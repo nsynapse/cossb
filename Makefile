@@ -99,4 +99,4 @@ example: helloworld.comp
 
 # Clean
 clean: 
-	$(RM) $(OUTDIR)*.o $(OUTDIR)cossb $(OUTDIR)cossb_test $(OUTDIR)*.so
+	$(RM) $(OUTDIR)*.o $(OUTDIR)cossb $(OUTDIR)cossb_test $(OUTDIR)*.so $(OUTDIR)*.comp
