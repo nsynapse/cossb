@@ -43,6 +43,14 @@ public:
 
 };
 
+#define DECLARE_INTERFACE_ICOMMREAD		int read() const;
+#define DECLARE_INTERFACE_ICOMMWRITE	int write(const char* data, int len);
+
+#define	DECLARE_INTERFACE_ICOMM \
+	DECLARE_INTERFACE_ICOMMREAD \
+	DECLARE_INTERFACE_ICOMMWRITE
+
+
 } /* namespace interface */
 } /* namespace cossb */
 
