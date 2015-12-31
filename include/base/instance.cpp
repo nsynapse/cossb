@@ -49,21 +49,21 @@ bool sync()
 
 bool start()
 {
-	/*cossb_log->log(log::loglevel::INFO, "Now all components is running...");
+	cossb_log->log(log::loglevel::INFO, "Now all components is running...");
 	if(cossb_component_manager->run())
-		return true;*/
+		return true;
 
 	return false;
 }
 
 bool stop()
 {
-	/*if(cossb_component_manager->count()>0)
+	if(cossb_component_manager->count()>0)
 	{
 		cossb_log->log(log::loglevel::INFO, "Now all components is stopping...");
 		if(cossb_component_manager->stop())
 			return true;
-	}*/
+	}
 
 	return true;
 }

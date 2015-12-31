@@ -7,7 +7,12 @@
  */
 
 #include <net/sock.hpp>
+#include <base/task.hpp>
 #include <interface/icomm.hpp>
+#include <sys/epoll.h>
+#include <sys/ioctl.h>
+#include <fcntl.h>
+#include <netdb.h>
 
 namespace cossb {
 namespace net {
@@ -18,7 +23,7 @@ namespace tcp {
  */
 class server : public sock {
 public:
-	server(short port);
+	server(const char* port);
 	virtual ~server();
 
 	/**
@@ -30,6 +35,23 @@ public:
 	 * @brief	stop server
 	 */
 	void stop();
+
+private:
+
+	/**
+	 * @brief	create socket
+	 */
+	void create(const char* port);
+
+	void eventtask();
+
+protected:
+	struct epoll_event event;
+	struct epoll_event* events;
+	int epollfd = -1;
+
+private:
+	base::task _event_task;
 };
 
 /**

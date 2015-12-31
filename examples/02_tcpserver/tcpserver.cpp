@@ -18,7 +18,11 @@ tcpserver::~tcpserver()
 
 bool tcpserver::setup()
 {
-	_server = new net::tcp::server(8000);
+	string port = get_profile()->get(profile::section::property, "port").asString("8000");
+	if(!_server) {
+		_server = new net::tcp::server(port.c_str());
+	}
+
 	return true;
 }
 

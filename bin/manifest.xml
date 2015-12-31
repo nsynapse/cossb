@@ -12,7 +12,7 @@
 	<!-- required component cannot be stopped by user -->
 	<!-- required library for advanced user or our support -->
 	
-	<required type="component">helloworld</required>
+	<required type="component">tcpserver</required>
 	<!--
 	<required type="component">messagetest</required>
 	<required type="library">libcblog.so</required>
