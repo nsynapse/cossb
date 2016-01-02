@@ -13,6 +13,8 @@
 #include <sys/ioctl.h>
 #include <fcntl.h>
 #include <netdb.h>
+#include <errno.h>
+#include <signal.h>
 
 namespace cossb {
 namespace net {
@@ -27,7 +29,7 @@ public:
 	virtual ~server();
 
 	/**
-	 * @brief	listen to access
+	 * @brief	start server
 	 */
 	int start();
 
@@ -35,6 +37,10 @@ public:
 	 * @brief	stop server
 	 */
 	void stop();
+
+	/**
+	 * @brief	join function to process
+	 */
 
 private:
 

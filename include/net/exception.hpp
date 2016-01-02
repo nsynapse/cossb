@@ -18,6 +18,7 @@ enum class excode : int {
 	SOCKET_SET_TIMEOUT_FAIL,
 	SOCKET_GET_ADDRINFO_FAIL,
 	SOCKET_LISTEN_FAIL,
+	SOCKET_ALREADY_USE,
 };
 /**
  * @brief	network exception
@@ -36,6 +37,7 @@ public:
 		case excode::SOCKET_SET_TIMEOUT_FAIL: set("Network timeout setting fail"); break;
 		case excode::SOCKET_GET_ADDRINFO_FAIL: set("Network socket address information fail"); break;
 		case excode::SOCKET_LISTEN_FAIL: set("Network socket listen fail"); break;
+		case excode::SOCKET_ALREADY_USE: set("Network socket already used"); break;
 		default: set(fmt::format("Unknown exception({})", (int)code).c_str());
 		}
 	}

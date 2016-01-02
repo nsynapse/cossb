@@ -58,7 +58,7 @@ int server::start()
 		cossb_log->log(log::loglevel::INFO, "Listen socket...");
 
 		//epoll create
-		if((epollfd = epoll_create1(0))==-1)
+		if((epollfd = epoll_create1(EPOLL_CLOEXEC))==-1)
 			throw net::exception(net::excode::SOCKET_LISTEN_FAIL);
 
 		//add
@@ -72,6 +72,9 @@ int server::start()
 		if(!_event_task)
 			_event_task = create_task(server::eventtask);
 	}
+	else
+		throw net::exception(net::excode::SOCKET_ALREADY_USE);
+
 	return 0;
 }
 
@@ -81,6 +84,7 @@ void server::stop()
 		close(epollfd);
 
 	destroy_task(_event_task);
+
 	cossb_log->log(log::loglevel::INFO, "event task destroy");
 }
 
@@ -88,25 +92,26 @@ void server::eventtask()
 {
 	while(1)
 	{
-		/*int npoll = 0;
-		if((npoll = epoll_wait(epollfd, events, max_event, -1))!=-1) {
+		int result = 0;
+		if((result = epoll_wait(epollfd, events, max_event, 0))==-1) {
+			cossb_log->log(log::loglevel::INFO, "wait");
+			/*cossb_log->log(log::loglevel::INFO, "epoll waiting");
 			for(int i=0;i<npoll;i++) {
-				if(events[i].events & EPOLLIN) {
-					if(events[i].data.fd == this->sockfd) {
-						struct sockaddr_storage saddr_c;
-						while(1) {
-							socklen_t len_saddr = sizeof(saddr_c);
-							int fd = accept(this->sockfd, (struct sockaddr*)&saddr_c, &len_saddr);
-							if(fd==-1) {
-
-							}
-						}
+				cossb_log->log(log::loglevel::INFO, "epoll wait");
+				//connection incoming
+				if(this->sockfd==events[i].data.fd) {
+					struct sockaddr in_addr;
+					socklen_t in_len;
+					if(accept(this->sockfd, &in_addr, &in_len)==-1) {
+						cossb_log->log(log::loglevel::INFO, fmt::format("new client {} event task", in_addr.sa_data).c_str());
 					}
 				}
-			}
-		}*/
-		cossb_log->log(log::loglevel::INFO, "event task");
-		boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
+			}*/
+		}
+		else
+			cossb_log->log(log::loglevel::INFO, "~~~");
+
+		boost::this_thread::sleep(boost::posix_time::microseconds(0));
 	}
 }
 
