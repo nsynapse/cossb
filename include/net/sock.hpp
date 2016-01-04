@@ -36,7 +36,6 @@ protected:
 
 protected:
 	int sockfd = -1;
-	struct sockaddr_in address;
 
 private:
 	netType _type = netType::CLIENT;

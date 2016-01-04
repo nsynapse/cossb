@@ -18,6 +18,8 @@ namespace interface {
 class icommread {
 public:
 	virtual ~icommread() {}
+
+protected:
 	virtual int read() const = 0;
 };
 
@@ -27,19 +29,17 @@ public:
 class icommwrite {
 public:
 	virtual ~icommwrite() {}
+
+protected:
 	virtual int write(const char* data, int len) = 0;
 };
 
 /**
  * @vrief	communication interface
  */
-class icomm : public icommread, public icommwrite {
+class icomm : protected icommread, protected icommwrite {
 public:
-	icomm() { }
 	virtual ~icomm() { }
-
-	virtual int read() const = 0;
-	virtual int write(const char* data, int len) = 0;
 
 };
 

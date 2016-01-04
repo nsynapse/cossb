@@ -39,7 +39,12 @@ public:
 	void request(cossb::base::message* const msg);
 
 private:
+	static int response(const char* data, int len);
+
+private:
 	net::tcp::server* _server = nullptr;
+
+
 };
 
 COMPONENT_EXPORT

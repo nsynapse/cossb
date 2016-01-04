@@ -25,18 +25,6 @@ void client::disconnect()
 
 }
 
-int client::read() const
-{
-	return 0;
-}
-
-int client::write(const char* data, int len)
-{
-	return 0;
-}
-
-
-
 
 } /* namespace tcp */
 } /* namespace net */
