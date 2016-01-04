@@ -37,6 +37,11 @@ $ sudo cossb --version
 $ sudo cossb --help
 ```
 
+Supports
+===============
+
+* TCP Server using epoll (Linux only available)
+
 
 License
 ===============
