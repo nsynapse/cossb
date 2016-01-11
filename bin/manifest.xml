@@ -9,6 +9,11 @@
 		<hostname>cossbgw.local</hostname>
 	</info>
 	
+	<!-- system setup -->
+	<system>
+		<enable name="auth"/>
+	</system>
+	
 	<!-- required component cannot be stopped by user -->
 	<!-- required library for advanced user or our support -->
 	
