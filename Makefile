@@ -65,7 +65,7 @@ $(OUTDIR)helloworld.o: $(EXAMPLE_FILES)01_Helloworld/helloworld.cpp
 	
 tcpserver.comp: $(OUTDIR)tcpserver.o 
 	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
-$(OUTDIR)tcpserver.o: $(EXAMPLE_FILES)02_tcpserver/tcpserver.cpp
+$(OUTDIR)tcpserver.o: $(COMPONENT_FILES)tcpserver/tcpserver.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
 serial.comp: $(OUTDIR)serial.o $(OUTDIR)libserial.o
@@ -115,15 +115,15 @@ $(OUTDIR)sysmanager_test.o: $(TEST_FILES)sysmanager_test.cpp
 
 
 # make cossb
-all: cossb helloworld.comp tcpserver.comp
+all: cossb helloworld.comp
 
 base: cossb
 
-components: serial.comp
+components: serial.comp tcpserver.comp
 
 test: cossb_test
 
-example: helloworld.comp tcpserver.comp
+example: helloworld.comp
 
 # Clean
 clean: 
