@@ -9,6 +9,7 @@
 #include "manager.hpp"
 #include <base/log.hpp>
 #include <base/libadopter.hpp>
+#include <secure/auth.hpp>
 
 namespace cossb {
 namespace manager {
@@ -30,6 +31,14 @@ bool system_manager::setup(base::manifestreader* manifest)
 {
 	if(!manifest)
 		return false;
+
+	//1. authentication
+	if(!cossb_auth->authentication(manifest))
+		return false;
+
+	if(!manifest->is_enabled("auth"))
+		return false;
+
 
 	//pre-load package after loading libraries
 	for(auto dep:manifest->get_required()) {

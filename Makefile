@@ -38,6 +38,7 @@ cossb:	$(OUTDIR)cossb.o \
 		$(OUTDIR)compmanager.o \
 		$(OUTDIR)driver.o \
 		$(OUTDIR)xmlprofile.o \
+		$(OUTDIR)sha1.o \
 		$(OUTDIR)server.o \
 		$(OUTDIR)client.o \
 		$(OUTDIR)log.o
@@ -51,6 +52,7 @@ cossb_test:	$(OUTDIR)cossb_test.o \
 		$(OUTDIR)compmanager.o \
 		$(OUTDIR)driver.o \
 		$(OUTDIR)xmlprofile.o \
+		$(OUTDIR)sha1.o \
 		$(OUTDIR)server.o \
 		$(OUTDIR)client.o \
 		$(OUTDIR)log.o
@@ -91,9 +93,13 @@ $(OUTDIR)xmlprofile.o: $(INCLUDE_FILES)base/xmlprofile.cpp
 	
 $(OUTDIR)log.o: $(INCLUDE_FILES)base/log.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+
+$(OUTDIR)sha1.o: $(INCLUDE_FILES)util/sha1.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
 $(OUTDIR)server.o: $(INCLUDE_FILES)net/server.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
 $(OUTDIR)client.o: $(INCLUDE_FILES)net/client.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
