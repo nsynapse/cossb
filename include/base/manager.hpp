@@ -22,7 +22,7 @@ namespace cossb {
 namespace base { template<class T> class libadopter; }
 namespace interface {
 	class ilog;
-	class iobject;
+	class iauth;
 }
 //namespace driver { class component_driver; }
 namespace manager {
@@ -111,6 +111,11 @@ private:
 	 * @brief	dependent libraries adopter
 	 */
 	base::libadopter<interface::ilog>* _log_adopter = nullptr;
+
+	/**
+	 * @brief	authentication
+	 */
+	interface::iauth* _auth = nullptr;
 
 
 };

@@ -38,6 +38,7 @@ bool manifestreader::load(const char* manifest_file)
 	{
 		read_info();
 		read_required();
+		read_system();
 	}
 
 	return true;
@@ -68,6 +69,17 @@ void manifestreader::read_required()
 	}
 }
 
+void manifestreader::read_system()
+{
+	XMLElement* elem_com = _doc->FirstChildElement("manifest")->FirstChildElement("system");
+	for(XMLElement* child = elem_com->FirstChildElement("enable");child!=nullptr; child = child->NextSiblingElement("enable"))
+	{
+		string name = child->Attribute("name");
+		std::transform(name.begin(), name.end(), name.begin(), ::tolower);
+		_enable[name] = true;
+	}
+}
+
 
 void manifestreader::parse_path()
 {
@@ -90,6 +102,7 @@ void manifestreader::parse_product_info()
 	for(XMLElement* child = elem_com->FirstChildElement();child!=nullptr; child = child->NextSiblingElement())
 		_product[child->Value()] = child->GetText();
 }
+
 
 /*void configreader::parse_service()
 {

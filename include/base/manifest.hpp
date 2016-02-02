@@ -78,6 +78,15 @@ public:
 	 */
 	map<string, string>& get_product_info() { return _product; }
 
+	/**
+	 * @brief	enabled parameter
+	 */
+	bool is_enabled(const char* name) {
+		if(_enable.find(name)==_enable.end())
+			return false;
+		return true;
+	}
+
 private:
 	/**
 	 * @brief	read information from manifest file
@@ -88,6 +97,11 @@ private:
 	 * @brief	read required components and libraries
 	 */
 	void read_required();
+
+	/**
+	 * @brief	read system parameters and options
+	 */
+	void read_system();
 
 private:
 	void parse_path();
@@ -106,7 +120,16 @@ private:
 	 */
 	map<string, string>	_info;
 
+	/**
+	 * @brief	required section
+	 */
 	vector<req_element*> _required;
+
+	/**
+	 * @brief	system section
+	 */
+	map<string, bool> _enable;
+
 	vector<string> _repository;
 	map<string, string> _path;
 	map<string, string> _product;

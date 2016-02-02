@@ -14,13 +14,10 @@
 #ifndef _COSSB_UTIL_SHA1_HPP_
 #define _COSSB_UTIL_SHA1_HPP_
 
-namespace cossb {
-namespace algorithm {
-
-#include <cstdint>
-#include <iostream>
 #include <string>
 
+namespace cossb {
+namespace algorithm {
 
 class sha1
 {
@@ -32,9 +29,9 @@ public:
     static std::string from_file(const std::string &filename);
 
 private:
-    uint32_t digest[5];
+    unsigned int digest[5];
     std::string buffer;
-    uint64_t transforms;
+    unsigned long int transforms;
 };
 
 } /* namespace algorithm */

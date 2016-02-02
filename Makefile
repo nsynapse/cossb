@@ -94,6 +94,7 @@ $(OUTDIR)log.o: $(INCLUDE_FILES)base/log.cpp
 	
 $(OUTDIR)server.o: $(INCLUDE_FILES)net/server.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
 $(OUTDIR)client.o: $(INCLUDE_FILES)net/client.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	

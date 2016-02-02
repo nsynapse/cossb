@@ -9,6 +9,16 @@
 		<hostname>cossbgw.local</hostname>
 	</info>
 	
+	<!-- system setup -->
+	<system>
+		<enable name="auth"/>
+		<enable name="secure"/>
+	</system>
+	
+	<auth>
+		<uri>http://www.bitspark.kr/auth</uri>
+	</auth>
+	
 	<!-- required component cannot be stopped by user -->
 	<!-- required library for advanced user or our support -->
 	
