@@ -68,6 +68,11 @@ example_tcpserver.comp: $(OUTDIR)example_tcpserver.o
 $(OUTDIR)example_tcpserver.o: $(EXAMPLE_FILES)02_tcpserver/example_tcpserver.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
+example_uart.comp: $(OUTDIR)example_uart.o 
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+$(OUTDIR)example_uart.o: $(EXAMPLE_FILES)03_uart/example_uart.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
 tcpserver.comp: $(OUTDIR)tcpserver.o 
 	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
 $(OUTDIR)tcpserver.o: $(COMPONENT_FILES)tcpserver/tcpserver.cpp
@@ -121,7 +126,7 @@ $(OUTDIR)sysmanager_test.o: $(TEST_FILES)sysmanager_test.cpp
 
 
 # make cossb
-all: cossb serial.comp tcpserver.comp
+all: cossb serial.comp tcpserver.comp example_tcpserver.comp example_uart.comp
 
 base: cossb
 
@@ -129,7 +134,7 @@ components: serial.comp tcpserver.comp
 
 test: cossb_test
 
-example: helloworld.comp example_tcpserver.comp
+example: helloworld.comp example_tcpserver.comp example_uart.comp
 
 # Clean
 clean: 

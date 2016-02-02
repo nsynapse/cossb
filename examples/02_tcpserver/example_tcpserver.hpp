@@ -1,5 +1,5 @@
 /**
- * @file		tcpserver.hpp
+ * @file		example_tcpserver.hpp
  * @brief		TCP Server Component Example
  * @author		Byunghun Hwang<bhhwang@nsynapse.com>
  * @date 		2015. 6. 21
@@ -13,10 +13,10 @@
 #include <net/tcp.hpp>
 using namespace cossb;
 
-class tcpserver : public interface::icomponent {
+class example_tcpserver : public interface::icomponent {
 public:
-	tcpserver();
-	virtual ~tcpserver();
+	example_tcpserver();
+	virtual ~example_tcpserver();
 
 	/**
 	 * @brief	setup interface function
@@ -37,12 +37,6 @@ public:
 	 * @brief	request interface function
 	 */
 	void request(cossb::base::message* const msg);
-
-private:
-	static int response(const char* data, int len);
-
-private:
-	net::tcp::server* _server = nullptr;
 
 
 };
