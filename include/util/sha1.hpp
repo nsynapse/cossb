@@ -14,11 +14,10 @@
 #ifndef _COSSB_UTIL_SHA1_HPP_
 #define _COSSB_UTIL_SHA1_HPP_
 
-namespace cossb {
-namespace algorithm {
-
 #include <string>
 
+namespace cossb {
+namespace algorithm {
 
 class sha1
 {

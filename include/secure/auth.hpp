@@ -10,7 +10,7 @@
 #ifndef _COSSB_AUTH_HPP_
 #define _COSSB_AUTH_HPP_
 
-#include <interface.hpp>
+#include <base/interface.hpp>
 #include <arch/singleton.hpp>
 
 namespace cossb {

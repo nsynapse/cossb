@@ -103,11 +103,6 @@ private:
 	 */
 	void read_system();
 
-	/**
-	 * @brief	read auth properties
-	 */
-	void read()
-
 private:
 	void parse_path();
 	void parse_repository();
