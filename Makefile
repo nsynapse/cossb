@@ -120,7 +120,7 @@ $(OUTDIR)sysmanager_test.o: $(TEST_FILES)sysmanager_test.cpp
 
 
 # make cossb
-all: cossb helloworld.comp
+all: cossb serial.comp tcpserver.comp
 
 base: cossb
 
