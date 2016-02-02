@@ -20,8 +20,10 @@ bool tcpserver::setup()
 {
 	string port = get_profile()->get(profile::section::property, "port").asString("8000");
 
-	_server = new cossb::net::tcp::server(port.c_str());
-	_server->set_response_func(response);
+	if(!_server) {
+		_server = new cossb::net::tcp::server(port.c_str());
+		_server->set_response_func(response);
+	}
 
 	return true;
 }
