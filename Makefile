@@ -20,6 +20,7 @@ RM	= rm -rf
 OUTDIR		= ./bin/
 INCLUDE_FILES = ./include/
 EXAMPLE_FILES = ./examples/
+COMPONENT_FILES = ./components/
 LIB_FILES = ./lib/
 UTIL_FILES = ./utils/
 TEST_FILES = ./test/
@@ -66,6 +67,13 @@ tcpserver.comp: $(OUTDIR)tcpserver.o
 	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
 $(OUTDIR)tcpserver.o: $(EXAMPLE_FILES)02_tcpserver/tcpserver.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
+serial.comp: $(OUTDIR)serial.o $(OUTDIR)libserial.o
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+$(OUTDIR)serial.o: $(COMPONENT_FILES)serial/serial.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+$(OUTDIR)libserial.o: $(COMPONENT_FILES)serial/libserial.cpp 
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 		
 		
 $(OUTDIR)cossb.o: $(SOURCE_FILES)cossb.cpp 
@@ -108,6 +116,10 @@ $(OUTDIR)sysmanager_test.o: $(TEST_FILES)sysmanager_test.cpp
 
 # make cossb
 all: cossb helloworld.comp tcpserver.comp
+
+base: cossb
+
+components: serial.comp
 
 test: cossb_test
 
