@@ -1,7 +1,7 @@
 
 #include "sha1.hpp"
 #include <sstream>
-#include <iomanip>
+//#include <iomanip>
 #include <fstream>
 
 namespace cossb {
@@ -11,7 +11,7 @@ static const size_t BLOCK_INTS = 16;  /* number of 32bit integers per SHA1 block
 static const size_t BLOCK_BYTES = BLOCK_INTS * 4;
 
 
-static void reset(uint32_t digest[], std::string &buffer, uint64_t &transforms)
+static void reset(unsigned int digest[], std::string &buffer, unsigned long int &transforms)
 {
     /* SHA1 initialization constants */
     digest[0] = 0x67452301;
@@ -26,13 +26,13 @@ static void reset(uint32_t digest[], std::string &buffer, uint64_t &transforms)
 }
 
 
-static uint32_t rol(const uint32_t value, const size_t bits)
+static unsigned int rol(const unsigned int value, const size_t bits)
 {
     return (value << bits) | (value >> (32 - bits));
 }
 
 
-static uint32_t blk(const uint32_t block[BLOCK_INTS], const size_t i)
+static unsigned int blk(const unsigned int block[BLOCK_INTS], const size_t i)
 {
     return rol(block[(i+13)&15] ^ block[(i+8)&15] ^ block[(i+2)&15] ^ block[i], 1);
 }
@@ -42,14 +42,14 @@ static uint32_t blk(const uint32_t block[BLOCK_INTS], const size_t i)
  * (R0+R1), R2, R3, R4 are the different operations used in SHA1
  */
 
-static void R0(const uint32_t block[BLOCK_INTS], const uint32_t v, uint32_t &w, const uint32_t x, const uint32_t y, uint32_t &z, const size_t i)
+static void R0(const unsigned int block[BLOCK_INTS], const unsigned int v, unsigned int &w, const unsigned int x, const unsigned int y, unsigned int &z, const size_t i)
 {
     z += ((w&(x^y))^y) + block[i] + 0x5a827999 + rol(v, 5);
     w = rol(w, 30);
 }
 
 
-static void R1(uint32_t block[BLOCK_INTS], const uint32_t v, uint32_t &w, const uint32_t x, const uint32_t y, uint32_t &z, const size_t i)
+static void R1(unsigned int block[BLOCK_INTS], const unsigned int v, unsigned int &w, const unsigned int x, const unsigned int y, unsigned int &z, const size_t i)
 {
     block[i] = blk(block, i);
     z += ((w&(x^y))^y) + block[i] + 0x5a827999 + rol(v, 5);
@@ -57,7 +57,7 @@ static void R1(uint32_t block[BLOCK_INTS], const uint32_t v, uint32_t &w, const 
 }
 
 
-static void R2(uint32_t block[BLOCK_INTS], const uint32_t v, uint32_t &w, const uint32_t x, const uint32_t y, uint32_t &z, const size_t i)
+static void R2(unsigned int block[BLOCK_INTS], const unsigned int v, unsigned int &w, const unsigned int x, const unsigned int y, unsigned int &z, const size_t i)
 {
     block[i] = blk(block, i);
     z += (w^x^y) + block[i] + 0x6ed9eba1 + rol(v, 5);
@@ -65,7 +65,7 @@ static void R2(uint32_t block[BLOCK_INTS], const uint32_t v, uint32_t &w, const 
 }
 
 
-static void R3(uint32_t block[BLOCK_INTS], const uint32_t v, uint32_t &w, const uint32_t x, const uint32_t y, uint32_t &z, const size_t i)
+static void R3(unsigned int block[BLOCK_INTS], const unsigned int v, unsigned int &w, const unsigned int x, const unsigned int y, unsigned int &z, const size_t i)
 {
     block[i] = blk(block, i);
     z += (((w|x)&y)|(w&x)) + block[i] + 0x8f1bbcdc + rol(v, 5);
@@ -73,7 +73,7 @@ static void R3(uint32_t block[BLOCK_INTS], const uint32_t v, uint32_t &w, const 
 }
 
 
-static void R4(uint32_t block[BLOCK_INTS], const uint32_t v, uint32_t &w, const uint32_t x, const uint32_t y, uint32_t &z, const size_t i)
+static void R4(unsigned int block[BLOCK_INTS], const unsigned int v, unsigned int &w, const unsigned int x, const unsigned int y, unsigned int &z, const size_t i)
 {
     block[i] = blk(block, i);
     z += (w^x^y) + block[i] + 0xca62c1d6 + rol(v, 5);
@@ -85,14 +85,14 @@ static void R4(uint32_t block[BLOCK_INTS], const uint32_t v, uint32_t &w, const 
  * Hash a single 512-bit block. This is the core of the algorithm.
  */
 
-static void transform(uint32_t digest[], uint32_t block[BLOCK_INTS], uint64_t &transforms)
+static void transform(unsigned int digest[], unsigned int block[BLOCK_INTS], unsigned long int &transforms)
 {
     /* Copy digest[] to working vars */
-    uint32_t a = digest[0];
-    uint32_t b = digest[1];
-    uint32_t c = digest[2];
-    uint32_t d = digest[3];
-    uint32_t e = digest[4];
+    unsigned int a = digest[0];
+    unsigned int b = digest[1];
+    unsigned int c = digest[2];
+    unsigned int d = digest[3];
+    unsigned int e = digest[4];
 
     /* 4 rounds of 20 operations each. Loop unrolled. */
     R0(block, a, b, c, d, e,  0);
@@ -188,9 +188,9 @@ static void transform(uint32_t digest[], uint32_t block[BLOCK_INTS], uint64_t &t
 }
 
 
-static void buffer_to_block(const std::string &buffer, uint32_t block[BLOCK_INTS])
+static void buffer_to_block(const std::string &buffer, unsigned int block[BLOCK_INTS])
 {
-    /* Convert the std::string (byte buffer) to a uint32_t array (MSB) */
+    /* Convert the std::string (byte buffer) to a unsigned int array (MSB) */
     for (size_t i = 0; i < BLOCK_INTS; i++)
     {
         block[i] = (buffer[4*i+3] & 0xff)
@@ -225,7 +225,7 @@ void sha1::update(std::istream &is)
         {
             return;
         }
-        uint32_t block[BLOCK_INTS];
+        unsigned int block[BLOCK_INTS];
         buffer_to_block(buffer, block);
         transform(digest, block, transforms);
         buffer.clear();
@@ -240,7 +240,7 @@ void sha1::update(std::istream &is)
 std::string sha1::final()
 {
     /* Total number of hashed bits */
-    uint64_t total_bits = (transforms*BLOCK_BYTES + buffer.size()) * 8;
+    unsigned long int total_bits = (transforms*BLOCK_BYTES + buffer.size()) * 8;
 
     /* Padding */
     buffer += 0x80;
@@ -250,7 +250,7 @@ std::string sha1::final()
         buffer += (char)0x00;
     }
 
-    uint32_t block[BLOCK_INTS];
+    unsigned int block[BLOCK_INTS];
     buffer_to_block(buffer, block);
 
     if (orig_size > BLOCK_BYTES - 8)
@@ -262,7 +262,7 @@ std::string sha1::final()
         }
     }
 
-    /* Append total_bits, split this uint64_t into two uint32_t */
+    /* Append total_bits, split this unsigned long int into two unsigned int */
     block[BLOCK_INTS - 1] = total_bits;
     block[BLOCK_INTS - 2] = (total_bits >> 32);
     transform(digest, block, transforms);
