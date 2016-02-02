@@ -7,7 +7,7 @@
  */
 
 #ifndef _COSSB_EXAMPLE_TCPSERVER_HPP_
-#define	_COSSB_EXAMPLE_TCPSERVER_HPP_
+#define _COSSB_EXAMPLE_TCPSERVER_HPP_
 
 #include <base/interface.hpp>
 #include <net/tcp.hpp>
