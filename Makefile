@@ -63,6 +63,11 @@ helloworld.comp: $(OUTDIR)helloworld.o
 $(OUTDIR)helloworld.o: $(EXAMPLE_FILES)01_Helloworld/helloworld.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
+example_tcpserver.comp: $(OUTDIR)example_tcpserver.o 
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+$(OUTDIR)example_tcpserver.o: $(EXAMPLE_FILES)02_tcpserver/example_tcpserver.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
 tcpserver.comp: $(OUTDIR)tcpserver.o 
 	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
 $(OUTDIR)tcpserver.o: $(COMPONENT_FILES)tcpserver/tcpserver.cpp
@@ -123,7 +128,7 @@ components: serial.comp tcpserver.comp
 
 test: cossb_test
 
-example: helloworld.comp
+example: helloworld.comp example_tcpserver.comp
 
 # Clean
 clean: 
