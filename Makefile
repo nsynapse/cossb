@@ -128,8 +128,6 @@ $(OUTDIR)sysmanager_test.o: $(TEST_FILES)sysmanager_test.cpp
 # make cossb
 all: cossb serial.comp tcpserver.comp example_tcpserver.comp example_uart.comp
 base: cossb
-serial:serial.comp
-tcpserver:tcpserver.comp
 components: serial.comp tcpserver.comp
 test: cossb_test
 examples: helloworld.comp example_tcpserver.comp example_uart.comp
