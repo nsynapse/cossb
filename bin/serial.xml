@@ -12,10 +12,13 @@
 	<category></category>
 	<tags></tags>
 	<publish>service/serial</publish>
-	<subscribe>null</subscribe>
+	<subscribe>service/example_uart</subscribe>
 </info>
 
 <property>
 	<port>/dev/ttyUSB0</port>
 	<baudrate>115200</baudrate>
 </property>
+
+<service name="serial_pub_service" method="publish" topic="service/serial/write"></service>
+<service name="serial_sub_example1" method="subscribe" topic="service/serial/read"></service>

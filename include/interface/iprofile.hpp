@@ -15,9 +15,12 @@
 #include <map>
 #include <boost/lexical_cast.hpp>
 #include <cstring>
+#include <algorithm>
 #include "../util/format.h"
+#include <util/uuid.hpp>
 
 using namespace std;
+using namespace cossb;
 
 namespace cossb {
 namespace service {
@@ -61,18 +64,21 @@ private:
  * @brief	service description
  */
 typedef struct _service_desc {
+private:
+	util::uuid service_id;	//service id
+public:
 	string name;				//service name
-	service_method method;
+	service_method method;	//service method
 	string topic;				//service topic
 	const char* show() {
-		return fmt::format("Name : {}\nMethod : {}\nTopic : {}", name, method.str(), topic).c_str();
+		return fmt::format("[{}]Name : {}\nMethod : {}\nTopic : {}", service_id.str(), name, method.str(), topic).c_str();
 	}
 } service_desc;
 
 /**
  * @brief	profile service section container
  */
-typedef vector<service::service_desc*> service_desc_container;
+typedef vector<service::service_desc> service_desc_container;
 
 } /* namespace service */
 
@@ -127,18 +133,18 @@ private:
 }
 
 namespace driver { class component_driver; }
+namespace manager { class component_manager; }
 
 namespace interface {
 class iprofile {
 
 	friend class driver::component_driver;
+	friend class manager::component_manager;
 
 public:
-	iprofile() {
-		_service_desc_container = new service::service_desc_container;
-	}
+	iprofile() { }
 	virtual ~iprofile() {
-		delete _service_desc_container;
+		_services.clear();
 	}
 
 	/**
@@ -157,10 +163,6 @@ public:
 	 */
 	virtual bool save() = 0;
 
-	/**
-	 * @brief	get multiple service descriptions
-	 */
-	service::service_desc_container* get_service_descs() const { return _service_desc_container; }
 
 private:
 	/**
@@ -174,12 +176,21 @@ protected:
 	 */
 	void set(profile::type_value& profile, string value) { profile.value = value; }
 
-protected:
+	/**
+	 * @brief	insert into the service container
+	 * @return total number of services registered
+	 */
+	int add(service::service_desc& svc) {
+		_services.push_back(svc);
+		return _services.size();
+	}
+
+private:
 
 	/**
 	 * @brief	service description container
 	 */
-	service::service_desc_container* _service_desc_container = nullptr;
+	service::service_desc_container _services;
 
 };
 

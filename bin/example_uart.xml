@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<info>
+	<uuid>00000000000000000000</uuid>
+	<name>example_uart</name>
+	<description>UART example component</description>
+	<company>Nsynapse Inc.</company>
+	<developer>Byunghun Hwang</developer>
+	<email>bhhwang@nsynapse.com</email>
+	<url>http://www.nsynapse.com</url>
+	<license>MIT</license> 
+	<version>0.0.1</version>
+	<category></category>
+	<tags></tags>
+	<publish>service/example_uart</publish>
+	<subscribe>service/serial</subscribe>
+</info>
+
+<property>
+</property>
+
+<service name="serial_pub_example1" method="publish" topic="service/example_uart"></service>

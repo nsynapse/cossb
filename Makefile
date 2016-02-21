@@ -12,7 +12,7 @@ CXX = g++
 CXXFLAGS = -O3 -fPIC -Wall -std=c++11 -D__cplusplus=201103L
 CCFLAGS = $(CXXFLAGS)
 LDFLAGS = -Wl,--export-dynamic
-LDLIBS = -lpopt -lboost_system -lboost_thread -lboost_filesystem -ltinyxml2 -ldl
+LDLIBS = -lpopt -lboost_system -lboost_thread -lboost_filesystem -ltinyxml2 -ldl -luuid
 LDLIBS_TEST = -lpopt -lboost_system -lboost_thread -ltinyxml2 -ldl -lgtest -lpthread
 INCLUDE = -I./include -I/usr/include -I/usr/local/include
 RM	= rm -rf
@@ -41,6 +41,7 @@ cossb:	$(OUTDIR)cossb.o \
 		$(OUTDIR)xmlprofile.o \
 		$(OUTDIR)server.o \
 		$(OUTDIR)client.o \
+		$(OUTDIR)message.o \
 		$(OUTDIR)log.o
 		$(CXX) $(LDFLAGS) -o $(OUTDIR)$@ $^ $(LDLIBS)
 		
@@ -54,6 +55,7 @@ cossb_test:	$(OUTDIR)cossb_test.o \
 		$(OUTDIR)xmlprofile.o \
 		$(OUTDIR)server.o \
 		$(OUTDIR)client.o \
+		$(OUTDIR)message.o \
 		$(OUTDIR)log.o
 		$(CXX) $(LDFLAGS) -o $(OUTDIR)$@ $^ $(LDLIBS_TEST)
 		
@@ -114,6 +116,9 @@ $(OUTDIR)server.o: $(INCLUDE_FILES)net/server.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
 $(OUTDIR)client.o: $(INCLUDE_FILES)net/client.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
+$(OUTDIR)message.o: $(INCLUDE_FILES)base/message.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
 #for test code	

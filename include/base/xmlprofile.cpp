@@ -134,10 +134,10 @@ void xml::read_profile()
 	{
 		service::service_desc desc;
 		if(elem->Attribute("name")) desc.name = elem->Attribute("name");
-		if(elem->Attribute("method")) desc.name = elem->Attribute("method");
-		if(elem->Attribute("topic")) desc.name = elem->Attribute("topic");
+		if(elem->Attribute("method")) desc.method = elem->Attribute("method");
+		if(elem->Attribute("topic")) desc.topic = elem->Attribute("topic");
 
-		_service_desc_container->push_back(&desc);
+		this->add(desc);
 	}
 }
 

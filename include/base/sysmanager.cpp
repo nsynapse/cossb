@@ -9,6 +9,7 @@
 #include "manager.hpp"
 #include <base/log.hpp>
 #include <base/libadopter.hpp>
+#include <base/common.hpp>
 
 namespace cossb {
 namespace manager {
@@ -31,28 +32,18 @@ bool system_manager::setup(base::manifestreader* manifest)
 	if(!manifest)
 		return false;
 
-	//1. authentication
-	//if(!cossb_auth->authentication(manifest))
-		//return false;
-
-	if(!manifest->is_enabled("auth"))
-		return false;
-
-
-	//pre-load package after loading libraries
+	//pre-load component/library/package
 	for(auto dep:manifest->get_required()) {
-		if(dep->type==base::bundleType::PACKAGE) {
-
-		}
-	}
-
-	//pre-load components after loading libraries
-	for(auto dep:manifest->get_required()) {
-		string prefix = manifest->get_path()["component"];
-		if(prefix.empty()) prefix = "./";
-
-		if(dep->type==base::bundleType::COMPONENT) {
-			cossb_component_manager->install((prefix+dep->name).c_str());
+		switch(dep->type) {
+		case base::bundleType::PACKAGE:
+			//code here for packages
+			break;
+		case base::bundleType::COMPONENT:
+			cossb_component_manager->install(dep->name.c_str());
+			break;
+		case base::bundleType::LIBRARY:
+			//code here for libraries
+			break;
 		}
 	}
 

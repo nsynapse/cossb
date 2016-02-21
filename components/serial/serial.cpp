@@ -54,7 +54,14 @@ bool serial::stop()
 
 void serial::request(cossb::base::message* const msg)
 {
+	cossb_log->log(log::loglevel::INFO, "Receive Message");
 
+	if(!_serial)
+		return;
+
+	switch(msg->get_frame()->type) {
+	case cossb::base::msg_type::DATA: { cossb_log->log(log::loglevel::INFO, fmt::format("Received : {}", msg->show()));} break;
+	}
 }
 
 void serial::read()

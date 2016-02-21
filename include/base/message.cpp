@@ -6,7 +6,8 @@
  */
 
 #include "message.hpp"
-#include "interface/icomponent.hpp"
+#include <interface/icomponent.hpp>
+#include <util/uuid.hpp>
 
 namespace cossb {
 namespace base {
@@ -15,7 +16,9 @@ message::message(interface::icomponent* component, msg_type type)
 {
 	frame.type = type;
 	frame.from = component->get_name();
-	frame.pub_topic = component->get_profile()->get(profile::section::info, "publish").asString("undefined");
+
+	cossb::util::uuid random_topic;
+	frame.pub_topic = component->get_profile()->get(profile::section::info, "publish").asString(random_topic.str());
 }
 
 } /* namespace base */

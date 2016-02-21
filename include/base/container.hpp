@@ -69,6 +69,7 @@ private:
 		}
 		else {
 			delete driver;
+			driver = nullptr;
 			return false;
 		}
 	}

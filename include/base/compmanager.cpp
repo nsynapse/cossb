@@ -9,10 +9,13 @@
 #include "manager.hpp"
 #include <base/container.hpp>
 #include <base/driver.hpp>
+#include <base/broker.hpp>
 #include <base/log.hpp>
 #include <base/manifest.hpp>
 #include <base/exception.hpp>
+#include <base/common.hpp>
 #include <list>
+#include <base/manifest.hpp>
 
 using namespace std;
 
@@ -32,18 +35,27 @@ component_manager::~component_manager()
 
 bool component_manager::install(const char* component_name)
 {
-	string component_path = cossb_manifest->get_path()["component"];
-	if(component_path.empty())
-		component_path = "./"+string(component_name);
-	else
-		component_path+=component_name;
+	if(!component_name)
+		return false;
 
-	if(cossb_component_container->add(component_name, new driver::component_driver(component_path.c_str())))
+	string comp_dir = cossb_manifest->get_path()[__COMPONENT__];
+	if(comp_dir.empty())
+		comp_dir = "./";
+
+	if(cossb_component_container->add(component_name, new driver::component_driver((comp_dir+string(component_name)).c_str())))
 	{
-		cossb_log->log(log::loglevel::INFO, fmt::format("Component installed : {}", component_name).c_str());
-		cossb_component_container->get_driver(component_name)->setup();
-		return true;
+		driver::component_driver* driver = cossb_component_container->get_driver(component_name);
+
+		for(auto srv:driver->get_component()->get_profile()->_services)
+			cossb_broker->regist(driver->get_component(), srv.topic);
+
+		if(driver->setup()) {
+			cossb_log->log(log::loglevel::INFO, fmt::format("{} component was successfully installed", driver->get_component()->get_name()));
+			return true;
+		}
 	}
+
+	this->uninstall(component_name);
 
 	return false;
 }

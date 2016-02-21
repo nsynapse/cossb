@@ -22,10 +22,11 @@ namespace interface { class icomponent; }
 namespace base {
 
 enum class msg_type : char {
-		DATA = 0x01,
-		ERROR,
-		ALERT,
-		EVENT };
+		DATA = 0x01,	//send data
+		SIGNAL,		//signal message(like event)
+		REQUEST,		//request message
+		RESPONSE		//response message
+};
 
 /**
  * @brief	serialized message frame
