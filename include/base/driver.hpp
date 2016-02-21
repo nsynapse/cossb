@@ -34,7 +34,7 @@ public:
 	/**
 	 * @brief	component validation for driving
 	 */
-	bool valid() { return _handle!=nullptr; }
+	bool valid();
 
 	/**
 	 * @brief	getting component pointer to access
@@ -62,13 +62,14 @@ private:
 
 	/**
 	 * @brief	setup component
+	 * @return	true, if success
 	 */
-	void setup();
+	bool setup();
 
 	/**
 	 * @brief	run component
 	 */
-	void run();
+	bool run();
 
 	/**
 	 * @brief	stop component
@@ -81,7 +82,7 @@ private:
 	/**
 	 * @brief	read service description
 	 */
-	void regist_service_desc();
+	//void regist_service_desc();
 
 	/**
 	 * @brief	load component by name

@@ -19,9 +19,11 @@
 #include <base/message.hpp>
 
 using namespace std;
+using namespace cossb;
 
 namespace cossb {
 namespace driver { class component_driver; }
+namespace manager { class component_manager; }
 namespace broker {
 
 //(topic, component name) pair
@@ -30,6 +32,7 @@ typedef multimap<string, string> topic_map;
 class component_broker : public arch::singleton<component_broker> {
 
 	friend class component_driver;
+	friend class component_manager;
 
 public:
 	component_broker() { };
@@ -62,11 +65,11 @@ public:
 	 * @return		times published
 	 */
 	template<typename... Args>
-	unsigned int publish(interface::icomponent* component, const char* to_topic, const char* api, const Args&... args) {
+	unsigned int publish(interface::icomponent* to_component, const char* to_topic, const char* api, const Args&... args) {
 		auto range = _topic_map.equal_range(to_topic);
 		unsigned int times = 0;
 		for(topic_map::iterator itr = range.first; itr!=range.second; ++itr) {
-			if(itr->second.compare(component->get_name())!=0) {
+			if(itr->second.compare(to_component->get_name())!=0) {
 				driver::component_driver* _drv = cossb_component_manager->get_driver(itr->second.c_str());
 				if(_drv) {
 					_drv->request(api, args...);
@@ -80,11 +83,11 @@ public:
 		return times;
 	}
 
-private:
+
 	/**
 	 *@brief	regist component with topic
 	 */
-	bool regist(interface::icomponent* component, string topic_name) {
+	bool regist(const interface::icomponent* component, const string topic_name) {
 		auto range = _topic_map.equal_range(topic_name);
 		bool found = false;
 		for(topic_map::iterator itr = range.first; itr!=range.second; ++itr) {
@@ -102,15 +105,6 @@ private:
 		return true;
 	}
 
-	/**
-	 * @brief	regist component
-	 */
-	bool regist(interface::icomponent* component, interface::iprofile* profile) {
-		if(profile) {
-			//profile->
-		}
-		return false;
-	}
 
 private:
 	topic_map	_topic_map;

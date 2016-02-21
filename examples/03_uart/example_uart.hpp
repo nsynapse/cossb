@@ -38,6 +38,15 @@ public:
 	 */
 	void request(cossb::base::message* const msg);
 
+private:
+	/**
+	 * @brief	write task function
+	 */
+	void do_write();
+
+private:
+	cossb::base::task _write_task;
+
 };
 
 COMPONENT_EXPORT

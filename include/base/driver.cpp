@@ -18,6 +18,7 @@
 #include <base/log.hpp>
 
 using namespace std;
+using namespace cossb;
 
 namespace cossb {
 namespace driver {
@@ -103,22 +104,26 @@ void component_driver::unload()
 	}
 }
 
-void component_driver::setup()
+bool component_driver::setup()
 {
 	if(_ptr_component) {
-		_ptr_component->setup();
+		return _ptr_component->setup();
 	}
+
+	return false;
 }
 
-void component_driver::run()
+bool component_driver::run()
 {
 	if(_ptr_component)
 	{
 		if(!_request_proc_task)
 			_request_proc_task = create_task(component_driver::request_proc);
 
-		_ptr_component->run();
+		return _ptr_component->run();
 	}
+
+	return false;
 
 }
 
@@ -132,6 +137,7 @@ void component_driver::stop()
 
 bool component_driver::set_profile(interface::iprofile* profile, const char* path)
 {
+	//not implemented yet
 	return true;
 }
 
@@ -158,16 +164,11 @@ void component_driver::request_proc()
 	}
 }
 
-void component_driver::regist_service_desc()
+bool component_driver::valid()
 {
-	if(_ptr_component) {
-		interface::iprofile* profile = _ptr_component->get_profile();
-		if(profile) {
-			//cout << "profiles : " << profile->get_service_descs()->size() << endl;
-			//cossb_broker->regist(_ptr_component, profile->g)
-		}
-	}
+	return _handle!=nullptr;
 }
+
 
 
 } /* namespace dirver */

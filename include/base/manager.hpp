@@ -24,7 +24,7 @@ namespace interface {
 	class ilog;
 	class iauth;
 }
-//namespace driver { class component_driver; }
+
 namespace manager {
 
 /**
@@ -81,7 +81,6 @@ public:
 	 * @brief	return specific component driver
 	 */
 	driver::component_driver* get_driver(const char* component_name);
-
 
 };
 

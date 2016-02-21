@@ -20,7 +20,7 @@ typedef struct _uuid {
 public:
 	unsigned char code[16];
 
-	void _uuid() {
+	_uuid() {
 		uuid_generate(code);
 		memset(encoded, 0x00, sizeof(encoded));
 		uuid_unparse(code, encoded);

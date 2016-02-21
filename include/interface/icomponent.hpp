@@ -84,7 +84,6 @@ public:
 	 * @brief
 	 */
 	iprofile* get_profile() const {
-		assert(_profile!=nullptr);
 		return _profile;
 	}
 
