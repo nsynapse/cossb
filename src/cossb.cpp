@@ -49,10 +49,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <cossb.hpp>
 
 using namespace std;
-using namespace cossb;
 
 void terminate() {
-	core::destroy();
+	cossb::core::destroy();
 	exit(EXIT_SUCCESS);
 }
 
@@ -100,10 +99,10 @@ int main(int argc, char* argv[])
 		case 'r': {
 			cossb_log->log(log::loglevel::INFO, fmt::format("{}{} Now Starting....",COSSB_NAME, COSSB_VERSION).c_str());
 
-			if(!core::init((const char*)poptGetOptArg(optionCon)))
+			if(!cossb::core::init((const char*)poptGetOptArg(optionCon)))
 				::terminate();
 
-			core::start();
+			cossb::core::start();
 			pause();
 
 		} break;
