@@ -47,16 +47,13 @@ private:
 	 */
 	template<typename... Args>
 	void request(const char* head, const Args&... args) {
-		/*auto data = std::make_tuple(head, args...);
-		message::message msg;
-		message::pack(&msg, data);
-
-		_mailbox.push(msg);
-		_condition.notify_one();*/
+		//not implemented.
 	}
 
 	void request(cossb::base::message* msg) {
 		msg->serialize();
+		_mailbox.push(msg);
+		_condition.notify_one();
 	}
 
 

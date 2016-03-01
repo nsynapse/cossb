@@ -50,7 +50,7 @@ public:
 			if(itr->second.compare(msg.get_from())!=0) {
 				driver::component_driver* _drv = cossb_component_manager->get_driver(itr->second.c_str());
 				if(_drv) {
-					cossb_log->log(log::loglevel::INFO, fmt::format("publish to : {}", msg.get_topic()).c_str());
+					cossb_log->log(log::loglevel::INFO, fmt::format("publish to : {}[{}]", _drv->get_component()->get_name(), msg.get_topic()).c_str());
 					_drv->request(&msg);
 					times++;
 				}
@@ -74,11 +74,15 @@ public:
 			if(itr->second.compare(to_component->get_name())!=0) {
 				driver::component_driver* _drv = cossb_component_manager->get_driver(itr->second.c_str());
 				if(_drv) {
+					cossb_log->log(log::loglevel::INFO, "requested");
 					_drv->request(api, args...);
 					times++;
 				}
 				else
+				{
+					cossb_log->log(log::loglevel::INFO, "cannot be requested");
 					throw broker::exception(cossb::broker::excode::DRIVER_NOT_FOUND);
+				}
 			}
 		}
 

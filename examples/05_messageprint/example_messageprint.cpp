@@ -34,13 +34,15 @@ void example_messageprint::request(cossb::base::message* const msg)
 {
 	switch(msg->get_frame()->type)
 	{
-		case cossb::base::msg_type::DATA:
-			if(!msg->get_frame()->topic.compare("service/print"))
-				printout(msg->show().c_str());
-		break;
-
-		case cossb::base::msg_type::REQUEST: break;
+		case cossb::base::msg_type::DATA: break;
+		case cossb::base::msg_type::REQUEST:
+			{
+				if(!msg->get_frame()->topic.compare("service/messageout"))
+					cossb_log->log(cossb::log::loglevel::INFO, fmt::format("[Message Received] : {}", msg->show()));
+			}
+			break;
 		case cossb::base::msg_type::RESPONSE: break;
+		case cossb::base::msg_type::SIGNAL: break;
 	}
 }
 
