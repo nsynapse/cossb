@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <info>
 	<uuid>00000000000000000000</uuid>
-	<name>example_uart</name>
-	<description>UART example component</description>
+	<name>example_messageprint</name>
+	<description>Messageout component</description>
 	<company>Nsynapse Inc.</company>
 	<developer>Byunghun Hwang</developer>
 	<email>bhhwang@nsynapse.com</email>
@@ -16,4 +16,5 @@
 <property>
 </property>
 
-<service method="publish" topic="service/example_uart"></service>
+<service method="publish" topic="service/print"></service>
+<service method="subscribe" topic="service/messageout"></service>

@@ -22,8 +22,8 @@
 	<!-- required component cannot be stopped by user -->
 	<!-- required library for advanced user or our support -->
 	
-	<required type="component">example_messageout</required>
-	<required type="component">example_messageprint</required>
+	<required type="component">example_uart</required>
+	<required type="component">serial</required>
 	
 	<!--
 	<required type="library">libcblog.so</required>

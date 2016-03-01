@@ -135,11 +135,6 @@ void component_driver::stop()
 	destroy_task(_request_proc_task);
 }
 
-bool component_driver::set_profile(interface::iprofile* profile, const char* path)
-{
-	//not implemented yet
-	return true;
-}
 
 void component_driver::request_proc()
 {

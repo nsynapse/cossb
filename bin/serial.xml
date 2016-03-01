@@ -11,8 +11,6 @@
 	<version>0.0.1</version>
 	<category></category>
 	<tags></tags>
-	<publish>service/serial</publish>
-	<subscribe>service/example_uart</subscribe>
 </info>
 
 <property>
@@ -20,5 +18,5 @@
 	<baudrate>115200</baudrate>
 </property>
 
-<service name="serial_pub_service" method="publish" topic="service/serial/write"></service>
-<service name="serial_sub_example1" method="subscribe" topic="service/serial/read"></service>
+<service method="publish" topic="service/serial/write"></service>
+<service method="subscribe" topic="service/serial/read"></service>

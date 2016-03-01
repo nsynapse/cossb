@@ -11,8 +11,6 @@
 	<version>0.0.1</version>
 	<category></category>
 	<tags></tags>
-	<publish>service/tcpserver</publish>
-	<subscribe>null</subscribe>
 </info>
 
 <property>

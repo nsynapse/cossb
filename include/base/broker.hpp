@@ -38,11 +38,13 @@ public:
 	component_broker() { };
 	virtual ~component_broker() { };
 
+
 	/**
-	 * @brief	publish message
+	 * @brief	publish message to specific topic
 	 */
-	unsigned int publish(cossb::base::message& msg) {
-		auto range = _topic_map.equal_range(msg.get_topic());
+	unsigned int publish(const char* topic, cossb::base::message& msg) {
+		msg.frame.topic = topic;
+		auto range = _topic_map.equal_range(topic);
 		unsigned int times = 0;
 		for(topic_map::iterator itr = range.first; itr!=range.second; ++itr) {
 			if(itr->second.compare(msg.get_from())!=0) {
@@ -65,8 +67,8 @@ public:
 	 * @return		times published
 	 */
 	template<typename... Args>
-	unsigned int publish(interface::icomponent* to_component, const char* to_topic, const char* api, const Args&... args) {
-		auto range = _topic_map.equal_range(to_topic);
+	unsigned int publish(interface::icomponent* to_component, const char* topic, const char* api, const Args&... args) {
+		auto range = _topic_map.equal_range(topic);
 		unsigned int times = 0;
 		for(topic_map::iterator itr = range.first; itr!=range.second; ++itr) {
 			if(itr->second.compare(to_component->get_name())!=0) {
@@ -104,6 +106,9 @@ public:
 
 		return true;
 	}
+
+private:
+
 
 
 private:

@@ -73,10 +73,9 @@ int main(int argc, char* argv[])
 	signal(SIGINT, sigc_interrupt);
 
 	char* manifest_file = nullptr;
-	struct poptOption optionTable[] =
-	{
-		{"run",			'r', POPT_ARG_STRING, (void*)manifest_file, 'r', "Run Broker with manifest file", "*.xml manifest file"},
-		{"version",		'v', POPT_ARG_NONE, 0, 'v', "Show COSSB Version", "version"},
+	struct poptOption optionTable[] = {
+		{"run", 'r', POPT_ARG_STRING, (void*)manifest_file, 'r', "Run Broker with manifest file", "*.xml manifest file"},
+		{"version", 'v', POPT_ARG_NONE, 0, 'v', "Show COSSB Version", "version"},
 		POPT_AUTOHELP
 		POPT_TABLEEND
 	};

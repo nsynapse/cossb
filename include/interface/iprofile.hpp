@@ -67,11 +67,10 @@ typedef struct _service_desc {
 private:
 	util::uuid service_id;	//service id
 public:
-	string name;				//service name
 	service_method method;	//service method
 	string topic;				//service topic
 	const char* show() {
-		return fmt::format("[{}]Name : {}\nMethod : {}\nTopic : {}", service_id.str(), name, method.str(), topic).c_str();
+		return fmt::format("Method : {}\nTopic : {}", service_id.str(), method.str(), topic).c_str();
 	}
 } service_desc;
 
@@ -102,6 +101,7 @@ class type_value
 {
 public:
 	type_value():value("") { }
+	type_value(const char* val) { this->value = val; }
 	virtual ~type_value() { }
 
 	friend class interface::iprofile;
@@ -148,14 +148,14 @@ public:
 	}
 
 	/**
-	 * @brief	get profile
+	 * @brief	get profile vaue list
 	 */
-	virtual profile::type_value get(profile::section section, const char* element) = 0;
+	virtual vector<profile::type_value> get(profile::section section, const char* element) = 0;
+
 
 	/**
 	 * @brief	update profile value
 	 */
-
 	virtual bool update(profile::section section, const char* element, const char* value) = 0;
 
 	/**

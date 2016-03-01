@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <info>
 	<uuid>00000000000000000000</uuid>
-	<name>example_uart</name>
-	<description>UART example component</description>
+	<name>example_edison_i2c</name>
+	<description>I2C component for Edison</description>
 	<company>Nsynapse Inc.</company>
 	<developer>Byunghun Hwang</developer>
 	<email>bhhwang@nsynapse.com</email>
@@ -16,4 +16,4 @@
 <property>
 </property>
 
-<service method="publish" topic="service/example_uart"></service>
+<service method="publish" topic="service/edison/i2c"></service>

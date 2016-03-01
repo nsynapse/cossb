@@ -75,6 +75,41 @@ example_uart.comp: $(OUTDIR)example_uart.o
 $(OUTDIR)example_uart.o: $(EXAMPLE_FILES)03_uart/example_uart.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
+example_messageout.comp: $(OUTDIR)example_messageout.o 
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+$(OUTDIR)example_messageout.o: $(EXAMPLE_FILES)04_messageout/example_messageout.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
+example_messageprint.comp: $(OUTDIR)example_messageprint.o 
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+$(OUTDIR)example_messageprint.o: $(EXAMPLE_FILES)05_messageprint/example_messageprint.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@	
+	
+example_edison_gpio.comp: $(OUTDIR)example_edison_gpio.o 
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+$(OUTDIR)example_edison_gpio.o: $(EXAMPLE_FILES)06_example_edison_gpio/example_edison_gpio.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@	
+	
+example_edison_i2c.comp: $(OUTDIR)example_edison_i2c.o 
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+$(OUTDIR)example_edison_i2c.o: $(EXAMPLE_FILES)07_example_edison_i2c/example_edison_i2c.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@	
+	
+edison_gpio.comp: $(OUTDIR)edison_gpio.o 
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+$(OUTDIR)edison_gpio.o: $(COMPONENT_FILES)edison_gpio/edison_gpio.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
+edison_uart.comp: $(OUTDIR)edison_uart.o 
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+$(OUTDIR)edison_uart.o: $(COMPONENT_FILES)edison_uart/edison_uart.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
+edison_i2c.comp: $(OUTDIR)edison_i2c.o 
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+$(OUTDIR)edison_i2c.o: $(COMPONENT_FILES)edison_i2c/edison_i2c.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
 tcpserver.comp: $(OUTDIR)tcpserver.o 
 	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
 $(OUTDIR)tcpserver.o: $(COMPONENT_FILES)tcpserver/tcpserver.cpp
@@ -131,11 +166,13 @@ $(OUTDIR)sysmanager_test.o: $(TEST_FILES)sysmanager_test.cpp
 
 
 # make cossb
-all: cossb serial.comp tcpserver.comp example_tcpserver.comp example_uart.comp
+all: cossb serial.comp tcpserver.comp example_tcpserver.comp example_uart.comp example_messageout.comp example_messageprint.comp
 base: cossb
 components: serial.comp tcpserver.comp
+edison: edison_i2c.comp edison_uart.comp edison_gpio.comp
 test: cossb_test
-examples: helloworld.comp example_tcpserver.comp example_uart.comp
+examples: helloworld.comp example_tcpserver.comp example_uart.comp example_messageout.comp example_messageprint.comp example_edison_gpio.comp example_edison_i2c.comp
+tutorial1 : example_messageout.comp example_messageprint.comp
 
 # Clean
 clean: 

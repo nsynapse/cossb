@@ -26,9 +26,9 @@ public:
 	virtual ~xml();
 
 	/**
-	 * @brief	getting profile value with matched type
+	 * @brief	getting profile value list
 	 */
-	type_value get(profile::section section, const char* element);
+	vector<profile::type_value> get(profile::section section, const char* element);
 
 	/**
 	 * @brief	update

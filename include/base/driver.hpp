@@ -95,11 +95,6 @@ private:
 	void unload();
 
 	/**
-	 * @brief	component profile setup
-	 */
-	bool set_profile(interface::iprofile* profile, const char* path);
-
-	/**
 	 * @brief	request process task
 	 */
 	void request_proc();

@@ -34,7 +34,7 @@ enum class msg_type : char {
 typedef struct _msgframe {
 	msg_type	type;
 	vector<char> encoded_data;
-	string pub_topic;
+	string topic;
 	string from;
 } msgframe;
 
@@ -65,7 +65,7 @@ public:
 	}
 
 	cossb::base::msgframe* get_frame() { return &frame; }
-	const char* get_topic() { return frame.pub_topic.c_str(); }
+	const char* get_topic() { return frame.topic.c_str(); }
 	const char* get_from() { return frame.from.c_str(); }
 
 protected:
