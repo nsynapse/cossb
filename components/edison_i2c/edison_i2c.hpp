@@ -4,6 +4,11 @@
 #define _COSSB_COMPONENT_EDISON_I2C_HPP_
 
 #include <interface/icomponent.hpp>
+#include <map>
+
+using namespace std;
+
+namespace mraa { class I2c; }
 
 class edison_i2c : public interface::icomponent  {
 public:
@@ -29,6 +34,14 @@ public:
 	 * @brief	request interface function
 	 */
 	void request(cossb::base::message* const msg);
+
+private:
+
+	/**
+	 * @brief	I2C address map
+	 */
+	map<unsigned char, mraa::I2c*> _addressmap;
+
 };
 
 COMPONENT_EXPORT

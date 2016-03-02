@@ -14,6 +14,8 @@
 </info>
 
 <property>
+	<address>0x22</address>
 </property>
 
 <service method="subscribe" topic="service/i2c/write"></service>
+<service method="publish" topic="service/i2c/read"></service>
