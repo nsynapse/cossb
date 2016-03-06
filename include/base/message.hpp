@@ -61,7 +61,7 @@ public:
 	}
 
 	string show() {
-		return data.dump(4);
+		return data.dump();
 	}
 
 	cossb::base::msgframe* get_frame() { return &frame; }

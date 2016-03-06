@@ -51,6 +51,7 @@ bool component_broker::regist(cossb::service::_service_desc* const service)
 		if(_service_map.find(service->name)==_service_map.end()) {
 			_service_map.insert(service_map::value_type(service->name, *service));
 			_topic_map.insert(topic_map::value_type(service->topic, service->component_name));
+			cossb_log->log(log::loglevel::INFO, fmt::format("Topic/Service registration : {}/{}", service->topic, service->name));
 			return true;
 		}
 	}
