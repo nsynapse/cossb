@@ -47,8 +47,8 @@ void example_messageout::do_task()
 	try {
 	while(1) {
 		cossb::base::message msg(this, base::msg_type::REQUEST);
-		msg["print"] = "this is example message";
-		cossb_broker->publish("service/messageout", msg);
+		msg["message"] = "this is example message";
+		cossb_broker->publish("messageout", msg);
 
 		//cossb_log->log(cossb::log::loglevel::INFO, fmt::format("{}",msg.show()));
 		boost::this_thread::sleep(boost::posix_time::milliseconds(1000));

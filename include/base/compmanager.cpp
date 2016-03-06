@@ -47,7 +47,7 @@ bool component_manager::install(const char* component_name)
 		driver::component_driver* driver = cossb_component_container->get_driver(component_name);
 
 		for(auto srv:driver->get_component()->get_profile()->_services)
-			cossb_broker->regist(driver->get_component(), srv.topic);
+			cossb_broker->regist(&srv);
 
 		if(driver->setup()) {
 			cossb_log->log(log::loglevel::INFO, fmt::format("{} component was successfully installed", driver->get_component()->get_name()));

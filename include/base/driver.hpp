@@ -77,11 +77,6 @@ private:
 private:
 
 	/**
-	 * @brief	read service description
-	 */
-	//void regist_service_desc();
-
-	/**
 	 * @brief	load component by name
 	 */
 	bool load(const char* component_name);

@@ -16,5 +16,6 @@
 <property>
 </property>
 
-<service method="publish" topic="service/print"></service>
-<service method="subscribe" topic="service/messageout"></service>
+<!-- do not edit service name attribute -->
+<service name="print" method="publish" topic="service/print"></service>
+<service name="print_messageout" method="subscribe" topic="service/messageout"></service>

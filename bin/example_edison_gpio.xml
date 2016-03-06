@@ -16,4 +16,4 @@
 <property>
 </property>
 
-<service method="publish" topic="service/edison/gpio"></service>
+<service name="gpio_write" method="publish" topic="service/gpio/write"></service>

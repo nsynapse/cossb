@@ -17,12 +17,12 @@ using namespace std;
 using namespace tinyxml2;
 
 namespace cossb {
+namespace interface { class icomponent; }
 namespace profile {
-
 
 class xml : public interface::iprofile {
 public:
-	xml(const char* filepath=nullptr);
+	xml();
 	virtual ~xml();
 
 	/**
@@ -45,14 +45,14 @@ private:
 	/**
 	 * @brief	load xml profile
 	 */
-	bool load(const char* filepath);
+	bool load(interface::icomponent* pComponent, const char* filepath);
 
 private:
 
 	/**
-	 * @brief	read profile
+	 * @brief	read services
 	 */
-	void read_profile();
+	void read_services(interface::icomponent* pComponent);
 
 	/**
 	 * @brief	getting comment what error is occurred

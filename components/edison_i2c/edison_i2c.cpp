@@ -55,5 +55,26 @@ bool edison_i2c::stop()
 
 void edison_i2c::request(cossb::base::message* const msg)
 {
+	if(_addressmap.empty()) {
+		cossb_log->log(log::loglevel::ERROR, "No I2C configurations in profile. Check <property> in this component profile.");
+		return;
+	}
 
+	switch(msg->get_frame()->type) {
+	case cossb::base::msg_type::REQUEST: {
+		if(!msg->get_frame()->topic.compare("service/i2c/write")) {
+			cossb_log->log(log::loglevel::INFO, fmt::format("Received message (GPIO) : {}", msg->show().c_str()));
+			msg->get_frame()->
+		}
+	}
+		break;
+	case cossb::base::msg_type::DATA: break;
+	default:
+		cossb_log->log(log::loglevel::INFO, "Received message has unsupported type.");
+	}
+
+
+	switch(msg->get_frame()->type) {
+	case cossb::base::msg_type::DATA: { cossb_log->log(log::loglevel::INFO, fmt::format("Received : {}", msg->show()));} break;
+	}
 }

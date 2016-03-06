@@ -16,4 +16,4 @@
 <property>
 </property>
 
-<service method="publish" topic="service/messageout"></service>
+<service name="messageout" method="publish" topic="service/messageout"></service>

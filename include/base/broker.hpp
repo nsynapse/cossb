@@ -12,6 +12,7 @@
 #include <map>
 #include <string>
 #include <interface/icomponent.hpp>
+#include <interface/iprofile.hpp>
 #include <arch/singleton.hpp>
 #include <base/manager.hpp>
 #include <base/log.hpp>
@@ -26,8 +27,12 @@ namespace driver { class component_driver; }
 namespace manager { class component_manager; }
 namespace broker {
 
-//(topic, component name) pair
+//topic, component name
 typedef multimap<string, string> topic_map;
+
+//service name, service desc
+typedef map<string, service::_service_desc> service_map;
+
 
 class component_broker : public arch::singleton<component_broker> {
 
@@ -36,13 +41,21 @@ class component_broker : public arch::singleton<component_broker> {
 
 public:
 	component_broker() { };
-	virtual ~component_broker() { };
+	virtual ~component_broker() {
+		_topic_map.clear();
+		_service_map.clear();
+	};
+
+	/**
+	 * @brief	publish message to
+	 */
+	unsigned int publish(const char* service_name, cossb::base::message& msg);
 
 
 	/**
 	 * @brief	publish message to specific topic
 	 */
-	unsigned int publish(const char* topic, cossb::base::message& msg) {
+	/*unsigned int publish(const char* topic, cossb::base::message& msg) {
 		msg.frame.topic = topic;
 		auto range = _topic_map.equal_range(topic);
 		unsigned int times = 0;
@@ -50,7 +63,6 @@ public:
 			if(itr->second.compare(msg.get_from())!=0) {
 				driver::component_driver* _drv = cossb_component_manager->get_driver(itr->second.c_str());
 				if(_drv) {
-					cossb_log->log(log::loglevel::INFO, fmt::format("publish to : {}[{}]", _drv->get_component()->get_name(), msg.get_topic()).c_str());
 					_drv->request(&msg);
 					times++;
 				}
@@ -60,40 +72,25 @@ public:
 		}
 
 		return times;
-	}
+	}*/
 
 	/**
 	 * @brief		publish data pack to specific service component
 	 * @return		times published
 	 */
 	template<typename... Args>
-	unsigned int publish(interface::icomponent* to_component, const char* topic, const char* api, const Args&... args) {
-		auto range = _topic_map.equal_range(topic);
-		unsigned int times = 0;
-		for(topic_map::iterator itr = range.first; itr!=range.second; ++itr) {
-			if(itr->second.compare(to_component->get_name())!=0) {
-				driver::component_driver* _drv = cossb_component_manager->get_driver(itr->second.c_str());
-				if(_drv) {
-					cossb_log->log(log::loglevel::INFO, "requested");
-					_drv->request(api, args...);
-					times++;
-				}
-				else
-				{
-					cossb_log->log(log::loglevel::INFO, "cannot be requested");
-					throw broker::exception(cossb::broker::excode::DRIVER_NOT_FOUND);
-				}
-			}
-		}
+	unsigned int publish(interface::icomponent* to_component, const char* topic, const char* api, const Args&... args);
 
-		return times;
-	}
+	/**
+	 * @brief	regist component to broker
+	 */
+	bool regist(cossb::service::_service_desc* const service);
 
 
 	/**
 	 *@brief	regist component with topic
 	 */
-	bool regist(const interface::icomponent* component, const string topic_name) {
+	/*bool regist(const interface::icomponent* component, const string topic_name) {
 		auto range = _topic_map.equal_range(topic_name);
 		bool found = false;
 		for(topic_map::iterator itr = range.first; itr!=range.second; ++itr) {
@@ -109,14 +106,20 @@ public:
 
 
 		return true;
-	}
-
-private:
-
+	}*/
 
 
 private:
+
+	/**
+	 * @brief	Topic map to find component
+	 */
 	topic_map	_topic_map;
+
+	/**
+	 * @brief	Service map
+	 */
+	service_map _service_map;
 };
 
 #define cossb_broker		cossb::broker::component_broker::instance()

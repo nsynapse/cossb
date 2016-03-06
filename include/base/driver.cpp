@@ -32,7 +32,7 @@ component_driver::component_driver(const char* component_path)
 
 			if(_ptr_component) {
 				_ptr_component->_profile = new profile::xml();
-				if(!_ptr_component->_profile->load(profile_path.c_str()))
+				if(!_ptr_component->_profile->load(_ptr_component, profile_path.c_str()))
 					unload();
 			}
 		}

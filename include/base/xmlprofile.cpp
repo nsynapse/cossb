@@ -3,15 +3,14 @@
 #include <iostream>
 #include <cstring>
 #include <base/common.hpp>
+#include <interface/icomponent.hpp>
 
 using namespace std;
 
 namespace cossb {
 namespace profile {
 
-xml::xml(const char* filepath) {
-	if(filepath)
-		load(filepath);
+xml::xml(){
 }
 
 xml::~xml() {
@@ -19,7 +18,7 @@ xml::~xml() {
 		delete _doc;
 }
 
-bool xml::load(const char* filepath)
+bool xml::load(interface::icomponent* pComponent, const char* filepath)
 {
 	if(_doc!=nullptr)
 	{
@@ -29,7 +28,7 @@ bool xml::load(const char* filepath)
 
 	_doc = new tinyxml2::XMLDocument;
 	if(_doc->LoadFile(filepath)==XML_SUCCESS) {
-		read_profile();
+		read_services(pComponent);
 		_loaded = true;
 	}
 	else
@@ -175,7 +174,7 @@ bool xml::save()
 	return false;
 }
 
-void xml::read_profile()
+void xml::read_services(interface::icomponent* pComponent)
 {
 	//read service desc.
 	for(XMLElement* elem = _doc->FirstChildElement(__SERVICE__);elem!=nullptr; elem = elem->NextSiblingElement(__SERVICE__))
@@ -183,6 +182,8 @@ void xml::read_profile()
 		service::service_desc desc;
 		if(elem->Attribute("method")) desc.method = elem->Attribute("method");
 		if(elem->Attribute("topic")) desc.topic = elem->Attribute("topic");
+		if(elem->Attribute("name")) desc.name = elem->Attribute("name");
+		desc.component_name = pComponent->get_name();
 
 		this->add(desc);
 	}

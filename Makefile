@@ -38,6 +38,7 @@ cossb:	$(OUTDIR)cossb.o \
 		$(OUTDIR)sysmanager.o \
 		$(OUTDIR)compmanager.o \
 		$(OUTDIR)driver.o \
+		$(OUTDIR)broker.o \
 		$(OUTDIR)xmlprofile.o \
 		$(OUTDIR)server.o \
 		$(OUTDIR)client.o \
@@ -52,6 +53,7 @@ cossb_test:	$(OUTDIR)cossb_test.o \
 		$(OUTDIR)sysmanager.o \
 		$(OUTDIR)compmanager.o \
 		$(OUTDIR)driver.o \
+		$(OUTDIR)broker.o \
 		$(OUTDIR)xmlprofile.o \
 		$(OUTDIR)server.o \
 		$(OUTDIR)client.o \
@@ -139,6 +141,9 @@ $(OUTDIR)compmanager.o: $(INCLUDE_FILES)base/compmanager.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
 $(OUTDIR)driver.o: $(INCLUDE_FILES)base/driver.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
+$(OUTDIR)broker.o: $(INCLUDE_FILES)base/broker.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
 $(OUTDIR)xmlprofile.o: $(INCLUDE_FILES)base/xmlprofile.cpp

@@ -16,8 +16,9 @@
 #include <boost/lexical_cast.hpp>
 #include <cstring>
 #include <algorithm>
-#include "../util/format.h"
+#include <util/format.h>
 #include <util/uuid.hpp>
+
 
 using namespace std;
 using namespace cossb;
@@ -63,14 +64,17 @@ private:
 /**
  * @brief	service description
  */
+
 typedef struct _service_desc {
 private:
 	util::uuid service_id;	//service id
 public:
+	string component_name;	//component name
+	string name;				//service name
 	service_method method;	//service method
 	string topic;				//service topic
 	const char* show() {
-		return fmt::format("Method : {}\nTopic : {}", service_id.str(), method.str(), topic).c_str();
+		return fmt::format("[{}] Name : {}, Method : {}, Topic : {}", service_id.str(), name, method.str(), topic).c_str();
 	}
 } service_desc;
 
@@ -88,7 +92,7 @@ namespace profile {
 /**
  * @brief	profile information section container
  */
-typedef map<string, string> profile_info_container;
+//typedef map<string, string> profile_info_container;
 
 enum class section : unsigned int {
 	info = 0,	//component information
@@ -136,6 +140,7 @@ namespace driver { class component_driver; }
 namespace manager { class component_manager; }
 
 namespace interface {
+class icomponent;
 class iprofile {
 
 	friend class driver::component_driver;
@@ -168,7 +173,7 @@ private:
 	/**
 	 * @brief	load profile
 	 */
-	virtual bool load(const char* filepath) = 0;
+	virtual bool load(icomponent* pComponent, const char* filepath) = 0;
 
 protected:
 	/**
