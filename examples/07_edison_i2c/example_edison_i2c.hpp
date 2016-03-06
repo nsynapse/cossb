@@ -1,22 +1,22 @@
 /**
- * @file		example_messageprint.hpp
- * @brief		messageprint Component Example
+ * @file		example_edison_i2c.hpp
+ * @brief		I2C write example for edison
  * @author		Byunghun Hwang<bhhwang@nsynapse.com>
  * @date 		2016. 2. 2
- * @details	message send to topic
+ * @details	data write to edison i2c port
  */
 
-#ifndef _COSSB_EXAMPLE_MESSAGEPRINT_HPP_
-#define _COSSB_EXAMPLE_MESSAGEPRINT_HPP_
+#ifndef _COSSB_EXAMPLE_EDISONI2C_HPP_
+#define _COSSB_EXAMPLE_EDISONI2C_HPP_
 
 #include <base/interface.hpp>
 
 using namespace cossb;
 
-class example_messageprint : public interface::icomponent {
+class example_edison_i2c : public interface::icomponent {
 public:
-	example_messageprint();
-	virtual ~example_messageprint();
+	example_edison_i2c();
+	virtual ~example_edison_i2c();
 
 	/**
 	 * @brief	setup interface function
@@ -43,7 +43,7 @@ private:
 	/**
 	 * @brief	print message to console
 	 */
-	void printout(const char* msg);
+	void write();
 
 private:
 
@@ -52,4 +52,4 @@ private:
 
 COMPONENT_EXPORT
 
-#endif /* _COSSB_EXAMPLE_MESSAGEPRINT_HPP_ */
+#endif /* _COSSB_EXAMPLE_EDISONI2C_HPP_ */

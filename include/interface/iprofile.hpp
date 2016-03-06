@@ -153,7 +153,7 @@ public:
 	}
 
 	/**
-	 * @brief	get profile vaue list
+	 * @brief	get profile value list
 	 */
 	virtual vector<profile::type_value> get(profile::section section, const char* element) = 0;
 

@@ -16,4 +16,4 @@
 <property>
 </property>
 
-<service method="publish" topic="service/edison/i2c"></service>
+<service name="example_i2c_write" method="publish" topic="service/i2c/write"></service>

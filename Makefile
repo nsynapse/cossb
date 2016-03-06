@@ -89,12 +89,12 @@ $(OUTDIR)example_messageprint.o: $(EXAMPLE_FILES)05_messageprint/example_message
 	
 example_edison_gpio.comp: $(OUTDIR)example_edison_gpio.o 
 	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
-$(OUTDIR)example_edison_gpio.o: $(EXAMPLE_FILES)06_example_edison_gpio/example_edison_gpio.cpp
+$(OUTDIR)example_edison_gpio.o: $(EXAMPLE_FILES)06_edison_gpio/example_edison_gpio.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@	
 	
 example_edison_i2c.comp: $(OUTDIR)example_edison_i2c.o 
 	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
-$(OUTDIR)example_edison_i2c.o: $(EXAMPLE_FILES)07_example_edison_i2c/example_edison_i2c.cpp
+$(OUTDIR)example_edison_i2c.o: $(EXAMPLE_FILES)07_edison_i2c/example_edison_i2c.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@	
 	
 edison_gpio.comp: $(OUTDIR)edison_gpio.o 

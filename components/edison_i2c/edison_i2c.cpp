@@ -8,6 +8,7 @@
 #include "edison_i2c.hpp"
 #include <cossb.hpp>
 #include <mraa.hpp>
+#include <algorithm>
 
 USE_COMPONENT_INTERFACE(edison_i2c)
 
@@ -18,27 +19,34 @@ edison_i2c::edison_i2c()
 }
 
 edison_i2c::~edison_i2c() {
-	if(!_addressmap.empty()) {
-		for(map<unsigned char, mraa::I2c*>::iterator itr = _addressmap.begin(); itr!=_addressmap.end(); ++itr) {
-			if(itr->second) {
-				delete itr->second;
-			}
-		}
-	}
+	if(_i2c)
+		delete _i2c;
 }
 
 bool edison_i2c::setup()
 {
+	if(!_i2c)
+		_i2c = new mraa::I2c(0);
+
 	//set address
 	for(auto value: get_profile()->get(profile::section::property, "address")) {
 		unsigned char address = value.asUChar(0x00);
 		if(address!=0x00) {
-			_addressmap.insert(std::pair<unsigned char, mraa::I2c*>(address, new mraa::I2c(0)));
-			if(_addressmap[address]->address(address)!=mraa::Result::SUCCESS)
+			if(_i2c->address(address)!=mraa::Result::SUCCESS)
 				return false;
 			else
 				cossb_log->log(log::loglevel::INFO, fmt::format("Set I2C Address : {}", value.asString("")));
+			break;
 		}
+	}
+
+	//set mode
+	for(auto mode: get_profile()->get(profile::section::property, "mode")) {
+		string m = mode.asString("");
+		std::transform(m.begin(), m.end(), m.begin(), ::tolower);
+		if(m.compare("i2c_std")==0)	_i2c->frequency(mraa::I2cMode::I2C_STD);	//up to 100khz
+		else if(m.compare("i2c_high")==0)	_i2c->frequency(mraa::I2cMode::I2C_HIGH); //up to 3.4Mhz
+		else if(m.compare("i2c_fast")==0)	_i2c->frequency(mraa::I2cMode::I2C_FAST);//up to 400khz
 	}
 	return true;
 }
@@ -55,16 +63,15 @@ bool edison_i2c::stop()
 
 void edison_i2c::request(cossb::base::message* const msg)
 {
-	if(_addressmap.empty()) {
-		cossb_log->log(log::loglevel::ERROR, "No I2C configurations in profile. Check <property> in this component profile.");
+	if(!_i2c) {
+		cossb_log->log(log::loglevel::ERROR, "No I2C Device");
 		return;
 	}
 
 	switch(msg->get_frame()->type) {
 	case cossb::base::msg_type::REQUEST: {
 		if(!msg->get_frame()->topic.compare("service/i2c/write")) {
-			cossb_log->log(log::loglevel::INFO, fmt::format("Received message (GPIO) : {}", msg->show().c_str()));
-			msg->get_frame()->
+			cossb_log->log(log::loglevel::INFO, fmt::format("Received message (I2C) : {}", msg->show().c_str()));
 		}
 	}
 		break;
@@ -73,8 +80,4 @@ void edison_i2c::request(cossb::base::message* const msg)
 		cossb_log->log(log::loglevel::INFO, "Received message has unsupported type.");
 	}
 
-
-	switch(msg->get_frame()->type) {
-	case cossb::base::msg_type::DATA: { cossb_log->log(log::loglevel::INFO, fmt::format("Received : {}", msg->show()));} break;
-	}
 }

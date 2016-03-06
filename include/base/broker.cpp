@@ -8,14 +8,10 @@ unsigned int component_broker::publish(const char* service_name, cossb::base::me
 	unsigned int times = 0;
 
 	if(_service_map.find(service_name)!=_service_map.end()) {
-		cout << "find topic : " << _service_map[service_name].topic << endl;
-
 		auto range = _topic_map.equal_range(_service_map[service_name].topic);
 		for(topic_map::iterator itr = range.first; itr!=range.second; ++itr) {
 			driver::component_driver* _drv = cossb_component_manager->get_driver(itr->second.c_str());
-			cout << "dd"<<endl;
 			if(_drv) {
-				cout << "request" << msg.show() << endl;
 				_drv->request(&msg);
 				times++;
 			}

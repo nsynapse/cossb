@@ -40,7 +40,7 @@ private:
 	/**
 	 * @brief	I2C address map
 	 */
-	map<unsigned char, mraa::I2c*> _addressmap;
+	mraa::I2c* _i2c = nullptr;
 
 };
 

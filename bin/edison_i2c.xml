@@ -15,7 +15,10 @@
 
 <property>
 	<address>0x22</address>
+	<mode>I2D_STD</mode>
+	<!--<mode>I2C_FAST</mode>-->
+	<!--<mode>I2C_HIGH</mode>-->
 </property>
 
-<service method="subscribe" topic="service/i2c/write"></service>
-<service method="publish" topic="service/i2c/read"></service>
+<service name="edison_i2c_write" method="subscribe" topic="service/i2c/write"></service>
+<service name="edison_i2c_read" method="publish" topic="service/i2c/read"></service>

@@ -1,53 +1,61 @@
 
-#include "../07_edison_i2c/example_edison_i2c.hpp"
-
+#include "example_edison_i2c.hpp"
 #include <cossb.hpp>
 
-USE_COMPONENT_INTERFACE(example_messageprint)
+USE_COMPONENT_INTERFACE(example_edison_i2c)
 
-example_messageprint::example_messageprint()
-:cossb::interface::icomponent(COMPONENT(example_messageprint))
+example_edison_i2c::example_edison_i2c()
+:cossb::interface::icomponent(COMPONENT(example_edison_i2c))
 {
 
 }
 
-example_messageprint::~example_messageprint()
+example_edison_i2c::~example_edison_i2c()
 {
 
 }
 
-bool example_messageprint::setup()
+bool example_edison_i2c::setup()
+{
+	if(!_task)
+		create_task(example_edison_i2c::write);
+
+	return true;
+}
+
+bool example_edison_i2c::run()
 {
 	return true;
 }
 
-bool example_messageprint::run()
+bool example_edison_i2c::stop()
 {
+	destroy_task(_task);
+
 	return true;
 }
 
-bool example_messageprint::stop()
+void example_edison_i2c::request(cossb::base::message* const msg)
 {
-	return true;
+
 }
 
-void example_messageprint::request(cossb::base::message* const msg)
+void example_edison_i2c::write()
 {
-	switch(msg->get_frame()->type)
-	{
-		case cossb::base::msg_type::DATA:
-			if(!msg->get_frame()->topic.compare("service/print"))
-				printout(msg->show().c_str());
-		break;
+	try {
+		while(1) {
+			cossb::base::message msg(this, base::msg_type::REQUEST);
 
-		case cossb::base::msg_type::REQUEST: break;
-		case cossb::base::msg_type::RESPONSE: break;
-	}
-}
+			msg["data"] = { 0x01, 0x02, 0x03 };
+			cossb_broker->publish("example_i2c_write", msg);
+			cossb_log->log(cossb::log::loglevel::INFO, fmt::format("{}",msg.show()));
 
-void example_messageprint::printout(const char* msg)
-{
-	cossb_log->log(cossb::log::loglevel::INFO, fmt::format("[Message Received] : {}", msg));
+			boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
+
+		}
+		} catch(cossb::broker::exception& e) {
+			cossb_log->log(cossb::log::loglevel::ERROR, fmt::format("{}", e.what()).c_str());
+		}
 }
 
 
