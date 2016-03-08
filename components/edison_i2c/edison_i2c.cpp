@@ -30,8 +30,11 @@ bool edison_i2c::setup()
 
 	//set address
 	for(auto value: get_profile()->get(profile::section::property, "address")) {
-		unsigned char address = value.asUChar(0x00);
-		if(address!=0x00) {
+		int address = value.asInt(0);
+		address += ((address/16)+1)*6;
+		cossb_log->log(log::loglevel::INFO, fmt::format("Set I2C Address : 0x{0:x}", address));
+
+		if(address) {
 			if(_i2c->address(address)!=mraa::Result::SUCCESS)
 				return false;
 			else

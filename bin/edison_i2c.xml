@@ -14,7 +14,7 @@
 </info>
 
 <property>
-	<address>0x22</address>
+	<address>22</address> <!-- 0x22 -->
 	<mode>I2D_STD</mode>
 	<!--<mode>I2C_FAST</mode>-->
 	<!--<mode>I2C_HIGH</mode>-->
