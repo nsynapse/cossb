@@ -32,14 +32,14 @@ bool edison_i2c::setup()
 	for(auto value: get_profile()->get(profile::section::property, "address")) {
 		int address = value.asInt(0);
 		address += ((address/16)+1)*6;
-		cossb_log->log(log::loglevel::INFO, fmt::format("Set I2C Address : 0x{0:x}", address));
 
 		if(address) {
-			if(_i2c->address(address)!=mraa::Result::SUCCESS)
-				return false;
+			if(_i2c->address(address)==mraa::Result::SUCCESS) {
+				cossb_log->log(log::loglevel::INFO, fmt::format("Set I2C Address : 0x{0:x}", address));
+				break;
+			}
 			else
-				cossb_log->log(log::loglevel::INFO, fmt::format("Set I2C Address : {}", value.asString("")));
-			break;
+				cossb_log->log(log::loglevel::INFO, fmt::format("Cannot Set I2C Address : 0x{0:x}", address));
 		}
 	}
 
