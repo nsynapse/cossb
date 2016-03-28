@@ -38,6 +38,8 @@ bool component_manager::install(const char* component_name)
 	if(!component_name)
 		return false;
 
+	cossb_log->log(log::loglevel::INFO, fmt::format("{} component is installing... ", component_name));
+
 	string comp_dir = cossb_manifest->get_path()[__COMPONENT__];
 	if(comp_dir.empty())
 		comp_dir = "./";

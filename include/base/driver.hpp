@@ -41,6 +41,11 @@ public:
 	 */
 	interface::icomponent* get_component() const { return _ptr_component; }
 
+	/*
+	 * @brief	check component is mine
+	 */
+	bool mine(const char* component_name);
+
 private:
 	/**
 	 * @brief	request message

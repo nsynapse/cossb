@@ -9,6 +9,7 @@
 #include <cossb.hpp>
 #include <mraa.hpp>
 #include <algorithm>
+#include <iostream>
 
 USE_COMPONENT_INTERFACE(edison_i2c)
 
@@ -25,7 +26,8 @@ edison_i2c::~edison_i2c() {
 
 bool edison_i2c::setup()
 {
-	if(!_i2c)
+
+	/*if(!_i2c)
 		_i2c = new mraa::I2c(0);
 
 	//set address
@@ -50,7 +52,7 @@ bool edison_i2c::setup()
 		if(m.compare("i2c_std")==0)	_i2c->frequency(mraa::I2cMode::I2C_STD);	//up to 100khz
 		else if(m.compare("i2c_high")==0)	_i2c->frequency(mraa::I2cMode::I2C_HIGH); //up to 3.4Mhz
 		else if(m.compare("i2c_fast")==0)	_i2c->frequency(mraa::I2cMode::I2C_FAST);//up to 400khz
-	}
+	}*/
 	return true;
 }
 
@@ -66,15 +68,17 @@ bool edison_i2c::stop()
 
 void edison_i2c::request(cossb::base::message* const msg)
 {
-	if(!_i2c) {
-		cossb_log->log(log::loglevel::ERROR, "No I2C Device");
+	/*if(!_i2c) {
+		cossb_log->log(log::loglevel::ERROR, "Not available I2C");
 		return;
-	}
+	}*/
 
 	switch(msg->get_frame()->type) {
 	case cossb::base::msg_type::REQUEST: {
 		if(!msg->get_frame()->topic.compare("service/i2c/write")) {
 			cossb_log->log(log::loglevel::INFO, fmt::format("Received message (I2C) : {}", msg->show().c_str()));
+			//if service/i2c/write topic is incoming, do write
+			//_i2c->write()
 		}
 	}
 		break;

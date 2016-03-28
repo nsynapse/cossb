@@ -164,6 +164,13 @@ bool component_driver::valid()
 	return _handle!=nullptr;
 }
 
+bool component_driver::mine(const char* component_name)
+{
+	if(!string(_ptr_component->get_name()).compare(component_name))
+		return true;
+	return false;
+}
+
 
 
 } /* namespace dirver */

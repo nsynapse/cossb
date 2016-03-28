@@ -11,9 +11,12 @@ unsigned int component_broker::publish(const char* service_name, cossb::base::me
 		auto range = _topic_map.equal_range(_service_map[service_name].topic);
 		for(topic_map::iterator itr = range.first; itr!=range.second; ++itr) {
 			driver::component_driver* _drv = cossb_component_manager->get_driver(itr->second.c_str());
-			if(_drv) {
-				_drv->request(&msg);
-				times++;
+			if(_drv)
+			{
+				if(!_drv->mine(msg.get_from())) {
+					_drv->request(&msg);
+					times++;
+				}
 			}
 			else
 				throw broker::exception(cossb::broker::excode::DRIVER_NOT_FOUND);
@@ -51,9 +54,11 @@ bool component_broker::regist(cossb::service::_service_desc* const service)
 		if(_service_map.find(service->name)==_service_map.end()) {
 			_service_map.insert(service_map::value_type(service->name, *service));
 			_topic_map.insert(topic_map::value_type(service->topic, service->component_name));
-			cossb_log->log(log::loglevel::INFO, fmt::format("Topic/Service registration : {}/{}", service->topic, service->name));
+			cossb_log->log(log::loglevel::INFO, fmt::format("Registration : topic {}, Service {}", service->topic, service->name));
 			return true;
 		}
+		else
+			cossb_log->log(log::loglevel::WARN, fmt::format("Already registered Topic {}, Service {}", service->topic, service->name));
 	}
 
 	return false;
