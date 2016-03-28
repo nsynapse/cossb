@@ -42,6 +42,14 @@ Supports
 
 * TCP Server using epoll (Linux only available)
 
+Examples
+===============
+* UART component
+* Simple Message Out component
+* Simple Message Print component
+* I2C component for Intel Edison
+
+
 
 License
 ===============
