@@ -45,6 +45,7 @@ void example_messageprint::request(cossb::base::message* const msg)
 			break;
 		case cossb::base::msg_type::RESPONSE: break;
 		case cossb::base::msg_type::SIGNAL: break;
+
 	}
 }
 
