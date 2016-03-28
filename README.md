@@ -44,10 +44,12 @@ Supports
 
 Examples
 ===============
+* Simple Hello World component
 * UART component
 * Simple Message Out component
 * Simple Message Print component
 * I2C component for Intel Edison
+* GPIO component for Intel Edison
 
 
 
