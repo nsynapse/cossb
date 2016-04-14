@@ -5,6 +5,9 @@
 
 #include <interface/icomponent.hpp>
 
+
+namespace mraa { class Uart; }
+
 class edison_uart : public interface::icomponent  {
 public:
 	edison_uart();
@@ -29,6 +32,9 @@ public:
 	 * @brief	request interface function
 	 */
 	void request(cossb::base::message* const msg);
+
+private:
+	mraa::Uart* _uart = nullptr;
 };
 
 COMPONENT_EXPORT

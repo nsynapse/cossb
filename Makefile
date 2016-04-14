@@ -97,6 +97,11 @@ example_edison_i2c.comp: $(OUTDIR)example_edison_i2c.o
 $(OUTDIR)example_edison_i2c.o: $(EXAMPLE_FILES)07_edison_i2c/example_edison_i2c.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@	
 	
+example_edison_uart.comp: $(OUTDIR)example_edison_uart.o 
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+$(OUTDIR)example_edison_uart.o: $(EXAMPLE_FILES)08_edison_uart/example_edison_uart.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@	
+	
 edison_gpio.comp: $(OUTDIR)edison_gpio.o 
 	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
 $(OUTDIR)edison_gpio.o: $(COMPONENT_FILES)edison_gpio/edison_gpio.cpp
@@ -176,7 +181,7 @@ base: cossb
 components: serial.comp tcpserver.comp
 edison: edison_i2c.comp edison_uart.comp edison_gpio.comp
 test: cossb_test
-examples: helloworld.comp example_tcpserver.comp example_uart.comp example_messageout.comp example_messageprint.comp example_edison_gpio.comp example_edison_i2c.comp
+examples: helloworld.comp example_tcpserver.comp example_uart.comp example_messageout.comp example_messageprint.comp example_edison_gpio.comp example_edison_i2c.comp example_edison_uart.comp
 tutorial1 : example_messageout.comp example_messageprint.comp
 
 # Clean

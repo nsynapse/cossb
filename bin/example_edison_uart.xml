@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <info>
 	<uuid>00000000000000000000</uuid>
-	<name>edison_uart</name>
+	<name>example_edison_uart</name>
 	<description>UART component for Edison</description>
 	<company>Nsynapse Inc.</company>
 	<developer>Byunghun Hwang</developer>
@@ -14,9 +14,6 @@
 </info>
 
 <property>
-	<port>/dev/ttyACM0</port>
-	<baudrate>115200</baudrate>
 </property>
 
-<service name="edison_uart_write" method="subscribe" topic="service/uart/write"></service>
-<service name="edison_uart_read" method="publish" topic="service/i2c/read"></service>
+<service name="example_uart_write" method="publish" topic="service/uart/write"></service>
