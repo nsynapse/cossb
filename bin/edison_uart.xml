@@ -14,7 +14,7 @@
 </info>
 
 <property>
-	<port>/dev/ttyACM0</port>
+	<port>/dev/ttyMFD1</port>
 	<baudrate>115200</baudrate>
 </property>
 
