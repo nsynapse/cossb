@@ -50,6 +50,7 @@ Examples
 * Simple Message Print component
 * I2C component for Intel Edison
 * GPIO component for Intel Edison
+* UART component for Intel Edison
 
 
 
