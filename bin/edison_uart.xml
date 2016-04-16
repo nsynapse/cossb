@@ -19,4 +19,4 @@
 </property>
 
 <service name="edison_uart_write" method="subscribe" topic="service/uart/write"></service>
-<service name="edison_uart_read" method="publish" topic="service/i2c/read"></service>
+<service name="edison_uart_read" method="publish" topic="service/uart/read"></service>

@@ -28,7 +28,12 @@ public:
 	/**
 	 * @brief	getting profile value list
 	 */
-	vector<profile::type_value> get(profile::section section, const char* element);
+	vector<profile::type_value> gets(profile::section section, const char* element);
+
+	/**
+	 * @brief	getting profile value
+	 */
+	profile::type_value get(profile::section section, const char* element);
 
 	/**
 	 * @brief	update

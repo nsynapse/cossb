@@ -22,7 +22,7 @@
 	<!-- required component cannot be stopped by user -->
 	<!-- required library for advanced user or our support -->
 	
-	<required type="component">example_edison_art</required>
+	<required type="component">example_edison_uart</required>
 	<required type="component">edison_uart</required>
 	
 	<!--

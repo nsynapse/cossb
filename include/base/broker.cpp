@@ -9,6 +9,7 @@ unsigned int component_broker::publish(const char* service_name, cossb::base::me
 
 	if(_service_map.find(service_name)!=_service_map.end()) {
 		auto range = _topic_map.equal_range(_service_map[service_name].topic);
+		msg.frame.topic = _service_map[service_name].topic;
 		for(topic_map::iterator itr = range.first; itr!=range.second; ++itr) {
 			driver::component_driver* _drv = cossb_component_manager->get_driver(itr->second.c_str());
 			if(_drv)

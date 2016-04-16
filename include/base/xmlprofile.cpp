@@ -62,7 +62,7 @@ const char* xml::get_error_str(int error) const
 	return "";
 }
 
-/*profile::type_value xml::get(profile::section section, const char* element)
+profile::type_value xml::get(profile::section section, const char* element)
 {
 	profile::type_value result;
 	string section_name = "";
@@ -89,9 +89,9 @@ const char* xml::get_error_str(int error) const
 	}
 
 	return result;
-}*/
+}
 
-vector<profile::type_value> xml::get(profile::section section, const char* element)
+vector<profile::type_value> xml::gets(profile::section section, const char* element)
 {
 	vector<profile::type_value> valuelist;
 
@@ -137,6 +137,7 @@ vector<profile::type_value> xml::get(profile::section section, const char* eleme
 
 	return valuelist;
 }
+
 
 bool xml::update(profile::section section, const char* element, const char* value)
 {

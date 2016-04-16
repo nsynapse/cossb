@@ -31,7 +31,7 @@ bool edison_i2c::setup()
 		_i2c = new mraa::I2c(0);
 
 	//set address
-	for(auto value: get_profile()->get(profile::section::property, "address")) {
+	for(auto value: get_profile()->gets(profile::section::property, "address")) {
 		int address = value.asInt(0);
 		address += ((address/16)+1)*6;
 

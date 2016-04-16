@@ -4,6 +4,7 @@
 #define _COSSB_COMPONENT_EDISON_UART_HPP_
 
 #include <interface/icomponent.hpp>
+#include <base/task.hpp>
 
 
 namespace mraa { class Uart; }
@@ -34,7 +35,12 @@ public:
 	void request(cossb::base::message* const msg);
 
 private:
+	void read();
+
+private:
 	mraa::Uart* _uart = nullptr;
+
+	cossb::base::task _read_task;
 };
 
 COMPONENT_EXPORT

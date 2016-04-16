@@ -29,13 +29,14 @@ edison_gpio::~edison_gpio() {
 bool edison_gpio::setup()
 {
 	//set output port
-	for(auto value: get_profile()->get(profile::section::property, "out")) {
+	for(auto value: get_profile()->gets(profile::section::property, "out")) {
 		int port = value.asInt(-1);
 		if(port>0) {
 			_iomap.insert(std::pair<int, mraa::Gpio*>(port, new mraa::Gpio(port)));
-			if(_iomap[port]!=nullptr)
+			if(_iomap[port]!=nullptr) {
 				if(_iomap[port]->dir(mraa::DIR_OUT)!=mraa::SUCCESS)
 					return false;
+			}
 			else {
 				cossb_log->log(log::loglevel::ERROR, "Unspecified GPIO Port");
 				return false;
@@ -44,13 +45,14 @@ bool edison_gpio::setup()
 	}
 
 	//set input port
-	for(auto value: get_profile()->get(profile::section::property, "in")) {
+	for(auto value: get_profile()->gets(profile::section::property, "in")) {
 		int port = value.asInt(-1);
 		if(port>0) {
 			_iomap.insert(std::pair<int, mraa::Gpio*>(port, new mraa::Gpio(port)));
-			if(_iomap[port]!=nullptr)
+			if(_iomap[port]!=nullptr) {
 				if(_iomap[port]->dir(mraa::DIR_IN)!=mraa::SUCCESS)
 					return false;
+			}
 			else {
 				cossb_log->log(log::loglevel::ERROR, "Unspecified GPIO Port");
 				return false;
@@ -78,21 +80,17 @@ void edison_gpio::request(cossb::base::message* const msg)
 		return;
 	}
 
-	switch(msg->get_frame()->type) {
+	switch(msg->get_frame()->type)
+	{
 	case cossb::base::msg_type::REQUEST: {
-		if(!msg->get_frame()->topic.compare("service/gpio/write")) {
+		if(!msg->get_frame()->topic.compare("service/gpio/write"))
 			cossb_log->log(log::loglevel::INFO, fmt::format("Received message (GPIO) : {}", msg->show().c_str()));
-		}
 	}
 		break;
-	case cossb::base::msg_type::DATA: break;
+	case cossb::base::msg_type::DATA: { cossb_log->log(log::loglevel::INFO, fmt::format("Received : {}", msg->show()));} break;
+	case cossb::base::msg_type::SIGNAL: break;
 	default:
 		cossb_log->log(log::loglevel::INFO, "Received message has unsupported type.");
-	}
-
-
-	switch(msg->get_frame()->type) {
-	case cossb::base::msg_type::DATA: { cossb_log->log(log::loglevel::INFO, fmt::format("Received : {}", msg->show()));} break;
 	}
 }
 
