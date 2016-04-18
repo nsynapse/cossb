@@ -16,7 +16,6 @@ message::message(interface::icomponent* component, msg_type type)
 {
 	frame.type = type;
 	frame.from = component->get_name();
-
 }
 
 } /* namespace base */

@@ -9,6 +9,7 @@
 #include <cossb.hpp>
 #include <string>
 #include <mraa.hpp>
+#include <base/message.hpp>
 
 using namespace std;
 
@@ -61,14 +62,16 @@ bool edison_uart::setup()
 
 bool edison_uart::run()
 {
-	/*if(!_read_task)
-		_read_task = create_task(edison_uart::read);*/
+	if(!_read_task)
+		_read_task = create_task(edison_uart::read);
 
 	return true;
 }
 
 bool edison_uart::stop()
 {
+	destroy_task(_read_task);
+
 	return true;
 }
 
@@ -79,8 +82,11 @@ void edison_uart::request(cossb::base::message* const msg)
 		case cossb::base::msg_type::REQUEST:
 		{
 			if(!msg->get_frame()->topic.compare("service/uart/write")) {
-				cossb_log->log(log::loglevel::INFO, fmt::format("UART write : {}", msg->show().c_str()));
-				_uart->writeStr(msg->show());
+				if((*msg)["data"].is_array()) {
+					std::vector<unsigned char> raw = (*msg)["data"];
+					cossb_log->log(log::loglevel::INFO, fmt::format("UART write {} byte(s): {}", raw.size(), msg->show()));
+					_uart->write((const char*)raw.data(), raw.size());
+				}
 			}
 		}
 			break;
@@ -93,26 +99,31 @@ void edison_uart::request(cossb::base::message* const msg)
 
 void edison_uart::read()
 {
-	/*while(1) {
+	while(1) {
 		try {
 			if(_uart) {
 				const unsigned int len = 1024;
 				unsigned char* buffer = new unsigned char[len];
-				int readsize = _serial->read(buffer, sizeof(unsigned char)*len);
-
-				_uart->read(buffer, sizeof(unsigned char*)*len);
+				int readsize = _uart->read((char*)buffer, len);
 
 				if(readsize>0) {
 					cossb_log->log(log::loglevel::INFO, fmt::format("read {} Byte(s)",readsize));
+
+					//publish message with received data
+					cossb::base::message msg(this, base::msg_type::REQUEST);
+					for(int i=0;i<readsize;i++)
+						msg["data"].push_back(buffer[i]);
+					cossb_broker->publish("edison_uart_read", msg);
+
 				}
 
 				delete []buffer;
-				boost::this_thread::sleep(boost::posix_time::milliseconds(100));
+				boost::this_thread::sleep(boost::posix_time::milliseconds(100));	//time limit for async read
 			}
 		}
 		catch(thread_interrupted&) {
 			break;
 		}
-	}*/
+	}
 }
 

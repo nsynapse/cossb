@@ -39,7 +39,7 @@ void example_edison_gpio::request(cossb::base::message* const msg)
 			if(!msg->get_frame()->topic.compare("service/print"))
 				printout(msg->show().c_str());
 		break;
-
+		case cossb::base::msg_type::SIGNAL: break;
 		case cossb::base::msg_type::REQUEST: break;
 		case cossb::base::msg_type::RESPONSE: break;
 	}
