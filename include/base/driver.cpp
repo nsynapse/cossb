@@ -132,6 +132,7 @@ void component_driver::stop()
 	if(_ptr_component)
 		_ptr_component->stop();
 
+	_condition.notify_one();
 	destroy_task(_request_proc_task);
 }
 
