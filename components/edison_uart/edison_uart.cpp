@@ -99,8 +99,8 @@ void edison_uart::request(cossb::base::message* const msg)
 
 void edison_uart::read()
 {
-	try {
-		while(1) {
+	while(1) {
+		try {
 			if(_uart) {
 				const unsigned int len = 1024;
 				unsigned char* buffer = new unsigned char[len];
@@ -121,9 +121,9 @@ void edison_uart::read()
 				boost::this_thread::sleep(boost::posix_time::milliseconds(100));	//time limit for async read
 			}
 		}
-	}
-	catch(thread_interrupted&) {
-		break;
+		catch(thread_interrupted&) {
+				break;
+			}
 	}
 }
 
