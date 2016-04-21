@@ -42,8 +42,10 @@ void example_edison_uart::request(cossb::base::message* const msg)
 
 void example_edison_uart::write()
 {
-	try {
-		while(1) {
+	while(1)
+	{
+		try
+		{
 			cossb::base::message msg(this, base::msg_type::REQUEST);
 
 			msg["data"] = { 0x01, 0x02, 0x0f };
@@ -51,10 +53,10 @@ void example_edison_uart::write()
 			cossb_log->log(cossb::log::loglevel::INFO, fmt::format("UART Message : {}",msg.show()));
 
 			boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
-
 		}
-		} catch(cossb::broker::exception& e) {
-			cossb_log->log(cossb::log::loglevel::ERROR, fmt::format("{}", e.what()).c_str());
+		catch(thread_interrupted&) {
+			break;
 		}
+	}
 }
 

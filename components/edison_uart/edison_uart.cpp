@@ -107,7 +107,7 @@ void edison_uart::read()
 				int readsize = _uart->read((char*)buffer, len);
 
 				if(readsize>0) {
-					cossb_log->log(log::loglevel::INFO, fmt::format("read {} Byte(s)",readsize));
+					cossb_log->log(log::loglevel::INFO, fmt::format("UART read {} Byte(s)",readsize));
 
 					//publish message with received data
 					cossb::base::message msg(this, base::msg_type::REQUEST);
