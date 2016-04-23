@@ -46,7 +46,7 @@ bool sync()
 
 bool start()
 {
-	cossb_log->log(log::loglevel::INFO, "Now all components is running...");
+	cossb_log->log(log::loglevel::INFO, "Starting all components...");
 	if(cossb_component_manager->run())
 		return true;
 
@@ -57,7 +57,7 @@ bool stop()
 {
 	if(cossb_component_manager->count()>0)
 	{
-		cossb_log->log(log::loglevel::INFO, "Now all components is stopping...");
+		cossb_log->log(log::loglevel::INFO, "Stopping all components...");
 		if(cossb_component_manager->stop())
 			return true;
 	}
