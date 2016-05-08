@@ -5,19 +5,39 @@
  *      Author: hwang
  */
 
-#ifndef COMPONENTS_WEBSOCKET_WSCLIENT_HPP_
-#define COMPONENTS_WEBSOCKET_WSCLIENT_HPP_
+#ifndef _COSSB_COMPONENT_WEBSOCKET_CLIENT_HPP_
+#define _COSSB_COMPONENT_WEBSOCKET_CLIENT_HPP_
 
-namespace interface {
-namespace icomponent {
+#include <base/interface.hpp>
 
-class wsclient {
+using namespace cossb;
+
+class wsclient : public interface::icomponent {
 public:
 	wsclient();
 	virtual ~wsclient();
+
+	/**
+	 * @brief	setup interface function
+	 */
+	bool setup();
+
+	/**
+	 * @brief	run interface function
+	 */
+	bool run();
+
+	/**
+	 * @brief	stop interface function
+	 */
+	bool stop();
+
+	/**
+	 * @brief	request interface function
+	 */
+	void request(cossb::base::message* const msg);
 };
 
-} /* namespace icomponent */
-} /* namespace interface */
+COMPONENT_EXPORT
 
-#endif /* COMPONENTS_WEBSOCKET_WSCLIENT_HPP_ */
+#endif /* _COSSB_COMPONENT_WEBSOCKET_CLIENT_HPP_ */

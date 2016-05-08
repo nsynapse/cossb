@@ -133,6 +133,13 @@ $(OUTDIR)serial.o: $(COMPONENT_FILES)serial/serial.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 $(OUTDIR)libserial.o: $(COMPONENT_FILES)serial/libserial.cpp 
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
+wsclient.comp: $(OUTDIR)wsclient.o $(OUTDIR)libwsclient.o
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+$(OUTDIR)wsclient.o: $(COMPONENT_FILES)websocket/wsclient.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+$(OUTDIR)libwsclient.o: $(COMPONENT_FILES)websocket/libwsclient.cpp 
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 		
 		
 $(OUTDIR)cossb.o: $(SOURCE_FILES)cossb.cpp 
