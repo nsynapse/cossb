@@ -9,7 +9,7 @@
 
 CC = gcc
 CXX = g++
-CXXFLAGS = -O3 -fPIC -Wall -std=c++11 -D__cplusplus=201103L
+CXXFLAGS = -O3 -fPIC -Wall -std=c++11 -D__cplusplus=201103L -D__boostthread__
 CCFLAGS = $(CXXFLAGS)
 LDFLAGS = -Wl,--export-dynamic
 LDLIBS = -lpopt -lboost_system -lboost_thread -lboost_filesystem -ltinyxml2 -ldl -luuid -lmraa
