@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<info>
+	<uuid>00000000000000000000</uuid>
+	<name>websocket_client</name>
+	<description>Websocket Client Component</description>
+	<company>Nsynapse Inc.</company>
+	<developer>Byunghun Hwang</developer>
+	<email>bhhwang@nsynapse.com</email>
+	<url>http://www.nsynapse.com</url>
+	<license>MIT</license> 
+	<version>0.0.1</version>
+	<category></category>
+	<tags></tags>
+</info>
+
+<property>
+	<url>ws://localhost:9002</url>
+</property>
+
+<service name="websocket_connect" method="subscribe" topic="service/websocket/connet"></service>
+<service name="websocket_read" method="publish" topic="service/websocket/read"></service>
+<service name="websocket_write" method="subscribe" topic="service/websocket/write"></service>

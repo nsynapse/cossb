@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+	
+	<!-- system information (IMPORTANT section, do not edit) -->
+	<info>
+		<guid>NSGW00000000FFFFFFFFFFFF</guid>
+		<manufacturer>Nsynapse Inc.</manufacturer>
+		<license>cdefabcd-cdefabcd-cdefabcd-cdefabcd</license>
+		<hostname>cossbgw.local</hostname>
+	</info>
+	
+	<!-- system setup -->
+	<system>
+		<enable name="auth"/>
+		<enable name="secure"/>
+	</system>
+	
+	<auth>
+		<uri>http://www.bitspark.kr/auth</uri>
+	</auth>
+	
+	<!-- required component cannot be stopped by user -->
+	<!-- required library for advanced user or our support -->
+	
+	<required type="component">wsclient</required>
+	
+	<!--
+	<required type="library">libcblog.so</required>
+	-->
+	
+	
+	<!-- do not edit this path -->
+	<property>
+		<path name="home">./cossb_home/</path>
+		<path name="include">./include/</path>
+		<path name="component">./</path>
+		<path name="utility">./</path>
+		<path name="library">./</path>
+		<path name="template">./template/</path>
+	</property>
+	
+</manifest>
