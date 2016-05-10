@@ -67,7 +67,7 @@ void wsclient::request(cossb::base::message* const msg)
 				if((*msg)["data"].is_array()) {
 					std::vector<unsigned char> raw = (*msg)["data"];
 					cossb_log->log(log::loglevel::INFO, fmt::format("Websocket write {} byte(s): {}", raw.size(), msg->show()));
-					//_client->send("test message");
+					_client->send("test message");
 				}
 			}
 		}
