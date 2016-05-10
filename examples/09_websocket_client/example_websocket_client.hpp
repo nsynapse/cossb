@@ -37,6 +37,12 @@ public:
 	 * @brief	request interface function
 	 */
 	void request(cossb::base::message* const msg);
+
+private:
+	void write();
+
+private:
+	cossb::base::task _task;
 };
 
 COMPONENT_EXPORT

@@ -18,7 +18,7 @@ example_edison_uart::~example_edison_uart()
 bool example_edison_uart::setup()
 {
 	if(!_task)
-			create_task(example_edison_uart::write);
+		create_task(example_edison_uart::write);
 
 	return true;
 }

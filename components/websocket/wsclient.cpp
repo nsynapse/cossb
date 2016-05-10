@@ -54,7 +54,7 @@ bool wsclient::stop()
 
 void wsclient::request(cossb::base::message* const msg)
 {
-	if(_client->getReadyState()!=easywsclient::WebSocket::CLOSED) {
+	if(_client->getReadyState()==easywsclient::WebSocket::CLOSED) {
 		cossb_log->log(log::loglevel::ERROR, "Websocket connection was closed.");
 		return;
 	}

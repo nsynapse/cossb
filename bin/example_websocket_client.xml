@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<info>
+	<uuid>00000000000000000000</uuid>
+	<name>example_websocket_clinet</name>
+	<description>Messageout component</description>
+	<company>Nsynapse Inc.</company>
+	<developer>Byunghun Hwang</developer>
+	<email>bhhwang@nsynapse.com</email>
+	<url>http://www.nsynapse.com</url>
+	<license>MIT</license> 
+	<version>0.0.1</version>
+	<category></category>
+	<tags></tags>
+</info>
+
+<property>
+</property>
+
+<!-- do not edit service name attribute -->
+<service name="example_websocket_write" method="publish" topic="service/websocket/write"></service>

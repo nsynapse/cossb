@@ -23,6 +23,7 @@
 	<!-- required library for advanced user or our support -->
 	
 	<required type="component">wsclient</required>
+	<required type="component">example_websocket_client</required>
 	
 	<!--
 	<required type="library">libcblog.so</required>
