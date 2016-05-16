@@ -12,7 +12,7 @@ USE_COMPONENT_INTERFACE(wsclient)
 
 void handle_message(const std::string & message)
 {
-	cossb_log->log(log::loglevel::INFO, fmt::format("Websocket Message : {}",message.c_str()));
+	cossb_log->log(log::loglevel::INFO, fmt::format("Websocket Message Received : {}",message.c_str()));
 
 }
 
@@ -23,6 +23,7 @@ wsclient::wsclient()
 }
 
 wsclient::~wsclient() {
+	_client->close();
 	delete _client;
 }
 
@@ -39,15 +40,15 @@ bool wsclient::setup()
 
 bool wsclient::run()
 {
-	/*if(!_socket_task)
-		_socket_task = create_task(wsclient::socket_control);*/
+	if(!_socket_task)
+		_socket_task = create_task(wsclient::read);
 
 	return true;
 }
 
 bool wsclient::stop()
 {
-	//destroy_task(_socket_task);
+	destroy_task(_socket_task);
 
 	return true;
 }
@@ -67,7 +68,12 @@ void wsclient::request(cossb::base::message* const msg)
 				if((*msg)["data"].is_array()) {
 					std::vector<unsigned char> raw = (*msg)["data"];
 					cossb_log->log(log::loglevel::INFO, fmt::format("Websocket write {} byte(s): {}", raw.size(), msg->show()));
-					_client->send("test message");
+					if(_client->getReadyState()!=easywsclient::WebSocket::CLOSED) {
+						_client->send(msg->show());
+						_client->poll(0);
+					}
+					else
+						cossb_log->log(log::loglevel::WARN, "Cannot send message");
 				}
 			}
 		}
@@ -79,7 +85,16 @@ void wsclient::request(cossb::base::message* const msg)
 	}
 }
 
-void wsclient::socket_control()
+void wsclient::read()
 {
-
+	while(1) {
+		try {
+			if(_client)
+				_client->dispatch(handle_message);
+				boost::this_thread::sleep(boost::posix_time::milliseconds(100));
+		}
+		catch(thread_interrupted&) {
+			break;
+		}
+	}
 }

@@ -14,7 +14,7 @@
 </info>
 
 <property>
-	<url>ws://localhost:9002</url>
+	<url>ws://192.168.0.6:9002</url>
 </property>
 
 <service name="websocket_connect" method="subscribe" topic="service/websocket/connet"></service>
