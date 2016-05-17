@@ -138,6 +138,11 @@ wsclient.comp: $(OUTDIR)wsclient.o
 	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
 $(OUTDIR)wsclient.o: $(COMPONENT_FILES)websocket/wsclient.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
+uart_protocol.comp: $(OUTDIR)uart_protocol.o
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+$(OUTDIR)uart_protocol.o: $(COMPONENT_FILES)uart_protocol/uart_protocol.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 		
 		
 $(OUTDIR)cossb.o: $(SOURCE_FILES)cossb.cpp 
@@ -188,7 +193,7 @@ $(OUTDIR)sysmanager_test.o: $(TEST_FILES)sysmanager_test.cpp
 # make cossb
 all: cossb serial.comp tcpserver.comp example_tcpserver.comp example_uart.comp example_messageout.comp example_messageprint.comp
 base: cossb
-components: serial.comp tcpserver.comp
+components: serial.comp tcpserver.comp uart_protocol.comp wsclient.comp
 edison: edison_i2c.comp edison_uart.comp edison_gpio.comp
 test: cossb_test
 examples: helloworld.comp example_tcpserver.comp example_uart.comp example_messageout.comp example_messageprint.comp example_edison_gpio.comp example_edison_i2c.comp example_edison_uart.comp example_websocket_client.comp
