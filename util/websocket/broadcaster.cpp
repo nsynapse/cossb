@@ -42,6 +42,21 @@ int main(int argc, char* argv[])
 		}
 	};
 
+	epmap.onopen=[](shared_ptr<WsServer::Connection> connection) {
+		cout << "* New connection : " << (size_t)connection.get() << endl;
+	};
+
+	    //See RFC 6455 7.4.1. for status codes
+	epmap.onclose=[](shared_ptr<WsServer::Connection> connection, int status, const string& reason) {
+		cout << "* Close connection : " << (size_t)connection.get() << " with status code " << status << endl;
+	};
+
+	    //See http://www.boost.org/doc/libs/1_55_0/doc/html/boost_asio/reference.html, Error Codes for error code meanings
+	epmap.onerror=[](shared_ptr<WsServer::Connection> connection, const boost::system::error_code& ec) {
+		cout << "Server: Error in connection " << (size_t)connection.get() << ". " <<
+				"Error: " << ec << ", error message: " << ec.message() << endl;
+	};
+
 	thread server_thread([&server](){
 		//Start WS-server
 		server.start();
