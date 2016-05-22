@@ -25,6 +25,7 @@ LIB_FILES = ./lib/
 UTIL_FILES = ./utils/
 TEST_FILES = ./test/
 SOURCE_FILES = ./src/
+UTIL_FILES = ./util/
 BASE_FILES = ./base/
 
 #ossb version
@@ -60,6 +61,12 @@ cossb_test:	$(OUTDIR)cossb_test.o \
 		$(OUTDIR)message.o \
 		$(OUTDIR)log.o
 		$(CXX) $(LDFLAGS) -o $(OUTDIR)$@ $^ $(LDLIBS_TEST)
+
+# Util
+wsbroadcaster: $(OUTDIR)broadcaster.o
+	$(CXX) $(LDFLAGS) -o $(OUTDIR)$@ $^ -lpthread -lboost_system -lboost_regex -lssl -lcrypto
+$(OUTDIR)broadcaster.o: $(UTIL_FILES)websocket/broadcaster.cpp 
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 		
 #examples
 helloworld.comp: $(OUTDIR)helloworld.o 
@@ -190,6 +197,8 @@ $(OUTDIR)sysmanager_test.o: $(TEST_FILES)sysmanager_test.cpp
 
 
 
+
+
 # make cossb
 all: cossb serial.comp tcpserver.comp example_tcpserver.comp example_uart.comp example_messageout.comp example_messageprint.comp
 base: cossb
@@ -198,6 +207,7 @@ edison: edison_i2c.comp edison_uart.comp edison_gpio.comp
 test: cossb_test
 examples: helloworld.comp example_tcpserver.comp example_uart.comp example_messageout.comp example_messageprint.comp example_edison_gpio.comp example_edison_i2c.comp example_edison_uart.comp example_websocket_client.comp
 tutorial1 : example_messageout.comp example_messageprint.comp
+util: wsbroadcaster
 
 # Clean
 clean: 
