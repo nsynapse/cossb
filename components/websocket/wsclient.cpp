@@ -7,6 +7,7 @@
 
 #include "wsclient.hpp"
 #include <cossb.hpp>
+#include <algorithm>
 
 USE_COMPONENT_INTERFACE(wsclient)
 
@@ -23,18 +24,15 @@ wsclient::wsclient()
 }
 
 wsclient::~wsclient() {
-	_client->close();
-	delete _client;
+	for(auto client:_client_map){
+		client.second->close();
+		delete client.second;
+	}
+	_client_map.clear();
 }
 
 bool wsclient::setup()
 {
-
-	string url = get_profile()->get(profile::section::property, "url").asString("ws://localhost:9090");
-	cossb_log->log(log::loglevel::INFO, fmt::format("Web Socket URL : {}",url));
-
-	_client = easywsclient::WebSocket::from_url(url);
-
 	return true;
 }
 
@@ -55,25 +53,35 @@ bool wsclient::stop()
 
 void wsclient::request(cossb::base::message* const msg)
 {
-	if(_client->getReadyState()==easywsclient::WebSocket::CLOSED) {
-		cossb_log->log(log::loglevel::ERROR, "Websocket connection was closed.");
-		return;
-	}
-
 	switch(msg->get_frame()->type)
 	{
 		case cossb::base::msg_type::REQUEST:
 		{
 			if(!msg->get_frame()->topic.compare("service/websocket/write")) {
-				if((*msg)["data"].is_array()) {
-					std::vector<unsigned char> raw = (*msg)["data"];
-					cossb_log->log(log::loglevel::INFO, fmt::format("Websocket write {} byte(s): {}", raw.size(), msg->show()));
-					if(_client->getReadyState()!=easywsclient::WebSocket::CLOSED) {
-						_client->send(msg->show());
-						_client->poll(0);
+				//check  uri
+				if((*msg)["uri"].empty()){
+					cossb_log->log(log::loglevel::ERROR, "Message does not have URI");
+					return;
+				}
+
+				//add url and
+				if(!(*msg)["uri"].is_null() && (*msg)["uri"].is_string()) {
+					string uri = (*msg)["uri"];
+					if(_client_map.find(uri)==_client_map.end()){
+						_client_map[uri] = easywsclient::WebSocket::from_url(uri);
+						cossb_log->log(log::loglevel::INFO, fmt::format("Add new Websocket URL {}", uri));
 					}
-					else
-						cossb_log->log(log::loglevel::WARN, "Cannot send message");
+
+					if(!(*msg)["data"].empty()){
+						cossb_log->log(log::loglevel::INFO, fmt::format("Send to websocket server : {}", msg->show()));
+
+						if(_client_map[uri]->getReadyState()!=easywsclient::WebSocket::CLOSED){
+							_client_map[uri]->send(msg->show());
+							_client_map[uri]->poll(0);
+						}
+						else
+							cossb_log->log(log::loglevel::WARN, "Cannot send message : No data");
+					}
 				}
 			}
 		}
@@ -87,7 +95,7 @@ void wsclient::request(cossb::base::message* const msg)
 
 void wsclient::read()
 {
-	while(1) {
+	/*while(1) {
 		try {
 			if(_client)
 				_client->dispatch(handle_message);
@@ -96,5 +104,5 @@ void wsclient::read()
 		catch(thread_interrupted&) {
 			break;
 		}
-	}
+	}*/
 }

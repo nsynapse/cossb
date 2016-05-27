@@ -10,7 +10,9 @@
 #define _COSSB_EXAMPLE_WEBSOCKET_CLIENT_HPP_
 
 #include <base/interface.hpp>
+#include <string>
 
+using namespace std;
 using namespace cossb;
 
 class example_websocket_client : public interface::icomponent {
@@ -43,6 +45,8 @@ private:
 
 private:
 	cossb::base::task _task;
+
+	std::string _url_prefix;
 };
 
 COMPONENT_EXPORT

@@ -18,6 +18,9 @@ example_websocket_client::~example_websocket_client() {
 
 bool example_websocket_client::setup()
 {
+
+	_url_prefix = get_profile()->get(profile::section::property, "url").asString("ws://localhost:9090");
+
 	if(!_task)
 		create_task(example_websocket_client::write);
 
@@ -43,14 +46,31 @@ void example_websocket_client::request(cossb::base::message* const msg)
 
 void example_websocket_client::write()
 {
+	static char id = 0x01;
 	while(1) {
 		try {
 			cossb::base::message msg(this, base::msg_type::REQUEST);
-
-			msg["data"] = { 0x01, 0x02, 0x0f };
+			msg["uri"] = _url_prefix+"/sensor/";
+			msg["data"]["id"] = id;
+			msg["data"]["status"] = 0x01;
+			msg["data"]["value"] = {0xff};
 			cossb_broker->publish("example_websocket_write", msg);
+
+			boost::this_thread::sleep(boost::posix_time::milliseconds(500));
+
+			msg["data"]["value"] = {0x00};
+			cossb_broker->publish("example_websocket_write", msg);
+
+			boost::this_thread::sleep(boost::posix_time::milliseconds(500));
+
+			id++;
+			if(id>0x05){
+				id=0x01;
+			}
+
+
 			//cossb_log->log(cossb::log::loglevel::INFO, fmt::format("Websocket Write Message : {}",msg.show()));
-			boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
+			//boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
 		} catch(thread_interrupted&) {
 			break;
 		}

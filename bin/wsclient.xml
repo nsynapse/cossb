@@ -14,9 +14,7 @@
 </info>
 
 <property>
-	<url>ws://192.168.0.6:9002</url>
 </property>
 
-<service name="websocket_connect" method="subscribe" topic="service/websocket/connet"></service>
 <service name="websocket_read" method="publish" topic="service/websocket/read"></service>
 <service name="websocket_write" method="subscribe" topic="service/websocket/write"></service>

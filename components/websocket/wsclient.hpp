@@ -11,8 +11,12 @@
 #include <base/interface.hpp>
 #include "easywsclient.hpp"
 #include "easywsclient.cpp"
+#include <vector>
+#include <map>
+
 using namespace cossb;
 using easywsclient::WebSocket;
+using namespace std;
 
 class wsclient : public interface::icomponent {
 public:
@@ -40,7 +44,8 @@ public:
 	void request(cossb::base::message* const msg);
 
 private:
-	easywsclient::WebSocket::pointer _client = nullptr;
+	//<url, socket> pair
+	std::map<string, easywsclient::WebSocket::pointer> _client_map;
 
 	base::task _socket_task;
 
