@@ -114,6 +114,11 @@ example_websocket_client.comp: $(OUTDIR)example_websocket_client.o
 $(OUTDIR)example_websocket_client.o: $(EXAMPLE_FILES)09_websocket_client/example_websocket_client.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
+example_cat_monitoring.comp: $(OUTDIR)example_cat_monitoring.o 
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+$(OUTDIR)example_cat_monitoring.o: $(EXAMPLE_FILES)10_cat_monitoring/example_cat_monitoring.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
 edison_gpio.comp: $(OUTDIR)edison_gpio.o 
 	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
 $(OUTDIR)edison_gpio.o: $(COMPONENT_FILES)edison_gpio/edison_gpio.cpp
@@ -205,7 +210,7 @@ base: cossb
 components: serial.comp tcpserver.comp uart_protocol.comp wsclient.comp
 edison: edison_i2c.comp edison_uart.comp edison_gpio.comp
 test: cossb_test
-examples: helloworld.comp example_tcpserver.comp example_uart.comp example_messageout.comp example_messageprint.comp example_edison_gpio.comp example_edison_i2c.comp example_edison_uart.comp example_websocket_client.comp
+examples: helloworld.comp example_tcpserver.comp example_uart.comp example_messageout.comp example_messageprint.comp example_edison_gpio.comp example_edison_i2c.comp example_edison_uart.comp example_websocket_client.comp example_cat_monitoring.comp
 tutorial1 : example_messageout.comp example_messageprint.comp
 util: wsbroadcaster
 

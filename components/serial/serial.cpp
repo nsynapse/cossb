@@ -60,7 +60,10 @@ void serial::request(cossb::base::message* const msg)
 		return;
 
 	switch(msg->get_frame()->type) {
-	case cossb::base::msg_type::DATA: { cossb_log->log(log::loglevel::INFO, fmt::format("Received : {}", msg->show()));} break;
+	case cossb::base::msg_type::REQUEST: { cossb_log->log(log::loglevel::INFO, fmt::format("Received : {}", msg->show()));} break;
+	case cossb::base::msg_type::DATA: break;
+	case cossb::base::msg_type::RESPONSE: break;
+	case cossb::base::msg_type::SIGNAL: break;
 	}
 }
 
