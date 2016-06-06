@@ -29,23 +29,22 @@ wsclient::~wsclient() {
 		_client->close();
 		delete _client;
 	}
-
-	/*for(auto client:_client_map){
-		client.second->close();
-		delete client.second;
-	}
-	_client_map.clear();*/
 }
 
 bool wsclient::setup()
 {
 	_uri = get_profile()->get(profile::section::property, "uri").asString("ws://localhost:9002");
 	_client = easywsclient::WebSocket::from_url(_uri.c_str());
-	if(_client->getReadyState()!=easywsclient::WebSocket::CLOSED){
-		cossb_log->log(log::loglevel::INFO, fmt::format("Connected to the {} websocket server",_uri));
+	if(_client!=nullptr) {
+		if(_client->getReadyState()!=easywsclient::WebSocket::CLOSED){
+			cossb_log->log(log::loglevel::INFO, fmt::format("Connected to the {} websocket server",_uri));
+		}
+		else {
+			cossb_log->log(log::loglevel::ERROR, fmt::format("Cannot connect to the {} websocket server",_uri));
+		}
 	}
 	else {
-		cossb_log->log(log::loglevel::INFO, fmt::format("Cannot be connected to the {} websocket server",_uri));
+		cossb_log->log(log::loglevel::ERROR, fmt::format("Cannot connect to the {} websocket server",_uri));
 	}
 
 	return true;
@@ -72,12 +71,21 @@ void wsclient::request(cossb::base::message* const msg)
 		case cossb::base::msg_type::REQUEST: {
 			cossb_log->log(log::loglevel::INFO, msg->show());
 
-			if(_client->getReadyState()!=easywsclient::WebSocket::CLOSED){
-				_client->send(msg->show());
-				_client->poll(0);
+			if(_client){
+				if(_client->getReadyState()!=easywsclient::WebSocket::CLOSED){
+					_client->send(msg->show());
+					_client->poll(0);
+				}
+				else{
+					cossb_log->log(log::loglevel::INFO, fmt::format("Try reconnect to the websocker server {}",_uri));
+					_client->close();
+					this->setup();
+				}
 			}
-			else
-				cossb_log->log(log::loglevel::WARN, "Cannot send message");
+			else {
+				cossb_log->log(log::loglevel::ERROR, fmt::format("Try reconnect to the websocker server {}",_uri));
+				this->setup();
+			}
 
 		} break;
 		case cossb::base::msg_type::DATA: break;
@@ -123,14 +131,15 @@ void wsclient::request(cossb::base::message* const msg)
 
 void wsclient::read()
 {
-	/*while(1) {
+	while(1) {
 		try {
 			if(_client)
 				_client->dispatch(handle_message);
-				boost::this_thread::sleep(boost::posix_time::milliseconds(100));
+
+			boost::this_thread::sleep(boost::posix_time::milliseconds(10));
 		}
 		catch(thread_interrupted&) {
 			break;
 		}
-	}*/
+	}
 }

@@ -213,7 +213,7 @@ class _RealWebSocket : public easywsclient::WebSocket
                 rxbuf.resize(N);
                 closesocket(sockfd);
                 readyState = CLOSED;
-                fputs(ret < 0 ? "Connection error!\n" : "Connection closed!\n", stderr);
+                //fputs(ret < 0 ? "Connection error!\n" : "Connection closed!\n", stderr);
                 break;
             }
             else {
@@ -229,7 +229,7 @@ class _RealWebSocket : public easywsclient::WebSocket
             else if (ret <= 0) {
                 closesocket(sockfd);
                 readyState = CLOSED;
-                fputs(ret < 0 ? "Connection error!\n" : "Connection closed!\n", stderr);
+                //fputs(ret < 0 ? "Connection error!\n" : "Connection closed!\n", stderr);
                 break;
             }
             else {
