@@ -18,5 +18,5 @@
 	<baudrate>115200</baudrate>
 </property>
 
-<service name="edison_uart_write" method="subscribe" topic="service/uart/write"></service>
-<service name="edison_uart_read" method="publish" topic="service/uart/read"></service>
+<service name="edison_uart_write" method="subscribe" topic="service/serial/write"></service>
+<service name="edison_uart_read" method="publish" topic="service/serial/read"></service>
