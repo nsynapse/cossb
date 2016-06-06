@@ -54,13 +54,20 @@ bool serial::stop()
 
 void serial::request(cossb::base::message* const msg)
 {
-	cossb_log->log(log::loglevel::INFO, "Receive Message");
-
 	if(!_serial)
 		return;
 
 	switch(msg->get_frame()->type) {
-	case cossb::base::msg_type::REQUEST: { cossb_log->log(log::loglevel::INFO, fmt::format("Received : {}", msg->show()));} break;
+	case cossb::base::msg_type::REQUEST: {
+		//write
+		if(!(*msg)["data"].is_null()){
+			if((*msg)["data"].is_array()){
+				std::vector<unsigned char> raw = (*msg)["data"];
+				_serial->write((const char*)raw.data(), raw.size());
+				cossb_log->log(log::loglevel::INFO, fmt::format("Write {} byte(s) to the serial : {}", raw.size(), (*msg)["data"].dump()));
+			}
+		}
+	} break;
 	case cossb::base::msg_type::DATA: break;
 	case cossb::base::msg_type::RESPONSE: break;
 	case cossb::base::msg_type::SIGNAL: break;
@@ -77,11 +84,18 @@ void serial::read()
 				int readsize = _serial->read(buffer, sizeof(unsigned char)*len);
 
 				if(readsize>0) {
-					cossb_log->log(log::loglevel::INFO, fmt::format("read {} Byte(s)",readsize));
+					cossb_log->log(log::loglevel::INFO, fmt::format("Read {} Byte(s) from serial",readsize));
+					//publish message with received data
+					cossb::base::message msg(this, base::msg_type::REQUEST);
+
+					for(int i=0;i<readsize;i++)
+						msg["data"].push_back(buffer[i]);
+
+					cossb_broker->publish("serial_read", msg);
 				}
 
 				delete []buffer;
-				boost::this_thread::sleep(boost::posix_time::milliseconds(0));
+				boost::this_thread::sleep(boost::posix_time::milliseconds(10));
 			}
 		}
 		catch(thread_interrupted&) {

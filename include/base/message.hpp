@@ -60,7 +60,12 @@ public:
 		return data[k];
 	}
 
+	//will change to the raw()
 	string show() {
+		return data.dump();
+	}
+
+	string raw(){
 		return data.dump();
 	}
 

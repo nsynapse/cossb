@@ -57,7 +57,7 @@ private:
 
 	void request(cossb::base::message* msg) {
 		msg->serialize();
-		_mailbox.push(msg);
+		_mailbox.push(*msg);
 		_condition.notify_one();
 	}
 
@@ -121,7 +121,7 @@ private:
 	/**
 	 * @brief	mailbox
 	 */
-	std::queue<cossb::base::message*> _mailbox;
+	std::queue<cossb::base::message> _mailbox;
 
 	boost::condition_variable _condition;
 	boost::mutex _mutex;

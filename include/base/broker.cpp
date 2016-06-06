@@ -19,12 +19,15 @@ unsigned int component_broker::publish(const char* service_name, cossb::base::me
 					times++;
 				}
 			}
-			else
-				throw broker::exception(cossb::broker::excode::DRIVER_NOT_FOUND);
+			else {
+				cossb_log->log(log::loglevel::ERROR, fmt::format("{} service has no component driver. it will be removed.", service_name));
+				_service_map.erase(service_name);
+				//throw broker::exception(cossb::broker::excode::DRIVER_NOT_FOUND);
+			}
 		}
 	}
 	else
-		cossb_log->log(log::loglevel::ERROR, "No Services found");
+		cossb_log->log(log::loglevel::ERROR, fmt::format("No Services({}) found", service_name));
 
 	return times;
 }
@@ -41,8 +44,10 @@ unsigned int component_broker::publish(interface::icomponent* to_component, cons
 				_drv->request(api, args...);
 				times++;
 			}
-			else
-				throw broker::exception(cossb::broker::excode::DRIVER_NOT_FOUND);
+			else {
+				cossb_log->log(log::loglevel::ERROR, fmt::format("{} has no component driver.", to_component->get_name()));
+				//throw broker::exception(cossb::broker::excode::DRIVER_NOT_FOUND);
+			}
 		}
 	}
 

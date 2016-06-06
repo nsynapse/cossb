@@ -22,9 +22,10 @@
 	<!-- required component cannot be stopped by user -->
 	<!-- required library for advanced user or our support -->
 	
+	<required type="component">example_cat_monitoring</required>
+	<required type="component">serial</required>
+	<required type="component">cat_protocol</required>
 	<required type="component">wsclient</required>
-	<required type="component">edison_uart</required>
-	<required type="component">uart_protocol</required>
 	
 	<!--
 	<required type="library">libcblog.so</required>

@@ -18,4 +18,4 @@
 </property>
 
 <!-- do not edit service name attribute -->
-<service name="example_cat_push" method="publish" topic="service/cat/push"></service>
+<service name="example_cat_push" method="publish" topic="service/serial/write"></service>

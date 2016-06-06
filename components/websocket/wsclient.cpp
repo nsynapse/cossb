@@ -24,15 +24,30 @@ wsclient::wsclient()
 }
 
 wsclient::~wsclient() {
-	for(auto client:_client_map){
+
+	if(_client){
+		_client->close();
+		delete _client;
+	}
+
+	/*for(auto client:_client_map){
 		client.second->close();
 		delete client.second;
 	}
-	_client_map.clear();
+	_client_map.clear();*/
 }
 
 bool wsclient::setup()
 {
+	_uri = get_profile()->get(profile::section::property, "uri").asString("ws://localhost:9002");
+	_client = easywsclient::WebSocket::from_url(_uri.c_str());
+	if(_client->getReadyState()!=easywsclient::WebSocket::CLOSED){
+		cossb_log->log(log::loglevel::INFO, fmt::format("Connected to the {} websocket server",_uri));
+	}
+	else {
+		cossb_log->log(log::loglevel::INFO, fmt::format("Cannot be connected to the {} websocket server",_uri));
+	}
+
 	return true;
 }
 
@@ -53,7 +68,24 @@ bool wsclient::stop()
 
 void wsclient::request(cossb::base::message* const msg)
 {
-	switch(msg->get_frame()->type)
+	switch(msg->get_frame()->type){
+		case cossb::base::msg_type::REQUEST: {
+			cossb_log->log(log::loglevel::INFO, msg->show());
+
+			if(_client->getReadyState()!=easywsclient::WebSocket::CLOSED){
+				_client->send(msg->show());
+				_client->poll(0);
+			}
+			else
+				cossb_log->log(log::loglevel::WARN, "Cannot send message");
+
+		} break;
+		case cossb::base::msg_type::DATA: break;
+		case cossb::base::msg_type::RESPONSE: break;
+		case cossb::base::msg_type::SIGNAL: break;
+
+	}
+	/*switch(msg->get_frame()->type)
 	{
 		case cossb::base::msg_type::REQUEST:
 		{
@@ -86,11 +118,7 @@ void wsclient::request(cossb::base::message* const msg)
 			}
 		}
 			break;
-		case cossb::base::msg_type::DATA: break;
-		case cossb::base::msg_type::SIGNAL: break;
-		default:
-			cossb_log->log(log::loglevel::INFO, "Received message has unsupported type.");
-	}
+	}*/
 }
 
 void wsclient::read()

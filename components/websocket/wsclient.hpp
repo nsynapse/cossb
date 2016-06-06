@@ -45,8 +45,10 @@ public:
 
 private:
 	//<url, socket> pair
-	std::map<string, easywsclient::WebSocket::pointer> _client_map;
+	//std::map<string, easywsclient::WebSocket::pointer> _client_map;
 
+	string _uri;
+	easywsclient::WebSocket::pointer _client;
 	base::task _socket_task;
 
 private:

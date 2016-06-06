@@ -147,7 +147,7 @@ void component_driver::request_proc()
 			_condition.wait(__lock);
 
 			while(!_mailbox.empty()) {
-				_ptr_component->request(_mailbox.front());
+				_ptr_component->request(&_mailbox.front());
 				_mailbox.pop();
 			}
 
