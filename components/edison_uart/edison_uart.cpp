@@ -77,24 +77,21 @@ bool edison_uart::stop()
 
 void edison_uart::request(cossb::base::message* const msg)
 {
-	switch(msg->get_frame()->type)
-	{
-		case cossb::base::msg_type::REQUEST:
-		{
-			if(!msg->get_frame()->topic.compare("service/uart/write")) {
-				if((*msg)["data"].is_array()) {
-					std::vector<unsigned char> raw = (*msg)["data"];
-					cossb_log->log(log::loglevel::INFO, fmt::format("UART write {} byte(s): {}", raw.size(), msg->show()));
-					_uart->write((const char*)raw.data(), raw.size());
-				}
+	switch(msg->get_frame()->type) {
+	case cossb::base::msg_type::REQUEST: {
+		//write
+		if(!(*msg)["data"].is_null()){
+			if((*msg)["data"].is_array()){
+				std::vector<unsigned char> raw = (*msg)["data"];
+				_uart->write((const char*)raw.data(), raw.size());
+				cossb_log->log(log::loglevel::INFO, fmt::format("Write {} byte(s) to the serial : {}", raw.size(), (*msg)["data"].dump()));
 			}
 		}
-			break;
-		case cossb::base::msg_type::DATA: break;
-		case cossb::base::msg_type::SIGNAL: break;
-		default:
-			cossb_log->log(log::loglevel::INFO, "Received message has unsupported type.");
-		}
+	} break;
+	case cossb::base::msg_type::DATA: break;
+	case cossb::base::msg_type::RESPONSE: break;
+	case cossb::base::msg_type::SIGNAL: break;
+	}
 }
 
 void edison_uart::read()
@@ -107,23 +104,23 @@ void edison_uart::read()
 				int readsize = _uart->read((char*)buffer, len);
 
 				if(readsize>0) {
-					cossb_log->log(log::loglevel::INFO, fmt::format("UART read {} Byte(s)",readsize));
-
+					cossb_log->log(log::loglevel::INFO, fmt::format("Read {} Byte(s) from serial",readsize));
 					//publish message with received data
 					cossb::base::message msg(this, base::msg_type::REQUEST);
+
 					for(int i=0;i<readsize;i++)
 						msg["data"].push_back(buffer[i]);
-					cossb_broker->publish("edison_uart_read", msg);
 
+					cossb_broker->publish("edison_uart_read", msg);
 				}
 
 				delete []buffer;
-				boost::this_thread::sleep(boost::posix_time::milliseconds(100));	//time limit for async read
+				boost::this_thread::sleep(boost::posix_time::milliseconds(10));
 			}
 		}
 		catch(thread_interrupted&) {
-				break;
-			}
+			break;
+		}
 	}
 }
 
