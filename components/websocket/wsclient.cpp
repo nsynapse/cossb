@@ -13,7 +13,7 @@ USE_COMPONENT_INTERFACE(wsclient)
 
 void handle_message(const std::string & message)
 {
-	cossb_log->log(log::loglevel::INFO, fmt::format("Websocket Message Received : {}",message.c_str()));
+	cossb_log->log(log::loglevel::INFO, fmt::format("***Websocket Message Received : {}",message.c_str()));
 
 }
 
@@ -35,12 +35,13 @@ bool wsclient::setup()
 {
 	_uri = get_profile()->get(profile::section::property, "uri").asString("ws://localhost:9002");
 	_client = easywsclient::WebSocket::from_url(_uri.c_str());
-	if(_client!=nullptr) {
+	if(_client) {
 		if(_client->getReadyState()!=easywsclient::WebSocket::CLOSED){
 			cossb_log->log(log::loglevel::INFO, fmt::format("Connected to the {} websocket server",_uri));
 		}
 		else {
 			cossb_log->log(log::loglevel::ERROR, fmt::format("Cannot connect to the {} websocket server",_uri));
+			_client->close();
 		}
 	}
 	else {
@@ -133,8 +134,10 @@ void wsclient::read()
 {
 	while(1) {
 		try {
-			if(_client)
-				_client->dispatch(handle_message);
+			if(_client){
+				if(_client->getReadyState()!=easywsclient::WebSocket::CLOSED)
+					_client->dispatch(handle_message);
+			}
 
 			boost::this_thread::sleep(boost::posix_time::milliseconds(10));
 		}
