@@ -31,30 +31,31 @@ int main(int argc, char* argv[])
 
 	sensor_epmap.onmessage=[&server](shared_ptr<WsServer::Connection> connection, shared_ptr<WsServer::Message> message) {
 		auto message_str = message->string();
-		cout << "[" << (size_t)connection.get() << "]" << "Message received : " << message_str << endl;
+		cout << "[" << connection.get() << "]" << "Message received : " << message_str << endl;
 
 		//echo_all.get_connections() can also be used to solely receive connections on this endpoint
 		for(auto a_connection: server.get_connections()) {
-			auto send_stream=make_shared<WsServer::SendStream>();
-			*send_stream << message_str;
-
-			//server.send is an asynchronous function
-			server.send(a_connection, send_stream);
+			auto send_stream = make_shared<WsServer::SendStream>();
+			if(a_connection!=connection){
+				*send_stream << message_str;
+				//server.send is an asynchronous function
+				server.send(a_connection, send_stream);
+			}
 		}
 	};
 
 	sensor_epmap.onopen=[](shared_ptr<WsServer::Connection> connection) {
-		cout << "* New connection : " << (size_t)connection.get() << endl;
+		cout << "* New connection : " << connection.get() << endl;
 	};
 
 	    //See RFC 6455 7.4.1. for status codes
 	sensor_epmap.onclose=[](shared_ptr<WsServer::Connection> connection, int status, const string& reason) {
-		cout << "* Close connection : " << (size_t)connection.get() << " with status code " << status << endl;
+		cout << "* Close connection : " << connection.get() << " with status code " << status << endl;
 	};
 
 	    //See http://www.boost.org/doc/libs/1_55_0/doc/html/boost_asio/reference.html, Error Codes for error code meanings
 	sensor_epmap.onerror=[](shared_ptr<WsServer::Connection> connection, const boost::system::error_code& ec) {
-		cout << "Server: Error in connection " << (size_t)connection.get() << ". " <<
+		cout << "Server: Error in connection " << connection.get() << ". " <<
 				"Error: " << ec << ", error message: " << ec.message() << endl;
 	};
 
