@@ -13,7 +13,14 @@ USE_COMPONENT_INTERFACE(wsclient)
 
 void handle_message(const std::string & message)
 {
+
+	cossb::base::message msg("wsclient", base::msg_type::REQUEST);
+	msg.parse(message);
+	cout << msg.show() << endl;
+	//cossb_broker->publish("websocket_read",msg);
+
 	cossb_log->log(log::loglevel::INFO, fmt::format("***Websocket Message Received : {}",message.c_str()));
+
 
 }
 
@@ -94,40 +101,6 @@ void wsclient::request(cossb::base::message* const msg)
 		case cossb::base::msg_type::SIGNAL: break;
 
 	}
-	/*switch(msg->get_frame()->type)
-	{
-		case cossb::base::msg_type::REQUEST:
-		{
-			if(!msg->get_frame()->topic.compare("service/websocket/write")) {
-				//check  uri
-				if((*msg)["uri"].empty()){
-					cossb_log->log(log::loglevel::ERROR, "Message does not have URI");
-					return;
-				}
-
-				//add url and
-				if(!(*msg)["uri"].is_null() && (*msg)["uri"].is_string()) {
-					string uri = (*msg)["uri"];
-					if(_client_map.find(uri)==_client_map.end()){
-						_client_map[uri] = easywsclient::WebSocket::from_url(uri);
-						cossb_log->log(log::loglevel::INFO, fmt::format("Add new Websocket URL {}", uri));
-					}
-
-					if(!(*msg)["data"].empty()){
-						cossb_log->log(log::loglevel::INFO, fmt::format("Send to websocket server : {}", msg->show()));
-
-						if(_client_map[uri]->getReadyState()!=easywsclient::WebSocket::CLOSED){
-							_client_map[uri]->send(msg->show());
-							_client_map[uri]->poll(0);
-						}
-						else
-							cossb_log->log(log::loglevel::WARN, "Cannot send message : No data");
-					}
-				}
-			}
-		}
-			break;
-	}*/
 }
 
 void wsclient::read()

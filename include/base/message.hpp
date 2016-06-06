@@ -50,6 +50,7 @@ class message {
 
 public:
 	message(interface::icomponent* component, msg_type type = msg_type::DATA);
+	message(const char* component_name, msg_type type = msg_type::DATA);
 	virtual ~message() { }
 
 	inline json::reference operator[] (const char* k) {
@@ -72,6 +73,10 @@ public:
 	cossb::base::msgframe* get_frame() { return &frame; }
 	const char* get_topic() { return frame.topic.c_str(); }
 	const char* get_from() { return frame.from.c_str(); }
+
+	void parse(string sdata){
+		data.parse(sdata.c_str());
+	}
 
 protected:
 	/**
