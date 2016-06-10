@@ -14,7 +14,7 @@
 </info>
 
 <property>
-	<uri>ws://192.168.0.6:9002/sensor</uri>
+	<uri>ws://192.168.0.26:9002/sensor</uri>
 </property>
 
 <service name="websocket_read" method="publish" topic="service/websocket/read"></service>
