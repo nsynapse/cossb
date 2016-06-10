@@ -44,6 +44,7 @@ void example_cat_monitoring::request(cossb::base::message* const msg)
 
 void example_cat_monitoring::write()
 {
+	static unsigned long try_count = 1;
 	static char id = 0x01;
 	while(1) {
 		try {
@@ -54,7 +55,7 @@ void example_cat_monitoring::write()
 			msg["data"] = {0xff, 0xff, 0x01, 0x03, 0x00, 0x20, 0xdb };
 			cossb_broker->publish("example_cat_push", msg);
 
-			cossb_log->log(cossb::log::loglevel::INFO, fmt::format("Send Test Message : {}",msg.show()));
+			cossb_log->log(cossb::log::loglevel::INFO, fmt::format("[{}] Send Test Message : {}",try_count++, msg.show()));
 			boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
 
 			id++;
