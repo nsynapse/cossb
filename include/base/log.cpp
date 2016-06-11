@@ -3,6 +3,7 @@
 #include <iostream>
 #include <interface/ilog.hpp>
 #include <util/format.h>
+#include <util/localtime.hpp>
 
 namespace cossb {
 namespace log {
@@ -22,15 +23,15 @@ void console::log(const log::loglevel& level, const char* logstr)
 	{
 		switch(level)
 		{
-		case	loglevel::TRACE:	cout << "[TRACE]\t"	<< logstr << endl;	break;
-		case	loglevel::DEBUG:	cout << "[DEBUG]\t"	<< logstr << endl;	break;
-		case	loglevel::INFO:	cout << "[INFO]\t"	<< logstr << endl;	break;
-		case	loglevel::NOTICE: cout << "[NOTICE]\t"	<< logstr << endl;	break;
-		case	loglevel::WARN: cout << "[WARN]\t"	<< logstr << endl;	break;
-		case	loglevel::ERROR: cout << "[ERROR]\t"	<< logstr << endl;	break;
-		case	loglevel::CRITICAL: cout << "[CRITICAL]\t"	<< logstr << endl;	break;
-		case	loglevel::ALERT: cout << "[ALERT]\t"	<< logstr << endl;	break;
-		case	loglevel::EMERG: cout << "[EMERG]\t"	<< logstr << endl;	break;
+		case	loglevel::TRACE:	cout << _time.current_formatted() << "[TRACE]\t"	<< logstr << endl;	break;
+		case	loglevel::DEBUG:	cout << _time.current_formatted() << "[DEBUG]\t"	<< logstr << endl;	break;
+		case	loglevel::INFO:		cout << _time.current_formatted() << "[INFO]\t"		<< logstr << endl;	break;
+		case	loglevel::NOTICE: 	cout << _time.current_formatted() << "[NOTICE]\t"	<< logstr << endl;	break;
+		case	loglevel::WARN: 	cout << _time.current_formatted() << "[WARN]\t"		<< logstr << endl;	break;
+		case	loglevel::ERROR: 	cout << _time.current_formatted() << "[ERROR]\t"	<< logstr << endl;	break;
+		case	loglevel::CRITICAL: cout << _time.current_formatted() << "[CRITICAL]\t"	<< logstr << endl;	break;
+		case	loglevel::ALERT: 	cout << _time.current_formatted() << "[ALERT]\t"	<< logstr << endl;	break;
+		case	loglevel::EMERG: 	cout << _time.current_formatted() << "[EMERG]\t"	<< logstr << endl;	break;
 		}
 	}
 }
@@ -43,15 +44,15 @@ void console::log(const log::loglevel& level, string logstr)
 	{
 		switch(level)
 		{
-		case	loglevel::TRACE:	cout << "[TRACE]\t"	<< logstr << endl;	break;
-		case	loglevel::DEBUG:	cout << "[DEBUG]\t"	<< logstr << endl;	break;
-		case	loglevel::INFO:	cout << "[INFO]\t"	<< logstr << endl;	break;
-		case	loglevel::NOTICE: cout << "[NOTICE]\t"	<< logstr << endl;	break;
-		case	loglevel::WARN: cout << "[WARN]\t"	<< logstr << endl;	break;
-		case	loglevel::ERROR: cout << "[ERROR]\t"	<< logstr << endl;	break;
-		case	loglevel::CRITICAL: cout << "[CRITICAL]\t"	<< logstr << endl;	break;
-		case	loglevel::ALERT: cout << "[ALERT]\t"	<< logstr << endl;	break;
-		case	loglevel::EMERG: cout << "[EMERG]\t"	<< logstr << endl;	break;
+		case	loglevel::TRACE:	cout << _time.current_formatted() << "[TRACE]\t"	<< logstr << endl;	break;
+		case	loglevel::DEBUG:	cout << _time.current_formatted() << "[DEBUG]\t"	<< logstr << endl;	break;
+		case	loglevel::INFO:		cout << _time.current_formatted() << "[INFO]\t"		<< logstr << endl;	break;
+		case	loglevel::NOTICE: 	cout << _time.current_formatted() << "[NOTICE]\t"	<< logstr << endl;	break;
+		case	loglevel::WARN: 	cout << _time.current_formatted() << "[WARN]\t"		<< logstr << endl;	break;
+		case	loglevel::ERROR: 	cout << _time.current_formatted() << "[ERROR]\t"	<< logstr << endl;	break;
+		case	loglevel::CRITICAL: cout << _time.current_formatted() << "[CRITICAL]\t"	<< logstr << endl;	break;
+		case	loglevel::ALERT: 	cout << _time.current_formatted() << "[ALERT]\t"	<< logstr << endl;	break;
+		case	loglevel::EMERG: 	cout << _time.current_formatted() << "[EMERG]\t"	<< logstr << endl;	break;
 		}
 	}
 }

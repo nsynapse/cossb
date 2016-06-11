@@ -44,7 +44,8 @@ cossb:	$(OUTDIR)cossb.o \
 		$(OUTDIR)server.o \
 		$(OUTDIR)client.o \
 		$(OUTDIR)message.o \
-		$(OUTDIR)log.o
+		$(OUTDIR)log.o\
+		$(OUTDIR)localtime.o
 		$(CXX) $(LDFLAGS) -o $(OUTDIR)$@ $^ $(LDLIBS)
 		
 cossb_test:	$(OUTDIR)cossb_test.o \
@@ -59,7 +60,8 @@ cossb_test:	$(OUTDIR)cossb_test.o \
 		$(OUTDIR)server.o \
 		$(OUTDIR)client.o \
 		$(OUTDIR)message.o \
-		$(OUTDIR)log.o
+		$(OUTDIR)log.o \
+		$(OUTDIR)localtime.o
 		$(CXX) $(LDFLAGS) -o $(OUTDIR)$@ $^ $(LDLIBS_TEST)
 
 # Util
@@ -160,6 +162,11 @@ cat_protocol.comp: $(OUTDIR)cat_protocol.o
 	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
 $(OUTDIR)cat_protocol.o: $(COMPONENT_FILES)cat_protocol/cat_protocol.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
+dbsqlite.comp: $(OUTDIR)dbsqlite.o
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+$(OUTDIR)dbsqlite.o: $(COMPONENT_FILES)dbsqlite/dbsqlite.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 		
 		
 $(OUTDIR)cossb.o: $(SOURCE_FILES)cossb.cpp 
@@ -198,6 +205,9 @@ $(OUTDIR)client.o: $(INCLUDE_FILES)net/client.cpp
 $(OUTDIR)message.o: $(INCLUDE_FILES)base/message.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
+$(OUTDIR)localtime.o: $(INCLUDE_FILES)util/localtime.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
 #for test code	
 $(OUTDIR)cossb_test.o: $(TEST_FILES)cossb_test.cpp 
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
@@ -218,7 +228,7 @@ test: cossb_test
 examples: helloworld.comp example_tcpserver.comp example_uart.comp example_messageout.comp example_messageprint.comp example_edison_gpio.comp example_edison_i2c.comp example_edison_uart.comp example_websocket_client.comp example_cat_monitoring.comp
 tutorial1 : example_messageout.comp example_messageprint.comp
 util: wsbroadcaster
-cat: cossb wsbroadcaster edison_uart.comp example_cat_monitoring.comp cat_protocol.comp wsclient.comp
+cat: cossb wsbroadcaster edison_uart.comp example_cat_monitoring.comp cat_protocol.comp wsclient.comp dbsqlite.comp
 
 # Clean
 clean: 

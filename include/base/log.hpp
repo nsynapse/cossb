@@ -11,6 +11,7 @@
 #include <arch/singleton.hpp>
 #include <util/format.h>
 #include <interface/ilog.hpp>
+#include <util/localtime.hpp>
 
 
 namespace cossb {
@@ -49,6 +50,8 @@ private:
 
 private:
 	interface::ilog* _logger = nullptr;
+
+	util::systime _time;
 
 };
 
