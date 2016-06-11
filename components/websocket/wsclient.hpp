@@ -13,6 +13,7 @@
 #include "easywsclient.cpp"
 #include <vector>
 #include <map>
+#include <mutex>
 
 using namespace cossb;
 using easywsclient::WebSocket;
@@ -44,12 +45,12 @@ public:
 	void request(cossb::base::message* const msg);
 
 private:
-	//<url, socket> pair
-	//std::map<string, easywsclient::WebSocket::pointer> _client_map;
 
 	string _uri;
 	easywsclient::WebSocket::pointer _client;
 	base::task _socket_task;
+
+	std::mutex _lock;
 
 private:
 	void read();

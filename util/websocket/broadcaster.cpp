@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
 
 	sensor_epmap.onmessage=[&server](shared_ptr<WsServer::Connection> connection, shared_ptr<WsServer::Message> message) {
 		auto message_str = message->string();
-		cout << "[" << connection.get() << "]" << "Message received : " << message_str << endl;
+		cout << "[" << connection.get() << "]" << "\tMessage received : " << message_str << endl;
 
 		//echo_all.get_connections() can also be used to solely receive connections on this endpoint
 		for(auto a_connection: server.get_connections()) {
@@ -41,6 +41,9 @@ int main(int argc, char* argv[])
 				//server.send is an asynchronous function
 				server.send(a_connection, send_stream);
 			}
+			else
+				cout << "*";
+
 		}
 	};
 

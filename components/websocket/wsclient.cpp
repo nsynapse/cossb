@@ -81,6 +81,7 @@ void wsclient::request(cossb::base::message* const msg)
 
 			if(_client){
 				if(_client->getReadyState()!=easywsclient::WebSocket::CLOSED){
+					std::lock_guard<std::mutex> lock(_lock);
 					_client->send(msg->show());
 					_client->poll(0);
 				}
@@ -108,8 +109,10 @@ void wsclient::read()
 	while(1) {
 		try {
 			if(_client){
-				if(_client->getReadyState()!=easywsclient::WebSocket::CLOSED)
+				if(_client->getReadyState()!=easywsclient::WebSocket::CLOSED){
+					std::lock_guard<std::mutex> lock(_lock);
 					_client->dispatch(handle_message);
+				}
 			}
 
 			boost::this_thread::sleep(boost::posix_time::milliseconds(10));
