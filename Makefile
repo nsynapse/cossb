@@ -163,11 +163,6 @@ cat_protocol.comp: $(OUTDIR)cat_protocol.o
 $(OUTDIR)cat_protocol.o: $(COMPONENT_FILES)cat_protocol/cat_protocol.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
-dbsqlite.comp: $(OUTDIR)dbsqlite.o
-	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
-$(OUTDIR)dbsqlite.o: $(COMPONENT_FILES)dbsqlite/dbsqlite.cpp
-	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
-		
 		
 $(OUTDIR)cossb.o: $(SOURCE_FILES)cossb.cpp 
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
