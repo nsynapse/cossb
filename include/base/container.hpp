@@ -84,7 +84,7 @@ private:
 				delete itr->second;
 				itr->second = nullptr;
 			}
-			_container.erase(itr);
+			//_container.erase(itr);
 			return true;
 		}
 		return false;

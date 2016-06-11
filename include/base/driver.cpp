@@ -16,6 +16,8 @@
 #include <base/exception.hpp>
 #include <util/format.h>
 #include <base/log.hpp>
+#include <base/manifest.hpp>
+#include <base/common.hpp>
 
 using namespace std;
 using namespace cossb;
@@ -23,12 +25,16 @@ using namespace cossb;
 namespace cossb {
 namespace driver {
 
-component_driver::component_driver(const char* component_path)
+component_driver::component_driver(const char* component_name)
 {
 	try {
-		if(load(component_path))
+		string comp_dir = cossb_manifest->get_path()[__COMPONENT__];
+		if(comp_dir.empty())
+			comp_dir = "./";
+
+		if(load((comp_dir+string(component_name)).c_str()))
 		{
-			string profile_path = fmt::format("{}.xml",component_path);
+			string profile_path = fmt::format("{}{}{}",comp_dir,component_name,__PROFILE_EXT__);
 
 			if(_ptr_component) {
 				_ptr_component->_profile = new profile::xml();
@@ -40,7 +46,7 @@ component_driver::component_driver(const char* component_path)
 			throw exception(excode::COMPONENT_LOAD_FAIL);
 	}
 	catch(driver::exception& e) {
-		cossb_log->log(log::loglevel::ERROR, e.what());
+		cossb_log->log(log::loglevel::ERROR, fmt::format("<{}> : {}", component_name, e.what()));
 	}
 }
 
@@ -56,7 +62,7 @@ component_driver::~component_driver()
 
 bool component_driver::load(const char* component_path)
 {
-	string fullpath = fmt::format("{}.comp",component_path);
+	string fullpath = fmt::format("{}{}",component_path, __COMPONENT_EXT__);
 
 	_handle = dlopen(fullpath.c_str(), RTLD_LAZY|RTLD_GLOBAL);
 
@@ -75,7 +81,7 @@ bool component_driver::load(const char* component_path)
 		return true;
 	}
 	else
-		throw exception(excode::COMPONENT_OPEN_ERROR, dlerror());
+		throw exception(excode::COMPONENT_LOAD_FAIL);
 
 	return false;
 }

@@ -28,7 +28,7 @@ class component_driver {
 	friend class broker::component_broker;
 
 public:
-	component_driver(const char* component_path);
+	component_driver(const char* component_name);
 	virtual ~component_driver();
 
 	/**

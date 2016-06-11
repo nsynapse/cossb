@@ -19,14 +19,14 @@ example_cat_monitoring::~example_cat_monitoring() {
 bool example_cat_monitoring::setup()
 {
 
-	if(!_task)
-		create_task(example_cat_monitoring::write);
-
 	return true;
 }
 
 bool example_cat_monitoring::run()
 {
+	if(!_task)
+		create_task(example_cat_monitoring::write);
+
 	return true;
 }
 

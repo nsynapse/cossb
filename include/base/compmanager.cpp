@@ -30,7 +30,7 @@ component_manager::component_manager()
 component_manager::~component_manager()
 {
 	stop();
-	cossb_component_container->destroy();
+	uninstall();
 }
 
 bool component_manager::install(const char* component_name)
@@ -38,23 +38,17 @@ bool component_manager::install(const char* component_name)
 	if(!component_name)
 		return false;
 
-	cossb_log->log(log::loglevel::INFO, fmt::format("{} component is installing... ", component_name));
+	cossb_log->log(log::loglevel::INFO, fmt::format("Install <{}>", component_name));
 
-	string comp_dir = cossb_manifest->get_path()[__COMPONENT__];
-	if(comp_dir.empty())
-		comp_dir = "./";
-
-	if(cossb_component_container->add(component_name, new driver::component_driver((comp_dir+string(component_name)).c_str())))
+	if(cossb_component_container->add(component_name, new driver::component_driver(component_name)))
 	{
 		driver::component_driver* driver = cossb_component_container->get_driver(component_name);
 
 		for(auto srv:driver->get_component()->get_profile()->_services)
 			cossb_broker->regist(&srv);
 
-		if(driver->setup()) {
-			cossb_log->log(log::loglevel::INFO, fmt::format("{} component was successfully installed", driver->get_component()->get_name()));
+		if(driver->setup())
 			return true;
-		}
 	}
 
 	this->uninstall(component_name);
@@ -68,10 +62,19 @@ bool component_manager::uninstall(const char* component_name)
 	{
 		cossb_component_container->get_driver(component_name)->stop();
 		cossb_component_container->remove(component_name);
-		cossb_log->log(log::loglevel::INFO, fmt::format("Component uninstalled : {}", component_name).c_str());
+		cossb_log->log(log::loglevel::INFO, fmt::format("Uninstall <{}>", component_name));
 		return true;
 	}
 	return false;
+}
+
+bool component_manager::uninstall()
+{
+	for(auto comp:cossb_component_container->_container) {
+		this->uninstall(comp.first.c_str());
+	}
+	cossb_component_container->clear();
+	return true;
 }
 
 
@@ -96,7 +99,7 @@ bool component_manager::run()
 bool component_manager::stop(const char* component_name)
 {
 	if(cossb_component_container->exist(component_name)) {
-		cossb_log->log(log::loglevel::INFO, fmt::format("Stopping {} component...", component_name));
+		cossb_log->log(log::loglevel::INFO, fmt::format("Stop <{}>", component_name));
 		cossb_component_container->get_driver(component_name)->stop();
 		return true;
 	}

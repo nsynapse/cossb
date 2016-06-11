@@ -11,7 +11,7 @@
 
 #define __COMPONENT__ "component"
 #define __COMPONENT_EXT__ ".comp"
-
+#define __PROFILE_EXT__	".xml"
 #define __SERVICE__ "service"
 
 

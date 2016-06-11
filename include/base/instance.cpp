@@ -32,7 +32,6 @@ bool init(const char* manifest_file, bool setup)
 
 void destroy()
 {
-	cossb_log->log(log::loglevel::INFO, "Now terminating...");
 	cossb_broker->destroy();
 	cossb_system_manager->destroy();
 	cossb_manifest->destroy();
@@ -46,7 +45,6 @@ bool sync()
 
 bool start()
 {
-	cossb_log->log(log::loglevel::INFO, "Starting all components...");
 	if(cossb_component_manager->run())
 		return true;
 
@@ -57,7 +55,6 @@ bool stop()
 {
 	if(cossb_component_manager->count()>0)
 	{
-		cossb_log->log(log::loglevel::INFO, "Stopping all components...");
 		if(cossb_component_manager->stop())
 			return true;
 	}

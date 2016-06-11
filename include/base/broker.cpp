@@ -45,7 +45,7 @@ unsigned int component_broker::publish(interface::icomponent* to_component, cons
 				times++;
 			}
 			else {
-				cossb_log->log(log::loglevel::ERROR, fmt::format("{} has no component driver.", to_component->get_name()));
+				cossb_log->log(log::loglevel::ERROR, fmt::format("<{}> has no component driver.", to_component->get_name()));
 				//throw broker::exception(cossb::broker::excode::DRIVER_NOT_FOUND);
 			}
 		}
@@ -60,11 +60,11 @@ bool component_broker::regist(cossb::service::_service_desc* const service)
 		if(_service_map.find(service->name)==_service_map.end()) {
 			_service_map.insert(service_map::value_type(service->name, *service));
 			_topic_map.insert(topic_map::value_type(service->topic, service->component_name));
-			cossb_log->log(log::loglevel::INFO, fmt::format("Registration : topic {}, Service {}", service->topic, service->name));
+			cossb_log->log(log::loglevel::INFO, fmt::format("Service Registration : topic {} / Service {}", service->topic, service->name));
 			return true;
 		}
 		else
-			cossb_log->log(log::loglevel::WARN, fmt::format("Already registered Topic {}, Service {}", service->topic, service->name));
+			cossb_log->log(log::loglevel::WARN, fmt::format("Already registered service : Topic {} / Service {}", service->topic, service->name));
 	}
 
 	return false;
