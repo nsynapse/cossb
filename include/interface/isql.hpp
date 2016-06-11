@@ -12,13 +12,15 @@
 namespace cossb {
 namespace interface {
 
-class iSQL
+class isql
 {
 public:
-	virtual ~iSQL() {}
+	virtual ~isql() {}
 
-	virtual bool open(const char* db) = 0;
-	virtual void close() = 0;
+	/*
+	 * @brief	send sql query
+	 */
+	virtual void query(const char* q) = 0;
 };
 
 } /* namespace interface */

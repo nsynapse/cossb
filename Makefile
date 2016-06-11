@@ -45,7 +45,8 @@ cossb:	$(OUTDIR)cossb.o \
 		$(OUTDIR)client.o \
 		$(OUTDIR)message.o \
 		$(OUTDIR)log.o\
-		$(OUTDIR)localtime.o
+		$(OUTDIR)localtime.o \
+		$(OUTDIR)sqlite.o
 		$(CXX) $(LDFLAGS) -o $(OUTDIR)$@ $^ $(LDLIBS)
 		
 cossb_test:	$(OUTDIR)cossb_test.o \
@@ -61,7 +62,8 @@ cossb_test:	$(OUTDIR)cossb_test.o \
 		$(OUTDIR)client.o \
 		$(OUTDIR)message.o \
 		$(OUTDIR)log.o \
-		$(OUTDIR)localtime.o
+		$(OUTDIR)localtime.o \
+		$(OUTDIR)sqlite.o
 		$(CXX) $(LDFLAGS) -o $(OUTDIR)$@ $^ $(LDLIBS_TEST)
 
 # Util
@@ -201,6 +203,9 @@ $(OUTDIR)message.o: $(INCLUDE_FILES)base/message.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
 $(OUTDIR)localtime.o: $(INCLUDE_FILES)util/localtime.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
+$(OUTDIR)sqlite.o: $(INCLUDE_FILES)db/sqlite.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
 #for test code	
