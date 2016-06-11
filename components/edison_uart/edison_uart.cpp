@@ -99,23 +99,25 @@ void edison_uart::read()
 	while(1) {
 		try {
 			if(_uart) {
-				const unsigned int len = 1024;
-				unsigned char* buffer = new unsigned char[len];
-				int readsize = _uart->read((char*)buffer, len);
+				if(_uart->dataAvailable(10)){	//waiting 10ms for reading
+					const unsigned int len = 1024;
+					unsigned char* buffer = new unsigned char[len];
 
-				if(readsize>0) {
-					cossb_log->log(log::loglevel::INFO, fmt::format("Read {} Byte(s) from serial",readsize));
-					//publish message with received data
-					cossb::base::message msg(this, base::msg_type::REQUEST);
+					int readsize = _uart->read((char*)buffer, len);
+					if(readsize>0) {
+						cossb_log->log(log::loglevel::INFO, fmt::format("Read {} Byte(s) from serial",readsize));
+						//publish message with received data
+						cossb::base::message msg(this, base::msg_type::REQUEST);
 
-					for(int i=0;i<readsize;i++)
-						msg["data"].push_back(buffer[i]);
+						for(int i=0;i<readsize;i++)
+							msg["data"].push_back(buffer[i]);
 
-					cossb_broker->publish("edison_uart_read", msg);
+						cossb_broker->publish("edison_uart_read", msg);
+					}
+
+					delete []buffer;
+					boost::this_thread::sleep(boost::posix_time::milliseconds(10));
 				}
-
-				delete []buffer;
-				boost::this_thread::sleep(boost::posix_time::milliseconds(10));
 			}
 		}
 		catch(thread_interrupted&) {
