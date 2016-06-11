@@ -99,7 +99,6 @@ bool component_manager::run()
 bool component_manager::stop(const char* component_name)
 {
 	if(cossb_component_container->exist(component_name)) {
-		cossb_log->log(log::loglevel::INFO, fmt::format("Stop <{}>", component_name));
 		cossb_component_container->get_driver(component_name)->stop();
 		return true;
 	}
