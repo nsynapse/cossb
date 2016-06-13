@@ -26,6 +26,7 @@
 	<required type="component">edison_uart</required>
 	<required type="component">cat_protocol</required>
 	<required type="component">wsclient</required>
+	<required type="component">example_cat_db_log</required>
 	
 	<!--
 	<required type="library">libcblog.so</required>
