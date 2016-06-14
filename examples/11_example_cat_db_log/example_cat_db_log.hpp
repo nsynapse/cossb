@@ -8,7 +8,7 @@
 
 using namespace std;
 
-
+class sqlite3;
 class example_cat_db_log : public interface::icomponent {
 public:
 	example_cat_db_log();
@@ -35,10 +35,13 @@ public:
 	void request(cossb::base::message* const msg);
 
 private:
-	void save_log_db();
+
+	//save log to database
+	void save_log(const char* tablename, Arg);
 
 private:
 	string _dbname;
+	sqlite3* _db = nullptr;
 
 };
 

@@ -17,7 +17,6 @@
 #include <interface/isql.hpp>
 #include <interface/ilog.hpp>
 #include <interface/icomm.hpp>
-#include <interface/isimpleservice.hpp>
 #include <interface/iutility.hpp>
 #include <interface/iservice.hpp>
 #include <base/task.hpp>
