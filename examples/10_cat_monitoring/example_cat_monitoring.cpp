@@ -39,7 +39,41 @@ bool example_cat_monitoring::stop()
 
 void example_cat_monitoring::request(cossb::base::message* const msg)
 {
+	cossb_log->log(log::loglevel::INFO, fmt::format("Message : {}", msg->show()));
 
+	switch(msg->get_frame()->type)
+	{
+		case cossb::base::msg_type::REQUEST:
+		{
+			try {
+				//if 'id' has a value
+				if(!(*msg)["id"].is_null()){
+					if((*msg)["id"].is_number()){
+						//read id value as int
+						int id = (*msg)["id"].get<int>();
+						cossb_log->log(log::loglevel::INFO, fmt::format("Message ID : {}", id));
+					}
+
+					if(!(*msg)["list"].is_null()){
+						if((*msg)["list"].is_array()){
+							//std::vector<int> arr = (*msg)["list"];	//correct
+							std::vector<bool> arr = (*msg)["list"];	//error!!
+							for(int v:arr)
+								cout << v << "\t";
+							cout << endl;
+						}
+					}
+				}
+			}
+			catch(std::exception& e){
+				cossb_log->log(log::loglevel::ERROR, fmt::format("message error : {}", e.what()));
+			}
+		} break;
+		case cossb::base::msg_type::DATA: break;
+		case cossb::base::msg_type::SIGNAL: break;
+		default:
+			cossb_log->log(log::loglevel::INFO, "Received message has unsupported type.");
+	}
 }
 
 void example_cat_monitoring::write()

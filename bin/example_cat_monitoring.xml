@@ -19,3 +19,4 @@
 
 <!-- do not edit service name attribute -->
 <service name="example_cat_push" method="publish" topic="service/serial/write"></service>
+<service name="example_cat_ws" method="subscribe" topic="service/websocket/read"></service>
