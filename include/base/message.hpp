@@ -74,9 +74,7 @@ public:
 	const char* get_topic() { return frame.topic.c_str(); }
 	const char* get_from() { return frame.from.c_str(); }
 
-	void parse(string sdata){
-		data.parse(sdata.c_str());
-	}
+	void parse(string sdata);
 
 protected:
 	/**

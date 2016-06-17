@@ -24,5 +24,9 @@ message::message(const char* component_name, msg_type type)
 	frame.from = component_name;
 }
 
+void message::parse(string sdata){
+	data = json::parse(sdata.c_str());
+}
+
 } /* namespace base */
 } /* namespace cossb */
