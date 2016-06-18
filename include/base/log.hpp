@@ -13,7 +13,6 @@
 #include <interface/ilog.hpp>
 #include <util/localtime.hpp>
 
-
 namespace cossb {
 namespace manager { class system_manager; }
 namespace log {
@@ -33,7 +32,6 @@ public:
 	 */
 	void log(const loglevel& level,  const char* logstr);
 	void log(const log::loglevel& level, string logstr);
-
 
 	/**
 	 * @brief	to use another log interface dynamically

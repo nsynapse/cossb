@@ -6,7 +6,6 @@
 #include <util/localtime.hpp>
 
 
-
 namespace cossb {
 namespace log {
 
@@ -20,6 +19,7 @@ console::~console() {
 	_logger = nullptr;
 
 }
+
 void console::log(const log::loglevel& level, const char* logstr)
 {
 	if(_logger)
