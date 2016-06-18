@@ -27,6 +27,7 @@
 	<required type="component">cat_protocol</required>
 	<required type="component">wsclient</required>
 	<required type="component">sqlite_db</required>
+	<required type="component">example_cat_db_log</required>
 	
 	
 	<!-- do not edit this path -->

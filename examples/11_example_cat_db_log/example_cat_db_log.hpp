@@ -35,13 +35,7 @@ public:
 	void request(cossb::base::message* const msg);
 
 private:
-
-	//save log to database
-	void save_log(const char* tablename, Arg);
-
-private:
 	string _dbname;
-	sqlite3* _db = nullptr;
 
 };
 

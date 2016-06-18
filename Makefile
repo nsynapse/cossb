@@ -121,6 +121,11 @@ example_cat_monitoring.comp: $(OUTDIR)example_cat_monitoring.o
 $(OUTDIR)example_cat_monitoring.o: $(EXAMPLE_FILES)10_cat_monitoring/example_cat_monitoring.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
+example_cat_db_log.comp: $(OUTDIR)example_cat_db_log.o 
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+$(OUTDIR)example_cat_db_log.o: $(EXAMPLE_FILES)11_example_cat_db_log/example_cat_db_log.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
 edison_gpio.comp: $(OUTDIR)edison_gpio.o 
 	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
 $(OUTDIR)edison_gpio.o: $(COMPONENT_FILES)edison_gpio/edison_gpio.cpp
@@ -228,7 +233,7 @@ test: cossb_test
 examples: helloworld.comp example_tcpserver.comp example_uart.comp example_messageout.comp example_messageprint.comp example_edison_gpio.comp example_edison_i2c.comp example_edison_uart.comp example_websocket_client.comp example_cat_monitoring.comp
 tutorial1 : example_messageout.comp example_messageprint.comp
 util: wsbroadcaster
-cat: cossb wsbroadcaster edison_uart.comp example_cat_monitoring.comp cat_protocol.comp wsclient.comp sqlite_db.comp
+cat: cossb wsbroadcaster edison_uart.comp example_cat_monitoring.comp cat_protocol.comp wsclient.comp sqlite_db.comp example_cat_db_log.comp
 
 # Clean
 clean: 
