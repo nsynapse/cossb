@@ -86,11 +86,15 @@ void example_cat_monitoring::write()
 
 			//test protocol for monitoring test
 			//it will be converted as [ 0xff | 0xff | id | length | error | value | checksum ]
-			msg["data"] = {0xff, 0xff, 0x01, 0x03, 0x00, 0x20, 0xdb };
+			static unsigned char value = 0;
+			msg["data"] = {0xff, 0xff, 0x01, 0x03, 0x00, value++, 0xdb };
 			cossb_broker->publish("example_cat_push", msg);
 
+			if(value>=255)
+				value=0;
+
 			cossb_log->log(cossb::log::loglevel::INFO, fmt::format("[{}] Send Test Message : {}",try_count++, msg.show()));
-			boost::this_thread::sleep(boost::posix_time::milliseconds(500));
+			boost::this_thread::sleep(boost::posix_time::milliseconds(200));
 
 			id++;
 			if(id>0x05){
