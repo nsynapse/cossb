@@ -38,6 +38,11 @@ bool component_manager::install(const char* component_name)
 	if(!component_name)
 		return false;
 
+	if(cossb_component_container->exist(component_name)){
+		cossb_log->log(log::loglevel::WARN, fmt::format("Already installed <{}>", component_name));
+		return false;
+	}
+
 	cossb_log->log(log::loglevel::INFO, fmt::format("Install <{}>", component_name));
 
 	if(cossb_component_container->add(component_name, new driver::component_driver(component_name)))

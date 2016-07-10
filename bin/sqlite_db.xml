@@ -14,7 +14,7 @@
 </info>
 
 <property>
-	<targetdb>db.sqlite</targetdb>
+	<access>/home/hwang/git/edison_cat/catserver/db.sqlite3</access>
 </property>
 
-<service name="sqlite_db_write" method="subscribe" topic="service/db/sqlite/write"></service>
+<service name="sqlite_db_query" method="subscribe" topic="service/db/sqlite/query"></service>

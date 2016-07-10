@@ -19,16 +19,19 @@ sqlite_db::~sqlite_db() {
 
 bool sqlite_db::setup()
 {
-	_dbname = get_profile()->get(profile::section::property, "targetdb").asString("db.sqlite");
-	if(boost::filesystem::exists(_dbname.c_str())){
-		int rc = sqlite3_open(_dbname.c_str(), &_db);
-		if(rc){
-			cossb_log->log(log::loglevel::ERROR, fmt::format("Cannot access database {}", _dbname));
+	_db_path = get_profile()->get(profile::section::property, "access").asString("db.sqlite");
+	cossb_log->log(log::loglevel::INFO, fmt::format("Database : {}", _db_path));
+
+	if(boost::filesystem::exists(_db_path.c_str())){
+		int rc = sqlite3_open(_db_path.c_str(), &_db);
+		if(rc!=SQLITE_OK){
+			sqlite3_close(_db);
+			cossb_log->log(log::loglevel::ERROR, fmt::format("Cannot access database {}", _db_path));
 			return false;
 		}
 	}
 	else
-		cossb_log->log(log::loglevel::ERROR, fmt::format("Cannot find local database {}", _dbname));
+		cossb_log->log(log::loglevel::ERROR, fmt::format("Cannot find local database {}", _db_path));
 	return true;
 }
 
@@ -47,6 +50,13 @@ void sqlite_db::request(cossb::base::message* const msg)
 {
 	switch(msg->get_frame()->type) {
 	case cossb::base::msg_type::REQUEST: {
+		if(!msg->get_frame()->topic.compare("service/db/sqlite/query")) {
+			if(msg->get_frame()->type==base::msg_type::REQUEST){
+				if(!(*msg)["query"].is_null() && _db){
+					//sqlite3_exec(_db,);
+				}
+			}
+		}
 	} break;
 	case cossb::base::msg_type::DATA: break;
 	case cossb::base::msg_type::RESPONSE: break;

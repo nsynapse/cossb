@@ -94,7 +94,7 @@ void example_cat_monitoring::write()
 				value=0;
 
 			cossb_log->log(cossb::log::loglevel::INFO, fmt::format("[{}] Send Test Message : {}",try_count++, msg.show()));
-			boost::this_thread::sleep(boost::posix_time::milliseconds(200));
+			boost::this_thread::sleep(boost::posix_time::milliseconds(500));
 
 			id++;
 			if(id>0x05){

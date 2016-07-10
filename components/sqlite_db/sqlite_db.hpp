@@ -42,7 +42,7 @@ public:
 	void request(cossb::base::message* const msg);
 
 private:
-	string _dbname;
+	string _db_path;
 	sqlite3* _db = nullptr;
 
 };
