@@ -173,6 +173,11 @@ cat_protocol.comp: $(OUTDIR)cat_protocol.o
 $(OUTDIR)cat_protocol.o: $(COMPONENT_FILES)cat_protocol/cat_protocol.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
+filelog.comp: $(OUTDIR)filelog.o
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+$(OUTDIR)filelog.o: $(COMPONENT_FILES)filelog/filelog.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
 		
 $(OUTDIR)cossb.o: $(SOURCE_FILES)cossb.cpp 
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
@@ -233,7 +238,7 @@ test: cossb_test
 examples: helloworld.comp example_tcpserver.comp example_uart.comp example_messageout.comp example_messageprint.comp example_edison_gpio.comp example_edison_i2c.comp example_edison_uart.comp example_websocket_client.comp example_cat_monitoring.comp
 tutorial1 : example_messageout.comp example_messageprint.comp
 util: wsbroadcaster
-cat: cossb wsbroadcaster edison_uart.comp example_cat_monitoring.comp cat_protocol.comp wsclient.comp sqlite_db.comp example_cat_db_log.comp
+cat: cossb wsbroadcaster edison_uart.comp example_cat_monitoring.comp cat_protocol.comp wsclient.comp sqlite_db.comp example_cat_db_log.comp filelog.comp
 
 # Clean
 clean: 
