@@ -41,7 +41,7 @@ void filelog::request(cossb::base::message* const msg)
 	switch(msg->get_frame()->type) {
 	case cossb::base::msg_type::REQUEST:
 	{
-		if(!msg->get_frame()->topic.compare("service/filelog/write")) {
+		/*if(!msg->get_frame()->topic.compare("service/filelog/write")) {
 			if(!(*msg)["data"].is_null() && (*msg)["data"].is_array()) {
 
 				if(!_file.is_open()){
@@ -53,7 +53,7 @@ void filelog::request(cossb::base::message* const msg)
 				  ofstream << element;
 				}
 			}
-		}
+		}*/
 	} break;
 	case cossb::base::msg_type::DATA: break;
 	case cossb::base::msg_type::RESPONSE: break;

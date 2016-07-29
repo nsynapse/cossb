@@ -61,11 +61,6 @@ public:
 		return data[k];
 	}
 
-	//will change to the raw()
-	string show() {
-		return data.dump();
-	}
-
 	string raw(){
 		return data.dump();
 	}
@@ -74,7 +69,23 @@ public:
 	const char* get_topic() { return frame.topic.c_str(); }
 	const char* get_from() { return frame.from.c_str(); }
 
+	/**
+	 * @breif	message data parse to json format
+	 */
 	void parse(string sdata);
+
+	/**
+	 * @brief	check empty
+	 * @return 	true if frame has no encoded data
+	 */
+	bool is_empty();	//true, if frame has no data
+
+	/**
+	 * @brief	getting json data pointer
+	 */
+	inline json* get() {
+		return &data;
+	}
 
 protected:
 	/**

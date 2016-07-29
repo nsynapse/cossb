@@ -73,12 +73,12 @@ void wsclient::request(cossb::base::message* const msg)
 {
 	switch(msg->get_frame()->type){
 		case cossb::base::msg_type::REQUEST: {
-			cossb_log->log(log::loglevel::INFO, msg->show());
+			cossb_log->log(log::loglevel::INFO, msg->raw());
 
 			if(_client){
 				if(_client->getReadyState()!=easywsclient::WebSocket::CLOSED){
 					std::lock_guard<std::mutex> lock(_lock);
-					_client->send(msg->show());
+					_client->send(msg->raw());
 					_client->poll(0);
 				}
 				else{

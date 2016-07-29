@@ -36,7 +36,7 @@ void example_cat_db_log::request(cossb::base::message* const msg)
 	{
 		case cossb::base::msg_type::REQUEST:
 		{
-			cossb_log->log(log::loglevel::INFO, fmt::format("Request for DB : {}", msg->show()));
+			cossb_log->log(log::loglevel::INFO, fmt::format("Request for DB : {}", msg->raw()));
 		} break;
 		case cossb::base::msg_type::DATA: break;
 		case cossb::base::msg_type::SIGNAL: break;

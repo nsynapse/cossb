@@ -39,7 +39,7 @@ bool example_cat_monitoring::stop()
 
 void example_cat_monitoring::request(cossb::base::message* const msg)
 {
-	cossb_log->log(log::loglevel::INFO, fmt::format("Message : {}", msg->show()));
+	cossb_log->log(log::loglevel::INFO, fmt::format("Message : {}", msg->raw()));
 
 	switch(msg->get_frame()->type)
 	{
@@ -93,7 +93,7 @@ void example_cat_monitoring::write()
 			if(value>=255)
 				value=0;
 
-			cossb_log->log(cossb::log::loglevel::INFO, fmt::format("[{}] Send Test Message : {}",try_count++, msg.show()));
+			cossb_log->log(cossb::log::loglevel::INFO, fmt::format("[{}] Send Test Message : {}",try_count++, msg.raw()));
 			boost::this_thread::sleep(boost::posix_time::milliseconds(500));
 
 			id++;

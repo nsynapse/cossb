@@ -28,5 +28,9 @@ void message::parse(string sdata){
 	data = json::parse(sdata.c_str());
 }
 
+bool message::is_empty(){
+	return frame.encoded_data.empty();
+}
+
 } /* namespace base */
 } /* namespace cossb */
