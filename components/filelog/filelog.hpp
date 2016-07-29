@@ -2,12 +2,18 @@
 #ifndef _COSSB_COMPONENT_FILELOG_HPP_
 #define _COSSB_COMPONENT_FILELOG_HPP_
 
+/**
+ * @brief	logging into text file
+ * @detail	all the incoming data saves into the single text file
+ */
+
 
 #include <base/interface.hpp>
 #include <map>
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <util/localtime.hpp>
 
 using namespace std;
 using namespace cossb;
@@ -38,7 +44,9 @@ public:
 	void request(cossb::base::message* const msg);
 
 private:
-	std::map<string, ofstream*> _filemap;
+	ofstream _file;
+	string _path;
+	util::systime _time;
 };
 
 COMPONENT_EXPORT

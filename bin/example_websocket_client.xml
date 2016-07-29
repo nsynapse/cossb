@@ -14,7 +14,7 @@
 </info>
 
 <property>
-	<url>ws://192.168.0.6:9002</url>
+	<url>ws://192.168.0.8:9002/sensor</url>
 </property>
 
 <!-- do not edit service name attribute -->

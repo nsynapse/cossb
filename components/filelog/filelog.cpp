@@ -16,15 +16,13 @@ filelog::filelog()
 }
 
 filelog::~filelog() {
-	for(auto fp:_filemap){
-		fp.second->close();
-		delete fp.second;
-	}
-	_filemap.clear();
+	_file.close();
 }
 
 bool filelog::setup()
 {
+	_path = get_profile()->get(profile::section::property, "path").asString("./");
+
 	return true;
 }
 
@@ -41,18 +39,18 @@ bool filelog::stop()
 void filelog::request(cossb::base::message* const msg)
 {
 	switch(msg->get_frame()->type) {
-	case cossb::base::msg_type::REQUEST: {
-		if(!msg->get_frame()->topic.compare("service/filelog/write")){
-			if(!(*msg)["file"].is_null() && (*msg)["file"].is_string()){
-				map<string, ofstream*>::iterator itr = _filemap.find((*msg)["file"]);
-				if(itr!=_filemap.end()){
-					if((*itr).second->is_open()){
-						(*(*itr).second) << (*msg)["data"] << endl;
-					}
+	case cossb::base::msg_type::REQUEST:
+	{
+		if(!msg->get_frame()->topic.compare("service/filelog/write")) {
+			if(!(*msg)["data"].is_null() && (*msg)["data"].is_array()) {
+
+				if(!_file.is_open()){
+					_path = _path + _time.current() + string(".txt");
+					_file.open(_path.c_str(), ios_base::out);
 				}
-				else {
-					string file = (*msg)["filepath"];
-					(*msg)["filepath"] = new ofstream(file);
+
+				for(auto& element : (*msg).data) {
+				  ofstream << element;
 				}
 			}
 		}
