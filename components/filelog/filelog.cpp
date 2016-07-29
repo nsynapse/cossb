@@ -28,11 +28,21 @@ bool filelog::setup()
 
 bool filelog::run()
 {
+	if(!_file.is_open()) {
+		string fullpath = _path+_time.current()+string(".log");
+		_file.open(fullpath.c_str(), std::ofstream::out|std::ofstream::app);
+	}
+
 	return true;
 }
 
 bool filelog::stop()
 {
+	if(_file.is_open()) {
+		_file.flush();
+		_file.close();
+	}
+
 	return true;
 }
 
@@ -41,6 +51,13 @@ void filelog::request(cossb::base::message* const msg)
 	switch(msg->get_frame()->type) {
 	case cossb::base::msg_type::REQUEST:
 	{
+		if(!msg->get_frame()->topic.compare("service/filelog/write")) {
+			if(!(*msg)["data"].is_null() && (*msg)["data"].is_string()) {
+				if(_file.is_open()) {
+					_file << (*msg)["data"];
+				}
+			}
+		}
 		/*if(!msg->get_frame()->topic.compare("service/filelog/write")) {
 			if(!(*msg)["data"].is_null() && (*msg)["data"].is_array()) {
 

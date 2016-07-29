@@ -22,12 +22,11 @@
 	<!-- required component cannot be stopped by user -->
 	<!-- required library for advanced user or our support -->
 	
-	<required type="component">example_cat_monitoring</required>
-	<required type="component">serial</required>
-	<required type="component">cat_protocol</required>
-	<required type="component">wsclient</required>
-	<required type="component">sqlite_db</required>
-	<required type="component">example_cat_db_log</required>
+	<required type="component">example_cat_monitoring</required> <!-- example for test -->
+	<required type="component">serial</required> <!-- serial communication -->
+	<required type="component">cat_protocol</required> <!-- cat protocol -->
+	<required type="component">wsclient</required> <!-- websocket client -->
+	<required type="component">filelog</required> <!-- save log into single file -->
 	
 	
 	<!-- do not edit this path -->

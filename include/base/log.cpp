@@ -3,7 +3,6 @@
 #include <iostream>
 #include <interface/ilog.hpp>
 #include <util/format.h>
-#include <util/localtime.hpp>
 
 
 namespace cossb {
