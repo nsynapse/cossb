@@ -1,25 +1,19 @@
-/**
- * @file		sqlite_db.hpp
- * @brief		simple sqlite database component
- * @author		Byunghun Hwang<bhhwang@nsynapse.com>
- * @date 		2016. 2. 2
- * @details	read/write/search query into the sqlite database
- */
 
-#ifndef _COSSB_COMPONENT_SQLITE_DB_HPP_
-#define _COSSB_COMPONENT_SQLITE_DB_HPP_
+#ifndef _COSSB_COMPONENT_SQLITEDB_HPP_
+#define _COSSB_COMPONENT_SQLITEDB_HPP_
 
 #include <base/interface.hpp>
 #include <string>
+#include <util/localtime.hpp>
 
 using namespace cossb;
 using namespace std;
 
 class sqlite3;
-class sqlite_db : public interface::icomponent {
+class sqlitedb : public interface::icomponent {
 public:
-	sqlite_db();
-	virtual ~sqlite_db();
+	sqlitedb();
+	virtual ~sqlitedb();
 
 	/**
 	 * @brief	setup interface function
@@ -42,7 +36,9 @@ public:
 	void request(cossb::base::message* const msg);
 
 private:
+	util::systime _time;
 	string _db_path;
+	string _path_root;
 	sqlite3* _db = nullptr;
 
 };

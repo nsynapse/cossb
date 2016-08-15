@@ -5,12 +5,14 @@
 #include <iostream>
 #include <sstream>
 #include <memory>
+#include <map>
 
 #include "include/server_ws.hpp"
 
 using namespace std;
 
 typedef SimpleWeb::SocketServer<SimpleWeb::WS> WsServer;
+map<string, string> connection_map;
 
 int main(int argc, char* argv[])
 {
@@ -28,40 +30,45 @@ int main(int argc, char* argv[])
 	cout << "Waiting for connection on port " << port << endl;
 
 	auto& sensor_epmap = server.endpoint["^/sensor/?$"];
+	auto& command_epmap = server.endpoint["^/command/?$"];
 
 	sensor_epmap.onmessage=[&server](shared_ptr<WsServer::Connection> connection, shared_ptr<WsServer::Message> message) {
 		auto message_str = message->string();
 		cout << "[" << connection.get() << "]" << "\tMessage received : " << message_str << endl;
 
-		//echo_all.get_connections() can also be used to solely receive connections on this endpoint
 		for(auto a_connection: server.get_connections()) {
 			auto send_stream = make_shared<WsServer::SendStream>();
 			if(a_connection!=connection){
 				*send_stream << message_str;
 				//server.send is an asynchronous function
 				server.send(a_connection, send_stream);
+				cout << "---Broadcast data to " << connection.get() << endl;
 			}
-			else
-				cout << "*";
-
 		}
 	};
 
-	sensor_epmap.onopen=[](shared_ptr<WsServer::Connection> connection) {
-		cout << "* New connection : " << connection.get() << endl;
-	};
+	sensor_epmap.onopen=[](shared_ptr<WsServer::Connection> connection) { cout << "* New connection : " << connection.get() << endl; };
+	sensor_epmap.onclose=[](shared_ptr<WsServer::Connection> connection, int status, const string& reason) { cout << "* Close connection : " << connection.get() << " with status code " << status << endl; };
+	sensor_epmap.onerror=[](shared_ptr<WsServer::Connection> connection, const boost::system::error_code& ec) { cout << "Server: Error in connection " << connection.get() << ". " << "Error: " << ec << ", error message: " << ec.message() << endl; };
 
-	    //See RFC 6455 7.4.1. for status codes
-	sensor_epmap.onclose=[](shared_ptr<WsServer::Connection> connection, int status, const string& reason) {
-		cout << "* Close connection : " << connection.get() << " with status code " << status << endl;
-	};
+	command_epmap.onopen=[](shared_ptr<WsServer::Connection> connection) { cout << "* New connection : " << connection.get() << endl; };
+	command_epmap.onclose=[](shared_ptr<WsServer::Connection> connection, int status, const string& reason) { cout << "* Close connection : " << connection.get() << " with status code " << status << endl; };
+	command_epmap.onerror=[](shared_ptr<WsServer::Connection> connection, const boost::system::error_code& ec) { cout << "Server: Error in connection " << connection.get() << ". " << "Error: " << ec << ", error message: " << ec.message() << endl; };
 
-	    //See http://www.boost.org/doc/libs/1_55_0/doc/html/boost_asio/reference.html, Error Codes for error code meanings
-	sensor_epmap.onerror=[](shared_ptr<WsServer::Connection> connection, const boost::system::error_code& ec) {
-		cout << "Server: Error in connection " << connection.get() << ". " <<
-				"Error: " << ec << ", error message: " << ec.message() << endl;
-	};
+	command_epmap.onmessage=[&server](shared_ptr<WsServer::Connection> connection, shared_ptr<WsServer::Message> message) {
+			auto message_str = message->string();
+			cout << "[" << connection.get() << "]" << "\tMessage received : " << message_str << endl;
 
+			for(auto a_connection: server.get_connections()) {
+				auto send_stream = make_shared<WsServer::SendStream>();
+				if(a_connection!=connection){
+					*send_stream << message_str;
+					//server.send is an asynchronous function
+					server.send(a_connection, send_stream);
+					cout << "Broadcast data to " << connection.get() << endl;
+				}
+			}
+		};
 	thread server_thread([&server](){
 		//Start WS-server
 		server.start();

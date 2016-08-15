@@ -47,7 +47,7 @@ public:
 private:
 
 	string _uri;
-	easywsclient::WebSocket::pointer _client;
+	easywsclient::WebSocket::pointer _client = nullptr;
 	base::task _socket_task;
 
 	std::mutex _lock;

@@ -5,7 +5,7 @@ namespace cossb {
 namespace util {
 systime::systime()
 {
-
+	local();
 }
 
 systime::~systime()
