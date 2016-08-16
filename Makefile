@@ -158,9 +158,9 @@ wsclient.comp: $(OUTDIR)wsclient.o
 $(OUTDIR)wsclient.o: $(COMPONENT_FILES)websocket/wsclient.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
-sqlitedb.comp: $(OUTDIR)sqlite_db.o
+sqlitedb.comp: $(OUTDIR)sqlitedb.o
 	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
-$(OUTDIR)sqlite_db.o: $(COMPONENT_FILES)sqlitedb/sqlitedb.cpp
+$(OUTDIR)sqlitedb.o: $(COMPONENT_FILES)sqlitedb/sqlitedb.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
 uart_protocol.comp: $(OUTDIR)uart_protocol.o
@@ -177,6 +177,12 @@ filelog.comp: $(OUTDIR)filelog.o
 	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
 $(OUTDIR)filelog.o: $(COMPONENT_FILES)filelog/filelog.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
+compcontroller.comp: $(OUTDIR)compcontroller.o
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+$(OUTDIR)compcontroller.o: $(COMPONENT_FILES)compcontroller/compcontroller.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
 	
 		
 $(OUTDIR)cossb.o: $(SOURCE_FILES)cossb.cpp 
@@ -238,7 +244,7 @@ test: cossb_test
 examples: helloworld.comp example_tcpserver.comp example_uart.comp example_messageout.comp example_messageprint.comp example_edison_gpio.comp example_edison_i2c.comp example_edison_uart.comp example_websocket_client.comp example_cat_monitoring.comp
 tutorial1 : example_messageout.comp example_messageprint.comp
 util: wsbroadcaster
-cat: cossb wsbroadcaster edison_uart.comp example_cat_monitoring.comp cat_protocol.comp wsclient.comp sqlitedb.comp
+cat: cossb wsbroadcaster edison_uart.comp example_cat_monitoring.comp cat_protocol.comp wsclient.comp sqlitedb.comp compcontroller.comp
 
 # Clean
 clean: 

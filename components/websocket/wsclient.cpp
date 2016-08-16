@@ -16,7 +16,7 @@ void handle_message(const std::string & message)
 	cossb::base::message msg("wsclient", base::msg_type::REQUEST);
 	msg.parse(message);
 	cossb_broker->publish("websocket_read",msg);
-	cossb_log->log(log::loglevel::INFO, fmt::format("***Websocket Message Received : {}",message.c_str()));
+	cossb_log->log(log::loglevel::INFO, fmt::format("Websocket Message Received : {}",message.c_str()));
 
 }
 

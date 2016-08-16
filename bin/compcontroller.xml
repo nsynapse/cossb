@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<info>
+	<uuid>00000000000000000000</uuid>
+	<name>compcontroller</name>
+	<description>component controller</description>
+	<company>Nsynapse Inc.</company>
+	<developer>Byunghun Hwang</developer>
+	<email>bhhwang@nsynapse.com</email>
+	<url>http://www.nsynapse.com</url>
+	<license>MIT</license> 
+	<version>0.0.1</version>
+	<category></category>
+	<tags></tags>
+</info>
+
+<property>
+
+</property>
+
+<service name="compcontroller_run" method="subscribe" topic="control/component/run"></service>
+<service name="compcontroller_stop" method="subscribe" topic="control/component/stop"></service>
+<service name="compcontroller_do" method="subscribe" topic="control/component/do"></service>

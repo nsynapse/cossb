@@ -39,7 +39,14 @@ bool example_cat_monitoring::stop()
 
 void example_cat_monitoring::request(cossb::base::message* const msg)
 {
-	cossb_log->log(log::loglevel::INFO, fmt::format("Message : {}", msg->raw()));
+	//cossb_log->log(log::loglevel::INFO, fmt::format("Message : {}", msg->raw()));
+
+	//for test
+	//cossb::base::message control_msg(this, base::msg_type::REQUEST);
+	//control_msg = msg;
+	cossb_broker->publish("example_cat_compcontrol", *msg);
+
+
 
 	switch(msg->get_frame()->type)
 	{
