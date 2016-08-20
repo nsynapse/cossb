@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
 
 	sensor_epmap.onmessage=[&server](shared_ptr<WsServer::Connection> connection, shared_ptr<WsServer::Message> message) {
 		auto message_str = message->string();
-		cout << "[" << connection.get() << "]" << "\tMessage received : " << message_str << endl;
+		cout << "[" << connection.get() << "]" << "\tMessage received(/sensor/) : " << message_str << endl;
 
 		for(auto a_connection: server.get_connections()) {
 			auto send_stream = make_shared<WsServer::SendStream>();
@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
 
 	command_epmap.onmessage=[&server](shared_ptr<WsServer::Connection> connection, shared_ptr<WsServer::Message> message) {
 			auto message_str = message->string();
-			cout << "[" << connection.get() << "]" << "\tMessage received : " << message_str << endl;
+			cout << "[" << connection.get() << "]" << "\tMessage received(/command/) : " << message_str << endl;
 
 			for(auto a_connection: server.get_connections()) {
 				auto send_stream = make_shared<WsServer::SendStream>();
@@ -68,6 +68,8 @@ int main(int argc, char* argv[])
 				}
 			}
 		};
+
+
 	thread server_thread([&server](){
 		//Start WS-server
 		server.start();
