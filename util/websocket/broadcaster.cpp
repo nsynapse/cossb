@@ -12,7 +12,6 @@
 using namespace std;
 
 typedef SimpleWeb::SocketServer<SimpleWeb::WS> WsServer;
-map<string, string> connection_map;
 
 int main(int argc, char* argv[])
 {
@@ -38,7 +37,7 @@ int main(int argc, char* argv[])
 
 		for(auto a_connection: server.get_connections()) {
 			auto send_stream = make_shared<WsServer::SendStream>();
-			if(a_connection!=connection){
+			if(a_connection.get()->path==connection.get()->path){
 				*send_stream << message_str;
 				//server.send is an asynchronous function
 				server.send(a_connection, send_stream);
@@ -61,7 +60,7 @@ int main(int argc, char* argv[])
 
 			for(auto a_connection: server.get_connections()) {
 				auto send_stream = make_shared<WsServer::SendStream>();
-				if(a_connection!=connection){
+				if(a_connection.get()->path==connection.get()->path){
 					*send_stream << message_str;
 					//server.send is an asynchronous function
 					server.send(a_connection, send_stream);
