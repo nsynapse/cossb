@@ -64,11 +64,19 @@ void sqlitedb::request(cossb::base::message* const msg)
 {
 	switch(msg->get_frame()->type) {
 	case cossb::base::msg_type::REQUEST: {
+		if(!msg->get_frame()->topic.compare("service/websocket/read")) {
+			if((*msg).find("command")){
+				string cmd = (*msg)["command"];
+				if(!cmd.compare("run"))
+					cout << "run" << endl;
+				else if(!cmd.compare("stop"))
+					cout << "stop" << endl;
+			}
+		}
+
 		if(!msg->get_frame()->topic.compare("service/db/sqlite/query")) {
-			if(msg->get_frame()->type==base::msg_type::REQUEST){
-				if(!(*msg)["query"].is_null() && _db){
-					//sqlite3_exec(_db,);
-				}
+			if(!(*msg)["query"].is_null() && _db){
+				//sqlite3_exec(_db,);
 			}
 		}
 	} break;

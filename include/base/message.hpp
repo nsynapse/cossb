@@ -80,6 +80,11 @@ public:
 	 */
 	bool is_empty();	//true, if frame has no data
 
+	/*
+	 * @brief	find
+	 */
+	bool find(const char* key) const;
+
 	/**
 	 * @brief	getting json data pointer
 	 */

@@ -14,11 +14,12 @@
 </info>
 
 <property>
-	<path>/home/hwang/git/cossb/bin/db</path>
+	<path>/home/hwanglinux/git/cossb/bin/db</path>
 	<table>
 		<column type="id">id</column>
-		<column type="date">date</column>
+		<column type="datetime">date</column>
 	</table>
 </property>
 
 <service name="sqlite_db_query" method="subscribe" topic="service/db/sqlite/query"></service>
+<service name="sqlite_db_control" method="subscribe" topic="service/websocket/read"></service>

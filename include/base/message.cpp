@@ -26,10 +26,24 @@ message::message(const char* component_name, msg_type type)
 
 void message::parse(string sdata){
 	data = json::parse(sdata.c_str());
+	//type
+	if(data.find("type")!=data.end()){
+		if(data["type"].is_string()) {
+			string t = data["type"];
+			if(!t.compare("request")) frame.type = msg_type::REQUEST;
+			else if(!t.compare("data")) frame.type = msg_type::DATA;
+			else if(!t.compare("response")) frame.type = msg_type::RESPONSE;
+			else if(!t.compare("signal")) frame.type = msg_type::SIGNAL;
+		}
+	}
 }
 
 bool message::is_empty(){
 	return frame.encoded_data.empty();
+}
+
+bool message::find(const char* key)const {
+	return (data.find(key)!=data.end());
 }
 
 } /* namespace base */

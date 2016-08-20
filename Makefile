@@ -12,7 +12,7 @@ CXX = g++
 CXXFLAGS = -O3 -fPIC -Wall -std=c++11 -D__cplusplus=201103L -D__boostthread__
 CCFLAGS = $(CXXFLAGS)
 LDFLAGS = -Wl,--export-dynamic
-LDLIBS = -lpopt -lboost_system -lboost_thread -lboost_filesystem -ltinyxml2 -ldl -luuid -lmraa -lsqlite3
+LDLIBS = -lpopt -lboost_system -lboost_thread -lboost_filesystem -ltinyxml2 -ldl -luuid -lsqlite3
 LDLIBS_TEST = -lpopt -lboost_system -lboost_thread -ltinyxml2 -ldl -lgtest -lpthread
 INCLUDE = -I./include -I/usr/include -I/usr/local/include
 RM	= rm -rf
@@ -244,7 +244,7 @@ test: cossb_test
 examples: helloworld.comp example_tcpserver.comp example_uart.comp example_messageout.comp example_messageprint.comp example_edison_gpio.comp example_edison_i2c.comp example_edison_uart.comp example_websocket_client.comp example_cat_monitoring.comp
 tutorial1 : example_messageout.comp example_messageprint.comp
 util: wsbroadcaster
-cat: cossb wsbroadcaster edison_uart.comp example_cat_monitoring.comp cat_protocol.comp wsclient.comp sqlitedb.comp compcontroller.comp
+cat: cossb wsbroadcaster serial.comp example_cat_monitoring.comp cat_protocol.comp wsclient.comp sqlitedb.comp compcontroller.comp
 
 # Clean
 clean: 
