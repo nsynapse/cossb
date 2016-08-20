@@ -27,28 +27,31 @@ wsclient::wsclient()
 }
 
 wsclient::~wsclient() {
-
-	if(_client){
-		_client->close();
-		delete _client;
+	for(auto it=_client_map.begin(); it!=_client_map.end(); ++it){
+		it->second->close();
+		delete it->second;
 	}
+	_client_map.clear();
 }
 
 bool wsclient::setup()
 {
-	_uri = get_profile()->get(profile::section::property, "uri").asString("ws://localhost:9002");
-	_client = easywsclient::WebSocket::from_url(_uri.c_str());
-	if(_client) {
-		if(_client->getReadyState()!=easywsclient::WebSocket::CLOSED){
-			cossb_log->log(log::loglevel::INFO, fmt::format("Connected to the {} websocket server",_uri));
+	for(auto uri:get_profile()->gets(profile::section::property, "endpoint")){
+		string u = uri.asString("ws://localhost::9002");
+		_client_map[u] = easywsclient::WebSocket::from_url(u.c_str());
+
+		if(_client_map[u]) {
+			if(_client_map[u]->getReadyState()!=easywsclient::WebSocket::CLOSED){
+				cossb_log->log(log::loglevel::INFO, fmt::format("Connected to the {} websocket server",_uri));
+			}
+			else {
+				cossb_log->log(log::loglevel::ERROR, fmt::format("Cannot connect to the {} websocket server",_uri));
+				_client_map[u]->close();
+			}
 		}
 		else {
 			cossb_log->log(log::loglevel::ERROR, fmt::format("Cannot connect to the {} websocket server",_uri));
-			_client->close();
 		}
-	}
-	else {
-		cossb_log->log(log::loglevel::ERROR, fmt::format("Cannot connect to the {} websocket server",_uri));
 	}
 
 	return true;
@@ -75,7 +78,7 @@ void wsclient::request(cossb::base::message* const msg)
 		case cossb::base::msg_type::REQUEST: {
 			cossb_log->log(log::loglevel::INFO, msg->raw());
 
-			if(_client){
+			/*if(_client){
 				if(_client->getReadyState()!=easywsclient::WebSocket::CLOSED){
 					std::lock_guard<std::mutex> lock(_lock);
 					_client->send(msg->raw());
@@ -90,7 +93,7 @@ void wsclient::request(cossb::base::message* const msg)
 			else {
 				cossb_log->log(log::loglevel::ERROR, fmt::format("Try reconnect to the websocker server {}",_uri));
 				this->setup();
-			}
+			}*/
 
 		} break;
 		case cossb::base::msg_type::DATA: break;
@@ -104,11 +107,11 @@ void wsclient::read()
 {
 	while(1) {
 		try {
-			if(_client){
-				if(_client->getReadyState()!=easywsclient::WebSocket::CLOSED){
+			for(auto it=_client_map.begin(); it!=_client_map.end(); ++it) {
+				if(it->second->getReadyState()!=easywsclient::WebSocket::CLOSED){
 					std::lock_guard<std::mutex> lock(_lock);
-					_client->poll();
-					_client->dispatch(handle_message);
+					it->second->poll();
+					it->second->dispatch(handle_message);
 				}
 			}
 
