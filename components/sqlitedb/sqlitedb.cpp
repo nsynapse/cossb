@@ -18,8 +18,11 @@ sqlitedb::sqlitedb()
 }
 
 sqlitedb::~sqlitedb() {
-	if(_db)
+	if(_db) {
+		if(_stmt)
+			sqlite3_finalize(_stmt);
 		sqlite3_close(_db);
+	}
 }
 
 bool sqlitedb::setup()
@@ -44,6 +47,10 @@ bool sqlitedb::run()
 		return false;
 	}
 	else {
+		for(auto col:get_profile()->gets(profile::section::property, "column")){
+
+		}
+		sqlite3_prepare_v2(_db, "CREATE TABLE demo (name TEXT, age INTEGER);", -1, &_stmt, NULL);
 		cossb_log->log(log::loglevel::INFO, fmt::format("Opened database successfully", _db_path));
 	}
 
@@ -53,7 +60,10 @@ bool sqlitedb::run()
 bool sqlitedb::stop()
 {
 	if(_db) {
+		if(_stmt)
+			sqlite3_finalize(_stmt);
 		sqlite3_close(_db);
+		_db = nullptr;
 		_db_path.clear();
 	}
 
@@ -62,22 +72,25 @@ bool sqlitedb::stop()
 
 void sqlitedb::request(cossb::base::message* const msg)
 {
+	if(!_db) {
+		cossb_log->log(log::loglevel::WARN, "No Database is opened");
+		return;
+	}
+
 	switch(msg->get_frame()->type) {
 	case cossb::base::msg_type::REQUEST: {
 		if(!msg->get_frame()->topic.compare("service/websocket/read")) {
 			if((*msg).find("command")){
 				string cmd = (*msg)["command"];
 				if(!cmd.compare("run"))
-					cout << "run" << endl;
+					this->run();
 				else if(!cmd.compare("stop"))
-					cout << "stop" << endl;
+					this->stop();
 			}
 		}
 
-		if(!msg->get_frame()->topic.compare("service/db/sqlite/query")) {
-			if(!(*msg)["query"].is_null() && _db){
-				//sqlite3_exec(_db,);
-			}
+		if(!msg->get_frame()->topic.compare("service/db/write")) {
+
 		}
 	} break;
 	case cossb::base::msg_type::DATA: break;

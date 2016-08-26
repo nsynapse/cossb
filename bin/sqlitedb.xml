@@ -15,11 +15,10 @@
 
 <property>
 	<path>/home/hwanglinux/git/cossb/bin/db</path>
-	<table>
-		<column type="id">id</column>
-		<column type="datetime">date</column>
-	</table>
+	<column type="id">id</column>
+	<column type="datetime">date</column>
+	<column type="int">value</column>
 </property>
 
-<service name="sqlite_db_query" method="subscribe" topic="service/db/sqlite/query"></service>
+<service name="sqlite_db_write" method="subscribe" topic="service/db/write"></service>
 <service name="sqlite_db_control" method="subscribe" topic="service/websocket/read"></service>

@@ -40,6 +40,7 @@ private:
 	string _db_path;
 	string _path_root;
 	sqlite3* _db = nullptr;
+	sqlite3_stmt* _stmt = nullptr;	//sqlite statement
 
 };
 
