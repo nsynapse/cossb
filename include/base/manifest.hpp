@@ -10,7 +10,7 @@
 #define _COSSB_MANIFEST_HPP_
 
 #include <arch/singleton.hpp>
-#include <tinyxml2.h>
+#include <ext/tinyxml2.h>
 #include <vector>
 #include <string>
 #include <map>

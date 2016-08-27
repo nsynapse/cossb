@@ -90,12 +90,12 @@ profile::type_value xml::get(profile::section section, const char* element)
 
 	return result;
 }
-vector<string> xml::gets(profile::section section, const char* element)
+/*vector<string> xml::gets(profile::section section, const char* element)
 {
 	vector<string> selections;
 
 	return selections;
-}
+}*/
 
 vector<profile::type_value> xml::gets(profile::section section, const char* element)
 {
@@ -144,10 +144,10 @@ vector<profile::type_value> xml::gets(profile::section section, const char* elem
 	return valuelist;
 }
 
-profile::type_value xml::get_attribute(profile::section section, const char* element, const char* attr)
+/*profile::type_value xml::get_attribute(profile::section section, const char* element, const char* attr)
 {
 
-}
+}*/
 
 
 bool xml::update(profile::section section, const char* element, const char* value)

@@ -5,11 +5,11 @@
 #include <base/interface.hpp>
 #include <string>
 #include <util/localtime.hpp>
+#include <sqlite3.h>
 
 using namespace cossb;
 using namespace std;
 
-class sqlite3;
 class sqlitedb : public interface::icomponent {
 public:
 	sqlitedb();

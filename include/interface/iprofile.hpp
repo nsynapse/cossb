@@ -165,7 +165,7 @@ public:
 	/**
 	 * @brief	get attribute in element
 	 */
-	virtual profile::type_value get_attribute(string& node, const char* attr) = 0;
+	//virtual profile::type_value get_attribute(string& node, const char* attr) = 0;
 
 
 	/**

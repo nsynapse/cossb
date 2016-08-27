@@ -7,7 +7,6 @@
 
 #include "sqlitedb.hpp"
 #include <cossb.hpp>
-#include <sqlite3.h>
 #include <boost/filesystem.hpp>
 
 USE_COMPONENT_INTERFACE(sqlitedb)

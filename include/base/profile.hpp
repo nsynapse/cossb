@@ -11,7 +11,7 @@
 
 #include <string>
 #include <interface/iprofile.hpp>
-#include <tinyxml2.h>
+#include <ext/tinyxml2.h>
 
 using namespace std;
 using namespace tinyxml2;
@@ -29,7 +29,7 @@ public:
 	 * @brief	getting profile value list
 	 */
 	vector<profile::type_value> gets(profile::section section, const char* element);
-	vector<string> gets(profile::section section, const char* element);
+	//vector<string> gets(profile::section section, const char* element);
 
 
 	/**
