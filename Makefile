@@ -12,8 +12,7 @@ CXX = g++
 CXXFLAGS = -O3 -fPIC -Wall -std=c++11 -D__cplusplus=201103L -D__boostthread__
 CCFLAGS = $(CXXFLAGS)
 LDFLAGS = -Wl,--export-dynamic
-LDLIBS = -lpopt -lboost_system -lboost_thread -lboost_filesystem -ltinyxml2 -ldl -luuid -lsqlite3
-LDLIBS_TEST = -lpopt -lboost_system -lboost_thread -ltinyxml2 -ldl -lgtest -lpthread
+LDLIBS = -lpopt -lboost_system -lboost_thread -lboost_filesystem -ldl -luuid -lsqlite3 -lpthread
 INCLUDE = -I./include -I/usr/include -I/usr/local/include
 RM	= rm -rf
 
@@ -45,7 +44,8 @@ cossb:	$(OUTDIR)cossb.o \
 		$(OUTDIR)client.o \
 		$(OUTDIR)message.o \
 		$(OUTDIR)log.o\
-		$(OUTDIR)localtime.o
+		$(OUTDIR)localtime.o \
+		$(OUTDIR)tinyxml2.o
 		$(CXX) $(LDFLAGS) -o $(OUTDIR)$@ $^ $(LDLIBS)
 		
 cossb_test:	$(OUTDIR)cossb_test.o \
@@ -61,14 +61,16 @@ cossb_test:	$(OUTDIR)cossb_test.o \
 		$(OUTDIR)client.o \
 		$(OUTDIR)message.o \
 		$(OUTDIR)log.o \
-		$(OUTDIR)localtime.o 
-		$(CXX) $(LDFLAGS) -o $(OUTDIR)$@ $^ $(LDLIBS_TEST)
+		$(OUTDIR)localtime.o \
+		$(OUTDIR)tinyxml2.o
+		$(CXX) $(LDFLAGS) -o $(OUTDIR)$@ $^ $(LDLIBS)
 
 # Util
 wsbroadcaster: $(OUTDIR)broadcaster.o
 	$(CXX) $(LDFLAGS) -o $(OUTDIR)$@ $^ -lpthread -lboost_system -lboost_regex -lssl -lcrypto
 $(OUTDIR)broadcaster.o: $(UTIL_FILES)websocket/broadcaster.cpp 
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+
 		
 #examples
 helloworld.comp: $(OUTDIR)helloworld.o 
@@ -223,6 +225,10 @@ $(OUTDIR)message.o: $(INCLUDE_FILES)base/message.cpp
 	
 $(OUTDIR)localtime.o: $(INCLUDE_FILES)util/localtime.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
+$(OUTDIR)tinyxml2.o: $(INCLUDE_FILES)ext/tinyxml2.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+
 	
 #for test code	
 $(OUTDIR)cossb_test.o: $(TEST_FILES)cossb_test.cpp 
