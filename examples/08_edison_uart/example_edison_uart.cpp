@@ -48,7 +48,7 @@ void example_edison_uart::write()
 
 			msg["data"] = { 0x01, 0x02, 0x0f };
 			cossb_broker->publish("example_uart_write", msg);
-			cossb_log->log(cossb::log::loglevel::INFO, fmt::format("UART Message : {}",msg.show()));
+			cossb_log->log(cossb::log::loglevel::INFO, fmt::format("UART Message : {}",msg.raw()));
 
 			boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
 		} catch(thread_interrupted&) {
