@@ -12,7 +12,7 @@ CXX = g++
 CXXFLAGS = -O3 -fPIC -Wall -std=c++11 -D__cplusplus=201103L -D__boostthread__
 CCFLAGS = $(CXXFLAGS)
 LDFLAGS = -Wl,--export-dynamic
-LDLIBS = -lpopt -lboost_system -lboost_thread -lboost_filesystem -ldl -luuid -lsqlite3 -lpthread
+LDLIBS = -lpopt -lboost_system -lboost_thread -lboost_filesystem -ldl -luuid -lsqlite3 -lpthread -lmraa
 INCLUDE = -I./include -I/usr/include -I/usr/local/include
 RM	= rm -rf
 
