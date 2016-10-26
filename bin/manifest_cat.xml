@@ -25,9 +25,9 @@
 	<required type="component">example_cat_monitoring</required> <!-- example for test -->
 	<required type="component">edison_uart</required> <!-- serial communication -->
 	<required type="component">cat_protocol</required> <!-- cat protocol -->
-	<required type="component">wsclient</required> <!-- websocket client -->
+	<!--<required type="component">wsclient</required>--> <!-- websocket client -->
 	<!--<required type="component">sqlitedb</required>--> <!-- save log into single file -->
-	<required type="component">compcontroller</required> <!-- component controller -->
+	<!--<required type="component">compcontroller</required>--> <!-- component controller -->
 	
 	
 	<!-- do not edit this path -->
