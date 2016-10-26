@@ -26,7 +26,7 @@
 	<required type="component">edison_uart</required> <!-- serial communication -->
 	<required type="component">cat_protocol</required> <!-- cat protocol -->
 	<required type="component">wsclient</required> <!-- websocket client -->
-	<required type="component">sqlitedb</required> <!-- save log into single file -->
+	<!--<required type="component">sqlitedb</required>--> <!-- save log into single file -->
 	<required type="component">compcontroller</required> <!-- component controller -->
 	
 	
