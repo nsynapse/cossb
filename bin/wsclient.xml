@@ -14,7 +14,7 @@
 </info>
 
 <property>
-	<endpoint>ws://127.0.0.2:9002/command/</endpoint>
+	<endpoint>ws://127.0.0.1:9002/command/</endpoint>
 	<endpoint>ws://127.0.0.2:9002/sensor/</endpoint>
 </property>
 
