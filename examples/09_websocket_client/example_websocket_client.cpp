@@ -50,7 +50,7 @@ void example_websocket_client::write()
 	while(1) {
 		try {
 			cossb::base::message msg(this, base::msg_type::REQUEST);
-			msg["uri"] = _url_prefix+"/sensor/";
+			msg["uri"] = _url_prefix;
 			msg["data"]["id"] = id;
 			msg["data"]["status"] = 0x01;
 			msg["data"]["value"] = {0xff};

@@ -42,15 +42,17 @@ bool wsclient::setup()
 
 		if(_client_map[u]) {
 			if(_client_map[u]->getReadyState()!=easywsclient::WebSocket::CLOSED){
-				cossb_log->log(log::loglevel::INFO, fmt::format("Connected to the {} websocket server",_uri));
+				cossb_log->log(log::loglevel::INFO, fmt::format("Connected to the {} websocket server",u));
 			}
 			else {
-				cossb_log->log(log::loglevel::ERROR, fmt::format("Cannot connect to the {} websocket server",_uri));
+				cossb_log->log(log::loglevel::ERROR, fmt::format("Server might not be ready {}",u));
 				_client_map[u]->close();
+				_client_map.erase(u);
 			}
 		}
 		else {
-			cossb_log->log(log::loglevel::ERROR, fmt::format("Cannot connect to the {} websocket server",_uri));
+			_client_map.erase(u);
+			cossb_log->log(log::loglevel::ERROR, fmt::format("Cannot connect to the {} websocket server",u));
 		}
 	}
 
@@ -76,24 +78,27 @@ void wsclient::request(cossb::base::message* const msg)
 {
 	switch(msg->get_frame()->type){
 		case cossb::base::msg_type::REQUEST: {
-			cossb_log->log(log::loglevel::INFO, msg->raw());
 
-			/*if(_client){
-				if(_client->getReadyState()!=easywsclient::WebSocket::CLOSED){
-					std::lock_guard<std::mutex> lock(_lock);
-					_client->send(msg->raw());
-					_client->poll(0);
-				}
-				else{
-					cossb_log->log(log::loglevel::INFO, fmt::format("Try reconnect to the websocker server {}",_uri));
-					_client->close();
-					this->setup();
+			if((*msg).find("uri")){
+				if((*msg)["uri"].is_string()){
+					string uri = (*msg)["uri"];
+
+					//if destination uri exists
+					if(_client_map.find(uri)!=_client_map.end()){
+						easywsclient::WebSocket::pointer endpoint = _client_map.find(uri)->second;
+						if(endpoint->getReadyState()!=easywsclient::WebSocket::CLOSED){
+							endpoint->send(msg->raw());
+							cossb_log->log(log::loglevel::INFO, msg->raw());
+						}
+						else
+							cossb_log->log(log::loglevel::WARN, fmt::format("Cannot connect to the server {}.",uri));
+					}
 				}
 			}
-			else {
-				cossb_log->log(log::loglevel::ERROR, fmt::format("Try reconnect to the websocker server {}",_uri));
-				this->setup();
-			}*/
+			else
+			{
+				cossb_log->log(log::loglevel::INFO, "There is no URI to send message");
+			}
 
 		} break;
 		case cossb::base::msg_type::DATA: break;

@@ -12,7 +12,8 @@ CXX = g++
 CXXFLAGS = -O3 -fPIC -Wall -std=c++11 -D__cplusplus=201103L -D__boostthread__
 CCFLAGS = $(CXXFLAGS)
 LDFLAGS = -Wl,--export-dynamic
-LDLIBS = -lpopt -lboost_system -lboost_thread -lboost_filesystem -ldl -luuid -lsqlite3 -lpthread -lmraa
+LDLIBS = -lpopt -lboost_system -lboost_thread -lboost_filesystem -ldl -luuid -lsqlite3 -lpthread
+EDISON_LDLIBS = -lmraa
 INCLUDE = -I./include -I/usr/include -I/usr/local/include
 RM	= rm -rf
 
@@ -99,17 +100,17 @@ $(OUTDIR)example_messageprint.o: $(EXAMPLE_FILES)05_messageprint/example_message
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@	
 	
 example_edison_gpio.comp: $(OUTDIR)example_edison_gpio.o 
-	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS) $(EDISON_LDLIBS)
 $(OUTDIR)example_edison_gpio.o: $(EXAMPLE_FILES)06_edison_gpio/example_edison_gpio.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@	
 	
 example_edison_i2c.comp: $(OUTDIR)example_edison_i2c.o 
-	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS) $(EDISON_LDLIBS)
 $(OUTDIR)example_edison_i2c.o: $(EXAMPLE_FILES)07_edison_i2c/example_edison_i2c.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@	
 	
 example_edison_uart.comp: $(OUTDIR)example_edison_uart.o 
-	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS) $(EDISON_LDLIBS)
 $(OUTDIR)example_edison_uart.o: $(EXAMPLE_FILES)08_edison_uart/example_edison_uart.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
@@ -129,17 +130,17 @@ $(OUTDIR)example_cat_db_log.o: $(EXAMPLE_FILES)11_example_cat_db_log/example_cat
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
 edison_gpio.comp: $(OUTDIR)edison_gpio.o 
-	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS) $(EDISON_LDLIBS)
 $(OUTDIR)edison_gpio.o: $(COMPONENT_FILES)edison_gpio/edison_gpio.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
 edison_uart.comp: $(OUTDIR)edison_uart.o 
-	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS) $(EDISON_LDLIBS)
 $(OUTDIR)edison_uart.o: $(COMPONENT_FILES)edison_uart/edison_uart.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
 edison_i2c.comp: $(OUTDIR)edison_i2c.o 
-	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS) $(EDISON_LDLIBS)
 $(OUTDIR)edison_i2c.o: $(COMPONENT_FILES)edison_i2c/edison_i2c.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
@@ -250,7 +251,8 @@ test: cossb_test
 examples: helloworld.comp example_tcpserver.comp example_uart.comp example_messageout.comp example_messageprint.comp example_edison_gpio.comp example_edison_i2c.comp example_edison_uart.comp example_websocket_client.comp example_cat_monitoring.comp
 tutorial1 : example_messageout.comp example_messageprint.comp
 util: wsbroadcaster
-cat: cossb wsbroadcaster serial.comp example_cat_monitoring.comp cat_protocol.comp wsclient.comp sqlitedb.comp compcontroller.comp
+cat: cossb wsbroadcaster edison_uart.comp example_cat_monitoring.comp cat_protocol.comp wsclient.comp sqlitedb.comp compcontroller.comp
+websocket: wsbroadcaster wsclient.comp example_websocket_client.comp
 
 # Clean
 clean: 

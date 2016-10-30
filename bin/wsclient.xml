@@ -14,9 +14,10 @@
 </info>
 
 <property>
-	<endpoint>ws://127.0.0.1:9002/command/</endpoint>
-	<endpoint>ws://127.0.0.2:9002/sensor/</endpoint>
+	<endpoint>ws://127.0.0.1:9002/command</endpoint>
+	<endpoint>ws://127.0.0.1:9002/sensor</endpoint>
 </property>
 
 <service name="websocket_read" method="publish" topic="service/websocket/read"></service>
-<service name="websocket_write" method="subscribe" topic="service/cat/protocol/align"></service>
+<service name="websocket_write" method="subscribe" topic="service/websocket/write"></service>
+<!--<service name="websocket_align" method="subscribe" topic="service/cat/protocol/align"></service>-->

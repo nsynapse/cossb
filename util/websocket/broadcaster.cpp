@@ -46,11 +46,11 @@ int main(int argc, char* argv[])
 		}
 	};
 
-	sensor_epmap.onopen=[](shared_ptr<WsServer::Connection> connection) { cout << "* New connection : " << connection.get() << endl; };
+	sensor_epmap.onopen=[](shared_ptr<WsServer::Connection> connection) { cout << "* New connection(sensor) : " << connection.get() << endl; };
 	sensor_epmap.onclose=[](shared_ptr<WsServer::Connection> connection, int status, const string& reason) { cout << "* Close connection : " << connection.get() << " with status code " << status << endl; };
 	sensor_epmap.onerror=[](shared_ptr<WsServer::Connection> connection, const boost::system::error_code& ec) { cout << "Server: Error in connection " << connection.get() << ". " << "Error: " << ec << ", error message: " << ec.message() << endl; };
 
-	command_epmap.onopen=[](shared_ptr<WsServer::Connection> connection) { cout << "* New connection : " << connection.get() << endl; };
+	command_epmap.onopen=[](shared_ptr<WsServer::Connection> connection) { cout << "* New connection(command) : " << connection.get() << endl; };
 	command_epmap.onclose=[](shared_ptr<WsServer::Connection> connection, int status, const string& reason) { cout << "* Close connection : " << connection.get() << " with status code " << status << endl; };
 	command_epmap.onerror=[](shared_ptr<WsServer::Connection> connection, const boost::system::error_code& ec) { cout << "Server: Error in connection " << connection.get() << ". " << "Error: " << ec << ", error message: " << ec.message() << endl; };
 
