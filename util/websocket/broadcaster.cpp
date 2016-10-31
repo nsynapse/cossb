@@ -15,23 +15,18 @@ typedef SimpleWeb::SocketServer<SimpleWeb::WS> WsServer;
 
 int main(int argc, char* argv[])
 {
-	if(argc!=3) {
-		cout << "Usage : broadcaster <ip> <port>" << endl;
+	if(argc!=2) {
+		cout << "Usage : broadcaster <port>" << endl;
 		return 0;
 	}
 
-	istringstream ss1(argv[1]);
-	string address;
-	if(!(ss1>>address))
-		cerr << "Invalid Address " << argv[1] << endl;
-
-	istringstream ss2(argv[2]);
+	istringstream ss(argv[1]);
 	int port;
-	if(!(ss2>>port))
-		cerr << "Invalid Port number " << argv[2] << endl;
+	if(!(ss>>port))
+		cerr << "Invalid Port number " << argv[1] << endl;
 
 	WsServer server(port, 4);
-	server.config.address = address;
+	//server.config.address = address;
 	cout << server.config.address << " - Waiting for connection on port " << port << endl;
 
 	auto& sensor_epmap = server.endpoint["^/sensor/?$"];
