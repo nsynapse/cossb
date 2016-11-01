@@ -40,7 +40,7 @@ void example_messageprint::request(cossb::base::message* const msg)
 		case cossb::base::msg_type::REQUEST:
 			{
 				//if(msg->get_frame()->topic.compare("service/messageout"))
-				cossb_log->log(cossb::log::loglevel::INFO, fmt::format("[Message Received] : {}", msg->show()));
+				cossb_log->log(cossb::log::loglevel::INFO, fmt::format("[Message Received] : {}", msg->raw()));
 			}
 			break;
 		case cossb::base::msg_type::RESPONSE: break;

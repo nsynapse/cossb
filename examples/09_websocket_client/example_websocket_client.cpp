@@ -69,7 +69,7 @@ void example_websocket_client::write()
 			}
 
 
-			//cossb_log->log(cossb::log::loglevel::INFO, fmt::format("Websocket Write Message : {}",msg.show()));
+			//cossb_log->log(cossb::log::loglevel::INFO, fmt::format("Websocket Write Message : {}",msg.raw()));
 			//boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
 		} catch(thread_interrupted&) {
 			break;

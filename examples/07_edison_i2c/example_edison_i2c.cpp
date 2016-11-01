@@ -48,7 +48,7 @@ void example_edison_i2c::write()
 
 			msg["data"] = { 0x01, 0x02, 0x0f };
 			cossb_broker->publish("example_i2c_write", msg);
-			cossb_log->log(cossb::log::loglevel::INFO, fmt::format("Send I2C Message : {}",msg.show()));
+			cossb_log->log(cossb::log::loglevel::INFO, fmt::format("Send I2C Message : {}",msg.raw()));
 
 			boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
 

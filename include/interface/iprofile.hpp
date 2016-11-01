@@ -73,7 +73,7 @@ public:
 	string name;				//service name
 	service_method method;	//service method
 	string topic;				//service topic
-	const char* show() {
+	const char* raw() {
 		return fmt::format("[{}] Name : {}, Method : {}, Topic : {}", service_id.str(), name, method.str(), topic).c_str();
 	}
 } service_desc;

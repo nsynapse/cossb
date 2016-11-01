@@ -76,7 +76,7 @@ void edison_i2c::request(cossb::base::message* const msg)
 	switch(msg->get_frame()->type) {
 	case cossb::base::msg_type::REQUEST: {
 		if(!msg->get_frame()->topic.compare("service/i2c/write")) {
-			cossb_log->log(log::loglevel::INFO, fmt::format("Received message (I2C) : {}", msg->show().c_str()));
+			cossb_log->log(log::loglevel::INFO, fmt::format("Received message (I2C) : {}", msg->raw().c_str()));
 			//if service/i2c/write topic is incoming, do write
 			//_i2c->write()
 		}

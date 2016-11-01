@@ -58,7 +58,7 @@ void uart_protocol::request(cossb::base::message* const msg)
 								msg["parameter"] = std::vector<unsigned char>(_queue.begin()+5, _queue.begin()+(unsigned int)_queue[3]);
 
 								cossb_broker->publish("protocol_read", msg);
-								cossb_log->log(log::loglevel::INFO, fmt::format("published processed protocol data {}", msg.show()));
+								cossb_log->log(log::loglevel::INFO, fmt::format("published processed protocol data {}", msg.raw()));
 								_queue.erase(_queue.begin(), _queue.begin()+(unsigned int)_queue[3]+4);
 							}
 						}

@@ -84,10 +84,10 @@ void edison_gpio::request(cossb::base::message* const msg)
 	{
 	case cossb::base::msg_type::REQUEST: {
 		if(!msg->get_frame()->topic.compare("service/gpio/write"))
-			cossb_log->log(log::loglevel::INFO, fmt::format("Received message (GPIO) : {}", msg->show().c_str()));
+			cossb_log->log(log::loglevel::INFO, fmt::format("Received message (GPIO) : {}", msg->raw().c_str()));
 	}
 		break;
-	case cossb::base::msg_type::DATA: { cossb_log->log(log::loglevel::INFO, fmt::format("Received : {}", msg->show()));} break;
+	case cossb::base::msg_type::DATA: { cossb_log->log(log::loglevel::INFO, fmt::format("Received : {}", msg->raw()));} break;
 	case cossb::base::msg_type::SIGNAL: break;
 	default:
 		cossb_log->log(log::loglevel::INFO, "Received message has unsupported type.");
