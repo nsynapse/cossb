@@ -14,8 +14,8 @@
 </info>
 
 <property>
-	<endpoint>ws://127.0.0.1:9002/command</endpoint>
-	<endpoint>ws://127.0.0.1:9002/sensor</endpoint>
+	<endpoint>ws://192.168.0.26:9002/command</endpoint>
+	<endpoint>ws://192.168.0.26:9002/sensor</endpoint>
 </property>
 
 <service name="websocket_read" method="publish" topic="service/websocket/read"></service>

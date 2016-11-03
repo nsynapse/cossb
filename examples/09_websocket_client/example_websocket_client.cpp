@@ -55,6 +55,7 @@ void example_websocket_client::write()
 			msg["data"]["status"] = 0x01;
 			msg["data"]["value"] = {0xff};
 			cossb_broker->publish("example_websocket_write", msg);
+			cossb_log->log(cossb::log::loglevel::INFO, fmt::format("Websocket Write Message : {}",msg.raw()));
 
 			boost::this_thread::sleep(boost::posix_time::milliseconds(500));
 
@@ -62,6 +63,8 @@ void example_websocket_client::write()
 			cossb_broker->publish("example_websocket_write", msg);
 
 			boost::this_thread::sleep(boost::posix_time::milliseconds(500));
+
+			cossb_log->log(cossb::log::loglevel::INFO, fmt::format("Websocket Write Message : {}",msg.raw()));
 
 			id++;
 			if(id>0x05){
