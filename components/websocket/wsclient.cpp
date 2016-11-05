@@ -78,8 +78,9 @@ void wsclient::request(cossb::base::message* const msg)
 {
 	switch(msg->get_frame()->type){
 		case cossb::base::msg_type::REQUEST: {
+			cossb_log->log(log::loglevel::WARN, fmt::format("Send to websocket server : {}",msg->raw()));
 
-			if((*msg).find("uri")){
+			if(msg->exist("uri")){
 				if((*msg)["uri"].is_string()){
 					string uri = (*msg)["uri"];
 
