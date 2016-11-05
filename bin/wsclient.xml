@@ -20,4 +20,4 @@
 
 <service name="websocket_read" method="publish" topic="service/websocket/read"></service>
 <service name="websocket_write" method="subscribe" topic="service/websocket/write"></service>
-<!--<service name="websocket_align" method="subscribe" topic="service/cat/protocol/align"></service>-->
+<service name="websocket_align" method="subscribe" topic="service/cat/protocol/align"></service>
