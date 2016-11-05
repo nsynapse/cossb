@@ -42,7 +42,7 @@ bool message::is_empty(){
 	return frame.encoded_data.empty();
 }
 
-bool message::find(const char* key)const {
+bool message::exist(const char* key) const {
 	return (data.find(key)!=data.end());
 }
 

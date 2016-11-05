@@ -83,7 +83,7 @@ public:
 	/*
 	 * @brief	find
 	 */
-	bool find(const char* key) const;
+	bool exist(const char* key) const;
 
 	/**
 	 * @brief	getting json data pointer

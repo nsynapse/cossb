@@ -14,7 +14,8 @@
 </info>
 
 <property>
+	<uri>ws://192.168.0.26:9002/sensor</uri>
 </property>
 
-<service name="cat_protocol_read" method="subscribe" topic="service/serial/read"></service>
+<service name="cat_protocol_read" method="subscribe" topic="service/uart/read"></service>
 <service name="cat_protocol_align" method="publish" topic="service/cat/protocol/align"></service>

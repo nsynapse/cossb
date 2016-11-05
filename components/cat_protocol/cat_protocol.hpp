@@ -40,6 +40,7 @@ public:
 
 private:
 	std::deque<unsigned char> _queue;
+	string _websocket_uri;
 
 };
 

@@ -18,7 +18,6 @@ example_cat_monitoring::~example_cat_monitoring() {
 
 bool example_cat_monitoring::setup()
 {
-
 	return true;
 }
 
@@ -44,8 +43,7 @@ void example_cat_monitoring::request(cossb::base::message* const msg)
 	//for test
 	//cossb::base::message control_msg(this, base::msg_type::REQUEST);
 	//control_msg = msg;
-	cossb_broker->publish("example_cat_compcontrol", *msg);
-
+	//cossb_broker->publish("example_cat_compcontrol", *msg);
 
 
 	switch(msg->get_frame()->type)
@@ -54,14 +52,14 @@ void example_cat_monitoring::request(cossb::base::message* const msg)
 		{
 			try {
 				//if 'id' has a value
-				if(!(*msg)["id"].is_null()){
+				if(msg->exist("id")){
 					if((*msg)["id"].is_number()){
 						//read id value as int
 						int id = (*msg)["id"].get<int>();
 						cossb_log->log(log::loglevel::INFO, fmt::format("Message ID : {}", id));
 					}
 
-					if(!(*msg)["list"].is_null()){
+					if(msg->exist("list")){
 						if((*msg)["list"].is_array()){
 							//std::vector<int> arr = (*msg)["list"];	//correct
 							std::vector<bool> arr = (*msg)["list"];	//error!!
@@ -100,8 +98,8 @@ void example_cat_monitoring::write()
 			if(value>=255)
 				value=0;
 
-			//cossb_log->log(cossb::log::loglevel::INFO, fmt::format("[{}] Send Test Message : {}",try_count++, msg.raw()));
-			boost::this_thread::sleep(boost::posix_time::milliseconds(500));
+			cossb_log->log(cossb::log::loglevel::INFO, fmt::format("[{}] Message : {}",__FILE__, msg.raw()));
+			boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
 
 			id++;
 			if(id>0x05){

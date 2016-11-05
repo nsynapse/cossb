@@ -17,6 +17,8 @@ cat_protocol::~cat_protocol() {
 
 bool cat_protocol::setup()
 {
+	_websocket_uri = get_profile()->get(profile::section::property, "uri").asString("ws://127.0.0.1:9002");
+
 	return true;
 }
 
@@ -38,7 +40,7 @@ void cat_protocol::request(cossb::base::message* const msg)
 	{
 		case cossb::base::msg_type::REQUEST:
 		{
-			if(!(*msg)["data"].is_null()){
+			if(msg->exist("data")){
 				if((*msg)["data"].is_array()){
 					//insert
 					_queue.insert(_queue.end(),(*msg)["data"].begin(),(*msg)["data"].end());
@@ -56,8 +58,9 @@ void cat_protocol::request(cossb::base::message* const msg)
 										msg["value"].push_back(_queue[i+5]);
 									_queue.erase(_queue.begin(), _queue.begin()+(unsigned int)_queue[3]+4);
 
+									msg["uri"] = _websocket_uri;
 									cossb_broker->publish("cat_protocol_align", msg);
-									cossb_log->log(log::loglevel::INFO, "Message is aligned and published.");
+									cossb_log->log(log::loglevel::INFO, fmt::format("Aligned Message : {}",msg.raw()));
 								}
 								else
 									break;

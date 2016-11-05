@@ -28,7 +28,7 @@ edison_uart::~edison_uart() {
 
 bool edison_uart::setup()
 {
-	string port = get_profile()->get(profile::section::property, "port").asString("/dev/ttyACM0");
+	string port = get_profile()->get(profile::section::property, "port").asString("/dev/ttyMFD0");
 	int baudrate = get_profile()->get(profile::section::property, "baudrate").asInt(115200);
 
 	cossb_log->log(log::loglevel::INFO, fmt::format("UART Profile Info : {}, {}", port, baudrate));
@@ -80,7 +80,7 @@ void edison_uart::request(cossb::base::message* const msg)
 	switch(msg->get_frame()->type) {
 	case cossb::base::msg_type::REQUEST: {
 		//write
-		if(!(*msg)["data"].is_null()){
+		if(msg->exist("data")){
 			if((*msg)["data"].is_array()){
 				std::vector<unsigned char> raw = (*msg)["data"];
 				_uart->write((const char*)raw.data(), raw.size());

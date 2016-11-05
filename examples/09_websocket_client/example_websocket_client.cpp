@@ -19,7 +19,7 @@ example_websocket_client::~example_websocket_client() {
 bool example_websocket_client::setup()
 {
 
-	_url_prefix = get_profile()->get(profile::section::property, "url").asString("ws://localhost:9090");
+	_url_prefix = get_profile()->get(profile::section::property, "uri").asString("ws://localhost:9090");
 
 	if(!_task)
 		create_task(example_websocket_client::write);
