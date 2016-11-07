@@ -52,6 +52,9 @@ bool edison_uart::setup()
 		if (_uart->setFlowcontrol(false, false) != mraa::SUCCESS)
 			cossb_log->log(log::loglevel::ERROR, "Error setting flow control UART");
 
+		if(_uart->setTimeout(10, 10, 10)!=mraa::SUCCESS)
+			cossb_log->log(log::loglevel::ERROR, "Error setting timeout UART");
+
 	} catch (std::exception& e) {
 		cossb_log->log(log::loglevel::ERROR, fmt::format("{}, Error while setting up raw UART, do you have a uart?", e.what()));
 		return false;
@@ -109,8 +112,9 @@ void edison_uart::read()
 						//publish message with received data
 						cossb::base::message msg(this, base::msg_type::REQUEST);
 
-						for(int i=0;i<readsize;i++)
+						for(int i=0;i<readsize;i++){
 							msg["data"].push_back(buffer[i]);
+						}
 
 						cossb_broker->publish("edison_uart_read", msg);
 					}
