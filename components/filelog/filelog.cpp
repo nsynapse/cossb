@@ -55,9 +55,8 @@ void filelog::request(cossb::base::message* const msg)
 	{
 		if(msg->exist("value")){
 			cossb_log->log(log::loglevel::INFO, fmt::format("Write to logfile : {} ", (*msg)["value"].dump()));
-			if((*msg)["value"].is_array())
-				if(_file.is_open())
-					_file << (*msg)["value"].dump();
+			if(_file.is_open())
+				_file << (*msg)["value"].dump();
 		}
 
 		/*if(!msg->get_frame()->topic.compare("service/filelog/write")) {
