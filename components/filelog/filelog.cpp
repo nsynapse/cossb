@@ -30,7 +30,7 @@ bool filelog::run()
 {
 	if(!_file.is_open()) {
 		string fullpath = _path+_time.current()+string(".log");
-		_file.open(fullpath.c_str(), std::ofstream::out|std::ofstream::app);
+		_file.open(fullpath.c_str(), std::ofstream::in|std::ofstream::app);
 	}
 
 	return true;
@@ -54,7 +54,7 @@ void filelog::request(cossb::base::message* const msg)
 		if(msg->exist("data")){
 			if((*msg)["data"].is_array())
 				if(_file.is_open())
-					_file << (*msg)["data"];
+					_file << (*msg).raw();
 		}
 
 		/*if(!msg->get_frame()->topic.compare("service/filelog/write")) {
