@@ -56,7 +56,7 @@ void filelog::request(cossb::base::message* const msg)
 		if(msg->exist("value")){
 			cossb_log->log(log::loglevel::INFO, fmt::format("Write to logfile : {} ", (*msg)["value"].dump()));
 			if(_file.is_open())
-				_file << "test";
+				_file << (*msg)["value"].dump();
 			else
 				cossb_log->log(log::loglevel::ERROR, "Log File did not open");
 		}
