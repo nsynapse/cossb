@@ -52,7 +52,7 @@ void filelog::request(cossb::base::message* const msg)
 	case cossb::base::msg_type::REQUEST:
 	{
 		if(!msg->get_frame()->topic.compare("service/filelog/write")) {
-			if(!(*msg)["data"].is_null() && (*msg)["data"].is_string()) {
+			if(!(*msg)["data"].is_null() && (*msg)["data"].is_array()) {
 				if(_file.is_open()) {
 					_file << (*msg)["data"];
 				}
