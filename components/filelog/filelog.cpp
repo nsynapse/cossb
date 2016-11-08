@@ -6,6 +6,8 @@
  */
 
 #include "filelog.hpp"
+#include <cossb.hpp>
+#include <base/message.hpp>
 
 USE_COMPONENT_INTERFACE(filelog)
 
@@ -52,6 +54,7 @@ void filelog::request(cossb::base::message* const msg)
 	case cossb::base::msg_type::REQUEST:
 	{
 		if(msg->exist("data")){
+			cossb_log->log(log::loglevel::INFO, fmt::format("Write to logfile : {} ", (*msg)["data"].dump()));
 			if((*msg)["data"].is_array())
 				if(_file.is_open())
 					_file << (*msg).raw();

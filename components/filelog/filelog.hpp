@@ -8,8 +8,7 @@
  */
 
 
-#include <base/interface.hpp>
-#include <map>
+#include <interface/icomponent.hpp>
 #include <string>
 #include <iostream>
 #include <fstream>
