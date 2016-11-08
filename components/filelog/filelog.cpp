@@ -57,7 +57,7 @@ void filelog::request(cossb::base::message* const msg)
 			cossb_log->log(log::loglevel::INFO, fmt::format("Write to logfile : {} ", (*msg)["value"].dump()));
 			if(_file.is_open()){
 				_file << (*msg)["value"].dump();
-				_file << "\n";
+				_file << endl;
 				_file.flush();
 			}
 			else
