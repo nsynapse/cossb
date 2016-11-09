@@ -29,7 +29,7 @@ UTIL_FILES = ./util/
 BASE_FILES = ./base/
 
 #ossb version
-CXXFLAGS += -D__MAJOR__=0 -D__MINOR__=0 -D__REV__=1
+CXXFLAGS += -D__MAJOR__=0 -D__MINOR__=0 -D__REV__=2
 
 
 # Make COSSB Application
