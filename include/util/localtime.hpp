@@ -24,13 +24,24 @@ typedef struct _stime {
 	int ctm_isdst;
 } stime;
 
+/*class Date {
+public:
+	Date(int year, int month, int day):_year(year), _month(month), _day(day) {}
+	friend std::ostream &operator<<(std::ostream &os, const Date &d) {
+		return os << d._year_ << '-' << d._month_ << '-' << d._day_;
+	}
+
+	private:
+	int _year, _month, _day;
+};*/
+
+
 class systime : public tm {
 public:
 	systime();
 	virtual ~systime();
 
 	string current();
-	string current_formatted();
 	stime* get_time();
 
 private:

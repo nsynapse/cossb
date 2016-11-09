@@ -15,6 +15,8 @@
 
 <property>
 	<path>./</path>
+	<column>value</column>
+	<column>uri</column>
 </property>
 
 <service name="filelog_write" method="subscribe" topic="service/cat/protocol/align"></service>

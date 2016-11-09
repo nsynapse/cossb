@@ -24,6 +24,10 @@ filelog::~filelog() {
 bool filelog::setup()
 {
 	_path = get_profile()->get(profile::section::property, "path").asString("./");
+	for(auto value: get_profile()->gets(profile::section::property, "column")){
+		if(!value.asString("").empty())
+			_columns.push_back(value.asString(""));
+	}
 
 	return true;
 }
@@ -54,11 +58,17 @@ void filelog::request(cossb::base::message* const msg)
 	case cossb::base::msg_type::REQUEST:
 	{
 		if(msg->exist("value")){
-			cossb_log->log(log::loglevel::INFO, fmt::format("Write to logfile : {} ", (*msg)["value"].dump()));
 			if(_file.is_open()){
-				_file << (*msg)["value"].dump();
+				_file << _time.current() << "\t";
+				for(auto& key:_columns){
+					if(msg->exist(key.c_str())){
+						_file << (*msg)[key.c_str()].dump();
+						_file << "\t";
+					}
+				}
 				_file << endl;
 				_file.flush();
+				cossb_log->log(log::loglevel::INFO, fmt::format("Write to log file"));
 			}
 			else
 				cossb_log->log(log::loglevel::ERROR, "Log File did not open");

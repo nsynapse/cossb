@@ -46,6 +46,7 @@ private:
 	ofstream _file;
 	string _path;
 	util::systime _time;
+	vector<string> _columns;
 };
 
 COMPONENT_EXPORT

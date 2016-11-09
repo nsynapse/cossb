@@ -22,15 +22,6 @@ string systime::current()
 	return time;
 }
 
-string systime::current_formatted()
-{
-	local();
-	string time = fmt::format("[{}-{}-{} {}:{}:{}]\t",
-			_time.ctm_year,_time.ctm_mon,_time.ctm_mday,
-			_time.ctm_hour,_time.ctm_min,_time.ctm_sec);
-	return time;
-}
-
 stime* systime::get_time()
 {
 	return &_time;
@@ -38,8 +29,8 @@ stime* systime::get_time()
 
 stime* systime::local()
 {
-	time_t now = time(0);
-	tm* local = ::localtime(&now);
+	std::time_t now = std::time(nullptr);
+	tm* local = std::localtime(&now);
 
 	_time.ctm_sec = local->tm_sec;
 	_time.ctm_min = local->tm_min+1;

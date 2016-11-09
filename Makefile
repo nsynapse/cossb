@@ -46,6 +46,8 @@ cossb:	$(OUTDIR)cossb.o \
 		$(OUTDIR)message.o \
 		$(OUTDIR)log.o\
 		$(OUTDIR)localtime.o \
+		$(OUTDIR)ostream.o \
+		$(OUTDIR)format.o \
 		$(OUTDIR)tinyxml2.o
 		$(CXX) $(LDFLAGS) -o $(OUTDIR)$@ $^ $(LDLIBS)
 		
@@ -63,6 +65,8 @@ cossb_test:	$(OUTDIR)cossb_test.o \
 		$(OUTDIR)message.o \
 		$(OUTDIR)log.o \
 		$(OUTDIR)localtime.o \
+		$(OUTDIR)ostream.o \
+		$(OUTDIR)format.o \
 		$(OUTDIR)tinyxml2.o
 		$(CXX) $(LDFLAGS) -o $(OUTDIR)$@ $^ $(LDLIBS)
 
@@ -225,6 +229,12 @@ $(OUTDIR)message.o: $(INCLUDE_FILES)base/message.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
 $(OUTDIR)localtime.o: $(INCLUDE_FILES)util/localtime.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
+$(OUTDIR)ostream.o: $(INCLUDE_FILES)util/ostream.cc
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
+$(OUTDIR)format.o: $(INCLUDE_FILES)util/format.cc
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
 $(OUTDIR)tinyxml2.o: $(INCLUDE_FILES)ext/tinyxml2.cpp

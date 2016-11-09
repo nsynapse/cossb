@@ -27,15 +27,15 @@ void console::log(const log::loglevel& level, const char* logstr)
 	{
 		switch(level)
 		{
-		case	loglevel::TRACE:	cout << _time.current_formatted() << "[TRACE]\t"	<< logstr << endl;	break;
-		case	loglevel::DEBUG:	cout << _time.current_formatted() << "[DEBUG]\t"	<< logstr << endl;	break;
-		case	loglevel::INFO:		cout << _time.current_formatted() << "[INFO]\t"		<< logstr << endl;	break;
-		case	loglevel::NOTICE: 	cout << _time.current_formatted() << "[NOTICE]\t"	<< logstr << endl;	break;
-		case	loglevel::WARN: 	cout << _time.current_formatted() << "[WARN]\t"		<< logstr << endl;	break;
-		case	loglevel::ERROR: 	cout << _COLOR_ERROR_ << _time.current_formatted() << "[ERROR]\t"	<< logstr << _COLOR_END_ << endl;	break;
-		case	loglevel::CRITICAL: cout << _time.current_formatted() << "[CRITICAL]\t"	<< logstr << endl;	break;
-		case	loglevel::ALERT: 	cout << _time.current_formatted() << "[ALERT]\t"	<< logstr << endl;	break;
-		case	loglevel::EMERG: 	cout << _time.current_formatted() << "[EMERG]\t"	<< logstr << endl;	break;
+		case	loglevel::TRACE:	cout << "[" << _time.current() << "]" << "[TRACE]\t"	<< logstr << endl;	break;
+		case	loglevel::DEBUG:	cout << "[" << _time.current() << "]" << "[DEBUG]\t"	<< logstr << endl;	break;
+		case	loglevel::INFO:		cout << "[" << _time.current() << "]" << "[INFO]\t"		<< logstr << endl;	break;
+		case	loglevel::NOTICE: 	cout << "[" << _time.current() << "]" << "[NOTICE]\t"	<< logstr << endl;	break;
+		case	loglevel::WARN: 	cout << "[" << _time.current() << "]" << "[WARN]\t"		<< logstr << endl;	break;
+		case	loglevel::ERROR: 	cout << _COLOR_ERROR_ << "[" << _time.current() << "]" << "[ERROR]\t"	<< logstr << _COLOR_END_ << endl;	break;
+		case	loglevel::CRITICAL: cout << "[" << _time.current() << "]" << "[CRITICAL]\t"	<< logstr << endl;	break;
+		case	loglevel::ALERT: 	cout << "[" << _time.current() << "]" << "[ALERT]\t"	<< logstr << endl;	break;
+		case	loglevel::EMERG: 	cout << "[" << _time.current() << "]" << "[EMERG]\t"	<< logstr << endl;	break;
 		}
 	}
 }
@@ -48,15 +48,15 @@ void console::log(const log::loglevel& level, string logstr)
 	{
 		switch(level)
 		{
-		case	loglevel::TRACE:	cout << _time.current_formatted() << "[TRACE]\t"	<< logstr << endl;	break;
-		case	loglevel::DEBUG:	cout << _time.current_formatted() << "[DEBUG]\t"	<< logstr << endl;	break;
-		case	loglevel::INFO:		cout << _time.current_formatted() << "[INFO]\t"		<< logstr << endl;	break;
-		case	loglevel::NOTICE: 	cout << _time.current_formatted() << "[NOTICE]\t"	<< logstr << endl;	break;
-		case	loglevel::WARN: 	cout << _time.current_formatted() << "[WARN]\t"		<< logstr << endl;	break;
-		case	loglevel::ERROR: 	cout << _COLOR_ERROR_ << _time.current_formatted() << "[ERROR]\t"	<< logstr << _COLOR_END_ << endl;	break;
-		case	loglevel::CRITICAL: cout << _time.current_formatted() << "[CRITICAL]\t"	<< logstr << endl;	break;
-		case	loglevel::ALERT: 	cout << _time.current_formatted() << "[ALERT]\t"	<< logstr << endl;	break;
-		case	loglevel::EMERG: 	cout << _time.current_formatted() << "[EMERG]\t"	<< logstr << endl;	break;
+		case	loglevel::TRACE:	cout << "[" << _time.current() << "]" << "[TRACE]\t"	<< logstr << endl;	break;
+		case	loglevel::DEBUG:	cout << "[" << _time.current() << "]" << "[DEBUG]\t"	<< logstr << endl;	break;
+		case	loglevel::INFO:		cout << "[" << _time.current() << "]" << "[INFO]\t"		<< logstr << endl;	break;
+		case	loglevel::NOTICE: 	cout << "[" << _time.current() << "]" << "[NOTICE]\t"	<< logstr << endl;	break;
+		case	loglevel::WARN: 	cout << "[" << _time.current() << "]" << "[WARN]\t"		<< logstr << endl;	break;
+		case	loglevel::ERROR: 	cout << _COLOR_ERROR_ << "[" << _time.current() << "]" << "[ERROR]\t"	<< logstr << _COLOR_END_ << endl;	break;
+		case	loglevel::CRITICAL: cout << "[" << _time.current() << "]" << "[CRITICAL]\t"	<< logstr << endl;	break;
+		case	loglevel::ALERT: 	cout << "[" << _time.current() << "]" << "[ALERT]\t"	<< logstr << endl;	break;
+		case	loglevel::EMERG: 	cout << "[" << _time.current() << "]" << "[EMERG]\t"	<< logstr << endl;	break;
 		}
 	}
 }
