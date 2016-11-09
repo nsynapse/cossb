@@ -132,6 +132,11 @@ example_cat_db_log.comp: $(OUTDIR)example_cat_db_log.o
 	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
 $(OUTDIR)example_cat_db_log.o: $(EXAMPLE_FILES)11_example_cat_db_log/example_cat_db_log.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+
+example_filelog.comp: $(OUTDIR)example_filelog.o 
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+$(OUTDIR)example_filelog.o: $(EXAMPLE_FILES)12_filelog/example_filelog.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
 edison_gpio.comp: $(OUTDIR)edison_gpio.o 
 	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS) $(EDISON_LDLIBS)
@@ -258,7 +263,7 @@ base: cossb
 components: serial.comp tcpserver.comp uart_protocol.comp wsclient.comp cat_protocol.comp
 edison: edison_i2c.comp edison_uart.comp edison_gpio.comp
 test: cossb_test
-examples: helloworld.comp example_tcpserver.comp example_uart.comp example_messageout.comp example_messageprint.comp example_edison_gpio.comp example_edison_i2c.comp example_edison_uart.comp example_websocket_client.comp example_cat_monitoring.comp
+examples: helloworld.comp example_tcpserver.comp example_uart.comp example_messageout.comp example_messageprint.comp example_edison_gpio.comp example_edison_i2c.comp example_edison_uart.comp example_websocket_client.comp example_cat_monitoring.comp example_filelog.comp
 tutorial1 : example_messageout.comp example_messageprint.comp
 util: wsbroadcaster
 cat: cossb wsbroadcaster edison_uart.comp example_cat_monitoring.comp cat_protocol.comp wsclient.comp sqlitedb.comp compcontroller.comp

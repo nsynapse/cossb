@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <info>
 	<uuid>00000000000000000000</uuid>
-	<name>filelog</name>
-	<description>File logger</description>
+	<name>example_filelog</name>
+	<description>Example for File logger</description>
 	<company>Nsynapse Inc.</company>
 	<developer>Byunghun Hwang</developer>
 	<email>bhhwang@nsynapse.com</email>
@@ -14,10 +14,6 @@
 </info>
 
 <property>
-	<path>./</path>
-	<column>value</column>
-	<column>uri</column>
 </property>
 
-<service name="filelog_write" method="subscribe" topic="service/cat/protocol/align"></service>
-<service name="filelog_write_test" method="subscribe" topic="service/example/filelog/write"></service> <!-- for test -->
+<service name="example_filelog_write" method="publish" topic="service/example/filelog/write"></service>
