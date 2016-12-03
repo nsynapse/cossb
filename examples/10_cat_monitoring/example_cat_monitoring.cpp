@@ -83,7 +83,6 @@ void example_cat_monitoring::request(cossb::base::message* const msg)
 
 void example_cat_monitoring::write()
 {
-	static unsigned long try_count = 1;
 	static char id = 0x01;
 	while(1) {
 		try {
