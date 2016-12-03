@@ -157,6 +157,7 @@ public:
 	 */
 	virtual vector<profile::type_value> gets(profile::section section, const char* element) = 0;
 
+
 	/**
 	 * @brief	get profile value
 	 */
