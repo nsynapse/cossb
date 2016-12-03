@@ -92,12 +92,13 @@ void example_cat_monitoring::write()
 			//it will be converted as [ 0xff | 0xff | id | length | error | value | checksum ]
 			static unsigned char value = 0;
 			msg["data"] = {0xff, 0xff, 0x01, 0x03, 0x00, value++, 0xdb };
+
 			cossb_broker->publish("example_cat_push", msg);
 
 			if(value>=255)
 				value=0;
 
-			cossb_log->log(cossb::log::loglevel::INFO, fmt::format("Message : {}", msg.raw()));
+			cossb_log->log(cossb::log::loglevel::INFO, fmt::format("Dummy Message : {}", msg.raw()));
 			boost::this_thread::sleep(boost::posix_time::milliseconds(100));
 
 			id++;

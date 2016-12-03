@@ -35,7 +35,11 @@ public:
 	void request(cossb::base::message* const msg);
 
 private:
+	void write();
+
+private:
 	string _dbname;
+	base::task _task;
 
 };
 
