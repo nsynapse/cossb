@@ -98,7 +98,7 @@ void example_cat_monitoring::write()
 			if(value>=255)
 				value=0;
 
-			cossb_log->log(cossb::log::loglevel::INFO, fmt::format("[{}] Message : {}",__FILE__, msg.raw()));
+			cossb_log->log(cossb::log::loglevel::INFO, fmt::format("Message : {}", msg.raw()));
 			boost::this_thread::sleep(boost::posix_time::milliseconds(100));
 
 			id++;
