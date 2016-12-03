@@ -45,10 +45,10 @@ public:
 	void request(cossb::base::message* const msg);
 
 private:
-
 	base::task _socket_task;
 	map<string, easywsclient::WebSocket::pointer> _client_map;
 	std::mutex _lock;
+	map<string, bool> _reconnect;
 
 private:
 	void read();

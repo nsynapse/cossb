@@ -28,8 +28,10 @@ wsclient::wsclient()
 
 wsclient::~wsclient() {
 	for(auto it=_client_map.begin(); it!=_client_map.end(); ++it){
-		it->second->close();
-		delete it->second;
+		if(it->second) {
+			it->second->close();
+			delete it->second;
+		}
 	}
 	_client_map.clear();
 }
@@ -38,21 +40,18 @@ bool wsclient::setup()
 {
 	for(auto uri:get_profile()->gets(profile::section::property, "endpoint")){
 		string u = uri.asString("ws://localhost::9002");
+
 		_client_map[u] = easywsclient::WebSocket::from_url(u.c_str());
 
-		if(_client_map[u]) {
-			if(_client_map[u]->getReadyState()!=easywsclient::WebSocket::CLOSED){
+		if(_client_map[u]){
+			if(_client_map[u]->getReadyState()==easywsclient::WebSocket::OPEN){
 				cossb_log->log(log::loglevel::INFO, fmt::format("Connected to the {} websocket server",u));
-			}
-			else {
-				cossb_log->log(log::loglevel::ERROR, fmt::format("Server might not be ready {}",u));
-				_client_map[u]->close();
-				_client_map.erase(u);
+				_reconnect[u] = false;
 			}
 		}
 		else {
-			_client_map.erase(u);
-			cossb_log->log(log::loglevel::ERROR, fmt::format("Cannot connect to the {} websocket server",u));
+			cossb_log->log(log::loglevel::ERROR, fmt::format("Cannot connect to the server {}.",u));
+			_reconnect[u] = true;
 		}
 	}
 
@@ -94,6 +93,8 @@ void wsclient::request(cossb::base::message* const msg)
 						else
 							cossb_log->log(log::loglevel::WARN, fmt::format("Cannot connect to the server {}.",uri));
 					}
+					else
+						cossb_log->log(log::loglevel::WARN, fmt::format("{} does not exist in profile.",uri));
 				}
 			}
 			else
@@ -114,10 +115,31 @@ void wsclient::read()
 	while(1) {
 		try {
 			for(auto it=_client_map.begin(); it!=_client_map.end(); ++it) {
-				if(it->second->getReadyState()!=easywsclient::WebSocket::CLOSED){
-					std::lock_guard<std::mutex> lock(_lock);
-					it->second->poll();
-					it->second->dispatch(handle_message);
+				if(it->second){
+					if(it->second->getReadyState()!=easywsclient::WebSocket::CLOSED){
+						std::lock_guard<std::mutex> lock(_lock);
+						it->second->poll();
+						it->second->dispatch(handle_message);
+
+						if(!_reconnect[it->first]){
+							cossb_log->log(log::loglevel::INFO, fmt::format("Connected to the {} websocket server",it->first));
+							_reconnect[it->first] = true;
+						}
+					}
+					else {
+						cossb_log->log(log::loglevel::INFO, fmt::format("Disconnected. Trying to reconnect {}",it->first));
+						it->second = easywsclient::WebSocket::from_url(it->first.c_str());
+						_reconnect[it->first] = false;
+					}
+
+				}
+				//try to reconnect
+				else {
+						//cossb_log->log(log::loglevel::INFO, fmt::format("Disconnected. Try to reconnect {}",it->first));
+					//
+					it->second = easywsclient::WebSocket::from_url(it->first.c_str());
+					_reconnect[it->first] = false;
+					//
 				}
 			}
 
