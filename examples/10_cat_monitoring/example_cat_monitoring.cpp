@@ -23,15 +23,15 @@ bool example_cat_monitoring::setup()
 
 bool example_cat_monitoring::run()
 {
-	/*if(!_task)
-		create_task(example_cat_monitoring::write);*/
+	if(!_task)
+		create_task(example_cat_monitoring::write);
 
 	return true;
 }
 
 bool example_cat_monitoring::stop()
 {
-	//destroy_task(_task);
+	destroy_task(_task);
 
 	return true;
 }
@@ -90,7 +90,7 @@ void example_cat_monitoring::write()
 				value=0;
 
 			cossb_log->log(cossb::log::loglevel::INFO, fmt::format("Dummy Message : {}", msg.raw()));
-			boost::this_thread::sleep(boost::posix_time::milliseconds(100));
+			boost::this_thread::sleep(boost::posix_time::milliseconds(3000));
 
 			id++;
 			if(id>0x05){
