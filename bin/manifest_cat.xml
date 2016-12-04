@@ -27,7 +27,6 @@
 	<required type="component">cat_protocol</required> <!-- cat protocol -->
 	<required type="component">wsclient</required> <!-- websocket client -->
 	<required type="component">filelog</required> <!-- save log into single file -->
-	<!--<required type="component">compcontroller</required>--> <!-- component controller -->
 	
 	
 	<!-- do not edit this path -->

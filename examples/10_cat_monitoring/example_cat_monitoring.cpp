@@ -23,15 +23,15 @@ bool example_cat_monitoring::setup()
 
 bool example_cat_monitoring::run()
 {
-	if(!_task)
-		create_task(example_cat_monitoring::write);
+	/*if(!_task)
+		create_task(example_cat_monitoring::write);*/
 
 	return true;
 }
 
 bool example_cat_monitoring::stop()
 {
-	destroy_task(_task);
+	//destroy_task(_task);
 
 	return true;
 }
@@ -51,22 +51,13 @@ void example_cat_monitoring::request(cossb::base::message* const msg)
 		case cossb::base::msg_type::REQUEST:
 		{
 			try {
-				//if 'id' has a value
-				if(msg->exist("id")){
-					if((*msg)["id"].is_number()){
-						//read id value as int
-						int id = (*msg)["id"].get<int>();
-						cossb_log->log(log::loglevel::INFO, fmt::format("Message ID : {}", id));
-					}
-
-					if(msg->exist("list")){
-						if((*msg)["list"].is_array()){
-							//std::vector<int> arr = (*msg)["list"];	//correct
-							std::vector<bool> arr = (*msg)["list"];	//error!!
-							for(int v:arr)
-								cout << v << "\t";
-							cout << endl;
-						}
+				if(msg->exist("data")){
+					if((*msg)["data"].is_array()){
+						//std::vector<int> arr = (*msg)["list"];	//correct
+						std::vector<unsigned char> arr = (*msg)["data"];	//error!!
+						for(unsigned char v:arr)
+							cout << (int)v << "\t";
+						cout << endl;
 					}
 				}
 			}
