@@ -9,8 +9,7 @@
 #ifndef _COSSB_HEADER_HPP_
 #define _COSSB_HEADER_HPP_
 
-#if defined(__unix__) || defined(__gnu_linux__) || defined(linux) || defined(__linux__)
-
+#if defined(__unix__) || defined(__gnu_linux__) || defined(linux) || defined(__linux__) || defined(__APPLE__)
 
 #include <base/version.hpp>
 #include <base/instance.hpp>

@@ -37,11 +37,6 @@ void destroy()
 	cossb_manifest->destroy();
 }
 
-bool sync()
-{
-	return true;
-}
-
 
 bool start()
 {

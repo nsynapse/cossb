@@ -9,7 +9,7 @@
 #ifndef _COSSB_INTERFACE_HPP_
 #define _COSSB_INTERFACE_HPP_
 
-#if defined(__unix__) || defined(__gnu_linux__) || defined(linux) || defined(__linux__)
+#if defined(__unix__) || defined(__gnu_linux__) || defined(linux) || defined(__linux__) || defined(__APPLE__)
 
 #include <interface/icomponent.hpp>
 #include <interface/iauth.hpp>

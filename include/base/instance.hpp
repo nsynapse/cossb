@@ -28,10 +28,6 @@ extern bool init(const char* manifest_file, bool setup=true);
  */
 extern void destroy();
 
-/**
- * @brief	service components synchronization
- */
-extern bool sync();
 
 /**
  * @brief	start COSSB

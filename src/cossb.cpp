@@ -26,12 +26,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 /**
- * @mainpage	COSSB(Component-based Open & Simple Service Broker)
- * @details
- */
-
-
-/**
  * @file		cossb.cpp
  * @brief		COSS Broker application
  * @author		Byunghun Hwang<bhhwang@nsynapse.com>
@@ -42,7 +36,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <iostream>
 #include <csignal>
 #include <cstdlib>
-#include <popt.h>
+#include <ext/cxxopts.hpp>
 #include <memory>
 #include <dirent.h>
 #include <unistd.h>
@@ -72,52 +66,36 @@ int main(int argc, char* argv[])
 {
 	signal(SIGINT, sigc_interrupt);
 
-	char* manifest_file = nullptr;
-	struct poptOption optionTable[] = {
-		{"run", 'r', POPT_ARG_STRING, (void*)manifest_file, 'r', "Run Broker with manifest file", "*.xml manifest file"},
-		{"version", 'v', POPT_ARG_NONE, 0, 'v', "Show COSSB Version", "version"},
-		POPT_AUTOHELP
-		POPT_TABLEEND
-	};
-	poptContext optionCon = poptGetContext(NULL, argc, (const char**)argv, optionTable, 0);
-	poptSetOtherOptionHelp(optionCon, "<option>");
+	try {
+		signal(SIGINT, sigc_interrupt);
 
-	if(argc<2)
-	{
-		std::cout << poptStrerror(POPT_ERROR_NOARG) << endl;
-		exit(EXIT_SUCCESS);
-	}
+		cxxopts::Options options(argv[0], "CommandLine Options");
+		options.add_options()
+			("r,run", "Manifest File(*.xml)", cxxopts::value<std::string>(), "FILE")
+			("v,version", "Print Version")
+			("h,help", "Print Help");
 
-	//only one opt
-	int opt = poptGetNextOpt(optionCon);
-	if(opt>=0)
-	{
-		switch(opt)
+		options.parse(argc, argv);
+
+		//Options
+		if(options.count("help")){ std::cout << options.help({ "", "Group" }) << std::endl; exit(0);}
+		else if(options.count("v")){ std::cout << COSSB_NAME << COSSB_VERSION << " (Built " << __DATE__ << " " <<__TIME__ << ")" << std::endl;	exit(EXIT_SUCCESS); }
+		else if(options.count("r"))
 		{
-		/* run with manifest file */
-		case 'r': {
+			auto& file = options["r"].as<std::string>();
 			cossb_log->log(log::loglevel::INFO, fmt::format("{}{} Now Starting....",COSSB_NAME, COSSB_VERSION).c_str());
 
-			if(!cossb::core::init((const char*)poptGetOptArg(optionCon)))
+			if(!cossb::core::init(file.c_str()))
 				::terminate();
 
 			cossb::core::start();
 			pause();
-
-		} break;
-
-		/* show cossb version */
-		case 'v':{ std::cout << COSSB_NAME << COSSB_VERSION << " (Built " << __DATE__ << " " <<__TIME__ << ")" << std::endl;	exit(EXIT_SUCCESS); } break;
 		}
 	}
-
-	if (opt<-1)
-	{
-		cout << poptBadOption(optionCon, POPT_BADOPTION_NOALIAS) << ":" << poptStrerror(opt) << endl;
-		::terminate();
+	catch(const cxxopts::OptionException& e) {
+		std::cout << "error parsing options : " << e.what() << std::endl;
+		exit(1);
 	}
-
-	poptFreeContext(optionCon);
 
 	::terminate();
 

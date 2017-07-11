@@ -41,8 +41,6 @@ cossb:	$(OUTDIR)cossb.o \
 		$(OUTDIR)driver.o \
 		$(OUTDIR)broker.o \
 		$(OUTDIR)xmlprofile.o \
-		$(OUTDIR)server.o \
-		$(OUTDIR)client.o \
 		$(OUTDIR)message.o \
 		$(OUTDIR)log.o\
 		$(OUTDIR)localtime.o \
@@ -60,8 +58,6 @@ cossb_test:	$(OUTDIR)cossb_test.o \
 		$(OUTDIR)driver.o \
 		$(OUTDIR)broker.o \
 		$(OUTDIR)xmlprofile.o \
-		$(OUTDIR)server.o \
-		$(OUTDIR)client.o \
 		$(OUTDIR)message.o \
 		$(OUTDIR)log.o \
 		$(OUTDIR)localtime.o \
