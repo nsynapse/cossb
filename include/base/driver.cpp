@@ -42,7 +42,7 @@ component_driver::component_driver(const char* component_name)
 			}
 		}
 		else
-			throw cossb::exception::excode::COMPONENT_LOAD_FAIL;
+			throw cossb::exception::cossb_exception(cossb::exception::excode::COMPONENT_LOAD_FAIL);
 	}
 	catch(exception::cossb_exception& e) {
 		cossb_log->log(log::loglevel::ERROR, fmt::format("<{}> : {}", component_name, e.what()));
@@ -65,29 +65,21 @@ bool component_driver::load(const char* component_path)
 
 	_handle = dlopen(fullpath.c_str(), RTLD_LAZY|RTLD_GLOBAL);
 
-	try {
-		if(_handle)
+
+	if(_handle)
+	{
+		create_component pfcreate = (create_component)dlsym(_handle, "create");
+		if(!pfcreate)
 		{
-			create_component pfcreate = (create_component)dlsym(_handle, "create");
-			if(!pfcreate)
-			{
-				dlclose(_handle);
-				_handle = nullptr;
+			dlclose(_handle);
+			_handle = nullptr;
 
-				return false;
-			}
-
-			_ptr_component = pfcreate();
-			return true;
+			return false;
 		}
-		else
-			throw cossb::exception::excode::COMPONENT_LOAD_FAIL;
 
-	} catch(exception::cossb_exception& e){
-		cossb_log->log(log::loglevel::ERROR, fmt::format("<{}> : {}", component_path, e.what()));
+		_ptr_component = pfcreate();
+		return true;
 	}
-
-
 
 	return false;
 }
@@ -105,7 +97,7 @@ void component_driver::unload()
 					pfdestroy();
 				}
 				else
-					throw cossb::exception::excode::COMPONENT_UNLOAD_FAIL;
+					throw cossb::exception::cossb_exception(cossb::exception::excode::COMPONENT_UNLOAD_FAIL);
 
 				_ptr_component = nullptr;
 			}
