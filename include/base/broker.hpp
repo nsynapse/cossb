@@ -23,7 +23,7 @@ using namespace std;
 using namespace cossb;
 
 namespace cossb {
-namespace driver { class component_driver; }
+class component_driver;
 namespace manager { class component_manager; }
 namespace broker {
 

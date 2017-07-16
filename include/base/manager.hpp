@@ -80,7 +80,7 @@ public:
 	/**
 	 * @brief	return specific component driver
 	 */
-	driver::component_driver* get_driver(const char* component_name);
+	cossb::component_driver* get_driver(const char* component_name);
 
 };
 

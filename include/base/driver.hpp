@@ -20,7 +20,6 @@ using namespace std;
 namespace cossb {
 namespace manager { class component_manager; }
 namespace broker { class component_broker; }
-namespace driver {
 
 class component_driver {
 
@@ -128,7 +127,6 @@ private:
 
 };
 
-} /* namespace driver */
 } /* namespace cossb */
 
 #endif

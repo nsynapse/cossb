@@ -23,7 +23,7 @@ namespace component {
 	enum class status : unsigned int { IDLE=0, RUNNING, STOPPED };
 }
 
-namespace driver { class component_driver; }
+class component_driver;
 
 namespace interface {
 /**
@@ -34,7 +34,7 @@ namespace interface {
 */
 class icomponent {
 
-	friend driver::component_driver;
+	friend cossb::component_driver;
 
 public:
 	/**

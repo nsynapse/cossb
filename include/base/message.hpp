@@ -17,7 +17,7 @@ using namespace std;
 
 namespace cossb {
 namespace broker { class component_broker; }
-namespace driver { class component_driver; }
+class component_driver;
 namespace interface { class icomponent; }
 namespace base {
 
@@ -46,7 +46,7 @@ class message {
 	using json = nlohmann::json;
 
 	friend class cossb::broker::component_broker;
-	friend class cossb::driver::component_driver;
+	friend class cossb::component_driver;
 
 public:
 	message(interface::icomponent* component, msg_type type = msg_type::DATA);

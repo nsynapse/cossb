@@ -19,7 +19,7 @@ using namespace tinyxml2;
 using namespace std;
 
 namespace cossb {
-namespace driver { class component_driver; }
+class component_driver;
 namespace broker { class component_broker; }
 
 namespace base {
@@ -46,7 +46,7 @@ public:
  */
 class manifestreader : public arch::singleton<manifestreader> {
 
-	friend class driver::component_driver;
+	friend class cossb::component_driver;
 	friend class broker::component_broker;
 
 public:

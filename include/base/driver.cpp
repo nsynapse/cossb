@@ -23,7 +23,6 @@ using namespace std;
 using namespace cossb;
 
 namespace cossb {
-namespace driver {
 
 component_driver::component_driver(const char* component_name)
 {
@@ -43,9 +42,9 @@ component_driver::component_driver(const char* component_name)
 			}
 		}
 		else
-			throw exception(excode::COMPONENT_LOAD_FAIL);
+			throw cossb::exception::excode::COMPONENT_LOAD_FAIL;
 	}
-	catch(driver::exception& e) {
+	catch(exception::cossb_exception& e) {
 		cossb_log->log(log::loglevel::ERROR, fmt::format("<{}> : {}", component_name, e.what()));
 	}
 }
@@ -55,7 +54,7 @@ component_driver::~component_driver()
 	try {
 		unload();
 	}
-	catch(driver::exception& e) {
+	catch(exception::cossb_exception& e) {
 		cossb_log->log(log::loglevel::ERROR, e.what());
 	}
 }
@@ -66,48 +65,61 @@ bool component_driver::load(const char* component_path)
 
 	_handle = dlopen(fullpath.c_str(), RTLD_LAZY|RTLD_GLOBAL);
 
-	if(_handle)
-	{
-		create_component pfcreate = (create_component)dlsym(_handle, "create");
-		if(!pfcreate)
+	try {
+		if(_handle)
 		{
-			dlclose(_handle);
-			_handle = nullptr;
+			create_component pfcreate = (create_component)dlsym(_handle, "create");
+			if(!pfcreate)
+			{
+				dlclose(_handle);
+				_handle = nullptr;
 
-			return false;
+				return false;
+			}
+
+			_ptr_component = pfcreate();
+			return true;
 		}
+		else
+			throw cossb::exception::excode::COMPONENT_LOAD_FAIL;
 
-		_ptr_component = pfcreate();
-		return true;
+	} catch(exception::cossb_exception& e){
+		cossb_log->log(log::loglevel::ERROR, fmt::format("<{}> : {}", component_path, e.what()));
 	}
-	else
-		throw exception(excode::COMPONENT_LOAD_FAIL);
+
+
 
 	return false;
 }
 
 void component_driver::unload()
 {
-	if(_ptr_component)
-	{
-		destroy_component pfdestroy = (destroy_component)dlsym(_handle, "destroy");
+	try {
+		if(_ptr_component)
+			{
+				destroy_component pfdestroy = (destroy_component)dlsym(_handle, "destroy");
 
-		destroy_task(_request_proc_task);
+				destroy_task(_request_proc_task);
 
-		if(pfdestroy) {
-			pfdestroy();
-		}
-		else
-			throw exception(excode::COMPONENT_UNLOAD_FAIL);
+				if(pfdestroy) {
+					pfdestroy();
+				}
+				else
+					throw cossb::exception::excode::COMPONENT_UNLOAD_FAIL;
 
-		_ptr_component = nullptr;
+				_ptr_component = nullptr;
+			}
+
+			if(_handle)
+			{
+				dlclose(_handle);
+				_handle = nullptr;
+			}
+	}catch(exception::cossb_exception& e){
+		cossb_log->log(log::loglevel::ERROR, "{}");
 	}
 
-	if(_handle)
-	{
-		dlclose(_handle);
-		_handle = nullptr;
-	}
+
 }
 
 bool component_driver::setup()
@@ -179,6 +191,4 @@ bool component_driver::mine(const char* component_name)
 }
 
 
-
-} /* namespace dirver */
 } /* namespace cossb */

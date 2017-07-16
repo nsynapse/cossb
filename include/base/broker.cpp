@@ -11,7 +11,7 @@ unsigned int component_broker::publish(const char* service_name, cossb::base::me
 		auto range = _topic_map.equal_range(_service_map[service_name].topic);
 		msg.frame.topic = _service_map[service_name].topic;
 		for(topic_map::iterator itr = range.first; itr!=range.second; ++itr) {
-			driver::component_driver* _drv = cossb_component_manager->get_driver(itr->second.c_str());
+			cossb::component_driver* _drv = cossb_component_manager->get_driver(itr->second.c_str());
 			if(_drv)
 			{
 				if(!_drv->mine(msg.get_from())) {
@@ -39,7 +39,7 @@ unsigned int component_broker::publish(interface::icomponent* to_component, cons
 	unsigned int times = 0;
 	for(topic_map::iterator itr = range.first; itr!=range.second; ++itr) {
 		if(itr->second.compare(to_component->get_name())!=0) {
-			driver::component_driver* _drv = cossb_component_manager->get_driver(itr->second.c_str());
+			cossb::component_driver* _drv = cossb_component_manager->get_driver(itr->second.c_str());
 			if(_drv) {
 				_drv->request(api, args...);
 				times++;
