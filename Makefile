@@ -192,6 +192,17 @@ $(OUTDIR)compcontroller.o: $(COMPONENT_FILES)compcontroller/compcontroller.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
 	
+rpi_uart.comp: $(OUTDIR)rpi_uart.o
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+$(OUTDIR)rpi_uart.o: $(COMPONENT_FILES)rpi_uart/rpi_uart.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
+rpi_spi.comp: $(OUTDIR)rpi_spi.o
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+$(OUTDIR)rpi_spi.o: $(COMPONENT_FILES)rpi_spi/rpi_spi.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
+	
 		
 $(OUTDIR)cossb.o: $(SOURCE_FILES)cossb.cpp 
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
@@ -254,6 +265,7 @@ $(OUTDIR)sysmanager_test.o: $(TEST_FILES)sysmanager_test.cpp
 
 
 # make cossb
+rpi: cossb rpi_spi.comp rpi_uart.comp
 all: cossb serial.comp tcpserver.comp example_tcpserver.comp example_uart.comp example_messageout.comp example_messageprint.comp
 base: cossb
 components: serial.comp tcpserver.comp uart_protocol.comp wsclient.comp cat_protocol.comp

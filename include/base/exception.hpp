@@ -27,19 +27,26 @@ class cossb_exception : public std::exception {
 public:
 	cossb_exception() { }
 	~cossb_exception() throw() { }
-	virtual const char* what() const throw() {
-		return exception_str.c_str();
-	}
+	virtual const char* what() const throw() { return exception_str.c_str(); }
 protected:
 	void set(const char* msg) { exception_str = msg; }
 private:
 	std::string exception_str;
 };
+
+enum class excode : int {
+	DRIVER_NOT_FOUND = 0,
+	COMPONENT_LOAD_FAIL,	//driver cannnot be loaded own component
+	COMPONENT_UNLOAD_FAIL,
+};
+
 } /* namespace exception */
 
 namespace broker {
 enum class excode : int {
-	DRIVER_NOT_FOUND=0,
+	DRIVER_NOT_FOUND = 0,
+	COMPONENT_LOAD_FAIL = 0,	//driver cannnot be loaded own component
+	COMPONENT_UNLOAD_FAIL,
 };
 
 /**

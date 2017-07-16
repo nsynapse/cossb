@@ -10,16 +10,13 @@
 #define _COSSB_HEADER_HPP_
 
 #if defined(__unix__) || defined(__gnu_linux__) || defined(linux) || defined(__linux__) || defined(__APPLE__)
-
-#include <base/version.hpp>
-#include <base/instance.hpp>
-#include <base/log.hpp>
-
-#include <base/broker.hpp>
-#include <base/task.hpp>
-#include <base/exception.hpp>
-#include <base/message.hpp>
-
+	#include <base/version.hpp>
+	#include <base/instance.hpp>
+	#include <base/log.hpp>
+	#include <base/broker.hpp>
+	#include <base/task.hpp>
+	#include <base/exception.hpp>
+	#include <base/message.hpp>
 #endif
 
 #endif
