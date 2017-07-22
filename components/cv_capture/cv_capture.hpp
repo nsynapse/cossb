@@ -31,15 +31,10 @@ public:
 	/**
 	 * @brief	request interface function
 	 */
-	void request(cossb::base::message* const msg);
+	void request(cossb::message* const msg);
 
 private:
 
-	/**
-	 * @brief	GPIO Map
-	 * @detail	<port number>, <Gpio instance>
-	 */
-	map<int, mraa::Gpio*> _iomap;
 };
 
 COMPONENT_EXPORT

@@ -12,7 +12,8 @@
 #include <string>
 #include <interface/iprofile.hpp>
 #include <interface/ilog.hpp>
-#include <interface/imessage.hpp>
+//#include <interface/imessage.hpp>
+#include <base/message_any.hpp>
 #include <cassert>
 
 using namespace std;
@@ -72,8 +73,7 @@ public:
 	 * @details	if request message comes in, this function will be called
 	 */
 //	virtual void request(cossb::base::message* const msg) = 0;
-	template<typename T>
-	void request(interface::imessage<T>* const msg){ }
+	void request(cossb::message* const msg){ }
 
 	/**
 	 * @brief
