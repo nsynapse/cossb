@@ -18,7 +18,6 @@
 #include <base/broker.hpp>
 #include <base/task.hpp>
 #include <base/exception.hpp>
-//#include <base/message.hpp>
 
 #endif
 

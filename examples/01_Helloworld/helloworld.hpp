@@ -10,6 +10,7 @@
 #define	_COSSB_EXAMPLE_HELLOWORLD_HPP_
 
 #include <base/interface.hpp>
+
 using namespace cossb;
 
 class helloworld : public interface::icomponent {
