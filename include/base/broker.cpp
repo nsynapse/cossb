@@ -3,15 +3,15 @@
 namespace cossb {
 namespace broker {
 
-unsigned int component_broker::publish(const char* service_name, cossb::base::message& msg)
+unsigned int component_broker::publish(const char* service_name, cossb::message& msg)
 {
 	unsigned int times = 0;
 
 	if(_service_map.find(service_name)!=_service_map.end()) {
 		auto range = _topic_map.equal_range(_service_map[service_name].topic);
-		msg.frame.topic = _service_map[service_name].topic;
+		msg.msg_frame.topic = _service_map[service_name].topic;
 		for(topic_map::iterator itr = range.first; itr!=range.second; ++itr) {
-			cossb::component_driver* _drv = cossb_component_manager->get_driver(itr->second.c_str());
+			driver::component_driver* _drv = cossb_component_manager->get_driver(itr->second.c_str());
 			if(_drv)
 			{
 				if(!_drv->mine(msg.get_from())) {
@@ -39,7 +39,7 @@ unsigned int component_broker::publish(interface::icomponent* to_component, cons
 	unsigned int times = 0;
 	for(topic_map::iterator itr = range.first; itr!=range.second; ++itr) {
 		if(itr->second.compare(to_component->get_name())!=0) {
-			cossb::component_driver* _drv = cossb_component_manager->get_driver(itr->second.c_str());
+			driver::component_driver* _drv = cossb_component_manager->get_driver(itr->second.c_str());
 			if(_drv) {
 				_drv->request(api, args...);
 				times++;

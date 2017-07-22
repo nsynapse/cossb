@@ -17,13 +17,13 @@
 #include <base/manager.hpp>
 #include <base/log.hpp>
 #include <base/exception.hpp>
-#include <base/message.hpp>
+#include <base/message_any.hpp>
 
 using namespace std;
 using namespace cossb;
 
 namespace cossb {
-class component_driver;
+namespace driver { class component_driver; }
 namespace manager { class component_manager; }
 namespace broker {
 
@@ -49,7 +49,7 @@ public:
 	/**
 	 * @brief	publish message to
 	 */
-	unsigned int publish(const char* service_name, cossb::base::message& msg);
+	unsigned int publish(const char* service_name, cossb::message& msg);
 
 
 	/**

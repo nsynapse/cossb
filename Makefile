@@ -11,8 +11,9 @@ CC = gcc
 CXX = g++
 CXXFLAGS = -O3 -fPIC -Wall -std=c++11 -D__cplusplus=201103L -D__boostthread__
 CCFLAGS = $(CXXFLAGS)
-LDFLAGS = -Wl,--export-dynamic
-LDLIBS = -lpopt -lboost_system -lboost_thread -lboost_filesystem -ldl -luuid -lsqlite3 -lpthread
+LDFLAGS = -Wl
+LDFLAGS2 = -Wl, --export-dynamic
+LDLIBS = -lboost_system-mt -lboost_thread-mt -lboost_filesystem-mt -ldl -luuid -lsqlite3 -lpthread
 EDISON_LDLIBS = -lmraa
 INCLUDE = -I./include -I/usr/include -I/usr/local/include
 RM	= rm -rf
@@ -28,7 +29,7 @@ SOURCE_FILES = ./src/
 UTIL_FILES = ./util/
 BASE_FILES = ./base/
 
-#ossb version
+#cossb version
 CXXFLAGS += -D__MAJOR__=0 -D__MINOR__=0 -D__REV__=2
 
 
@@ -41,7 +42,7 @@ cossb:	$(OUTDIR)cossb.o \
 		$(OUTDIR)driver.o \
 		$(OUTDIR)broker.o \
 		$(OUTDIR)xmlprofile.o \
-		$(OUTDIR)message.o \
+		$(OUTDIR)message_any.o \
 		$(OUTDIR)log.o\
 		$(OUTDIR)localtime.o \
 		$(OUTDIR)ostream.o \
@@ -58,7 +59,7 @@ cossb_test:	$(OUTDIR)cossb_test.o \
 		$(OUTDIR)driver.o \
 		$(OUTDIR)broker.o \
 		$(OUTDIR)xmlprofile.o \
-		$(OUTDIR)message.o \
+		$(OUTDIR)message_any.o \
 		$(OUTDIR)log.o \
 		$(OUTDIR)localtime.o \
 		$(OUTDIR)ostream.o \
@@ -191,19 +192,10 @@ compcontroller.comp: $(OUTDIR)compcontroller.o
 $(OUTDIR)compcontroller.o: $(COMPONENT_FILES)compcontroller/compcontroller.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
-	
-rpi_uart.comp: $(OUTDIR)rpi_uart.o
-	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
-$(OUTDIR)rpi_uart.o: $(COMPONENT_FILES)rpi_uart/rpi_uart.cpp
+
+$(OUTDIR)message_any.o: $(INCLUDE_FILES)base/message_any.cpp 
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
-	
-rpi_spi.comp: $(OUTDIR)rpi_spi.o
-	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
-$(OUTDIR)rpi_spi.o: $(COMPONENT_FILES)rpi_spi/rpi_spi.cpp
-	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
-	
-	
-		
+			
 $(OUTDIR)cossb.o: $(SOURCE_FILES)cossb.cpp 
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
@@ -237,9 +229,6 @@ $(OUTDIR)server.o: $(INCLUDE_FILES)net/server.cpp
 $(OUTDIR)client.o: $(INCLUDE_FILES)net/client.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
-$(OUTDIR)message.o: $(INCLUDE_FILES)base/message.cpp
-	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
-	
 $(OUTDIR)localtime.o: $(INCLUDE_FILES)util/localtime.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
@@ -265,7 +254,6 @@ $(OUTDIR)sysmanager_test.o: $(TEST_FILES)sysmanager_test.cpp
 
 
 # make cossb
-rpi: cossb rpi_spi.comp rpi_uart.comp
 all: cossb serial.comp tcpserver.comp example_tcpserver.comp example_uart.comp example_messageout.comp example_messageprint.comp
 base: cossb
 components: serial.comp tcpserver.comp uart_protocol.comp wsclient.comp cat_protocol.comp

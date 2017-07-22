@@ -12,7 +12,7 @@
 #include <string>
 #include <interface/iprofile.hpp>
 #include <interface/ilog.hpp>
-#include <base/message.hpp>
+#include <interface/imessage.hpp>
 #include <cassert>
 
 using namespace std;
@@ -23,7 +23,7 @@ namespace component {
 	enum class status : unsigned int { IDLE=0, RUNNING, STOPPED };
 }
 
-class component_driver;
+namespace driver { class component_driver; }
 
 namespace interface {
 /**
@@ -34,7 +34,7 @@ namespace interface {
 */
 class icomponent {
 
-	friend cossb::component_driver;
+	friend driver::component_driver;
 
 public:
 	/**
@@ -71,7 +71,9 @@ public:
 	 * @brief	message request
 	 * @details	if request message comes in, this function will be called
 	 */
-	virtual void request(cossb::base::message* const msg) = 0;
+//	virtual void request(cossb::base::message* const msg) = 0;
+	template<typename T>
+	void request(interface::imessage<T>* const msg){ }
 
 	/**
 	 * @brief

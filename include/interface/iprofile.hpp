@@ -136,14 +136,14 @@ private:
 };
 }
 
-class component_driver;
+namespace driver { class component_driver; }
 namespace manager { class component_manager; }
 
 namespace interface {
 class icomponent;
 class iprofile {
 
-	friend class cossb::component_driver;
+	friend class driver::component_driver;
 	friend class manager::component_manager;
 
 public:

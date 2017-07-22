@@ -20,7 +20,7 @@
 #include <interface/iutility.hpp>
 #include <interface/iservice.hpp>
 #include <base/task.hpp>
-#include <base/message.hpp>
+//#include <base/message.hpp>
 
 
 #endif

@@ -13,6 +13,8 @@
 #include <tuple>
 #include <queue>
 #include <base/interface.hpp>
+#include <boost/any.hpp>
+#include <base/message_any.hpp>
 
 
 using namespace std;
@@ -20,6 +22,7 @@ using namespace std;
 namespace cossb {
 namespace manager { class component_manager; }
 namespace broker { class component_broker; }
+namespace driver {
 
 class component_driver {
 
@@ -49,16 +52,21 @@ private:
 	/**
 	 * @brief	request message
 	 */
-	template<typename... Args>
-	void request(const char* head, const Args&... args) {
-		//not implemented.
-	}
+//	template<typename... Args>
+//	void request(const char* head, const Args&... args) {
+//		//not implemented.
+//	}
 
-	void request(cossb::base::message* msg) {
-		msg->serialize();
+	void request(cossb::message* msg){
 		_mailbox.push(*msg);
 		_condition.notify_one();
 	}
+
+//	void request(cossb::base::message* msg) {
+//		msg->serialize();
+//		_mailbox.push(*msg);
+//		_condition.notify_one();
+//	}
 
 
 	/**
@@ -120,13 +128,14 @@ private:
 	/**
 	 * @brief	mailbox
 	 */
-	std::queue<cossb::base::message> _mailbox;
+	std::queue<cossb::message> _mailbox;
 
 	boost::condition_variable _condition;
 	boost::mutex _mutex;
 
 };
 
+} /* namespace driver */
 } /* namespace cossb */
 
 #endif

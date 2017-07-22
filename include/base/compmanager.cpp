@@ -45,9 +45,9 @@ bool component_manager::install(const char* component_name)
 
 	cossb_log->log(log::loglevel::INFO, fmt::format("Install <{}>", component_name));
 
-	if(cossb_component_container->add(component_name, new component_driver(component_name)))
+	if(cossb_component_container->add(component_name, new driver::component_driver(component_name)))
 	{
-		cossb::component_driver* driver = cossb_component_container->get_driver(component_name);
+		driver::component_driver* driver = cossb_component_container->get_driver(component_name);
 
 		for(auto srv:driver->get_component()->get_profile()->_services)
 			cossb_broker->regist(&srv);
@@ -124,7 +124,7 @@ int component_manager::count()
 	return cossb_component_container->_container.size();
 }
 
-cossb::component_driver* component_manager::get_driver(const char* component_name)
+driver::component_driver* component_manager::get_driver(const char* component_name)
 {
 	if(cossb_component_container->exist(component_name)) {
 		return cossb_component_container->get_driver(component_name);

@@ -20,7 +20,7 @@ using namespace std;
 namespace cossb {
 namespace container {
 
-typedef std::map<string, cossb::component_driver*> comp_container;
+typedef std::map<string, driver::component_driver*> comp_container;
 
 class component_container : private arch::singleton<component_container> {
 
@@ -50,7 +50,7 @@ private:
 	/**
 	 * @brief	find component driver if it exists, and getting its driver
 	 */
-	cossb::component_driver* get_driver(const char* component_name) {
+	driver::component_driver* get_driver(const char* component_name) {
 		comp_container::iterator itr = _container.find(component_name);
 		if(itr!=_container.end())
 			return itr->second;
@@ -62,7 +62,7 @@ private:
 	 * @brief	add new component
 	 * @return	true, if success
 	 */
-	bool add(const char* component_name, cossb::component_driver* driver) {
+	bool add(const char* component_name, driver::component_driver* driver) {
 		if(_container.find(component_name)==_container.end() && driver->valid()) {
 			_container.insert(comp_container::value_type(component_name, driver));
 			return true;

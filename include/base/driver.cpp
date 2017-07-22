@@ -12,7 +12,8 @@
 #include <base/profile.hpp>
 #include <tuple>
 #include <base/broker.hpp>
-#include <base/message.hpp>
+//#include <base/message.hpp>
+//#include <base/message_any.hpp>
 #include <base/exception.hpp>
 #include <util/format.h>
 #include <base/log.hpp>
@@ -23,6 +24,7 @@ using namespace std;
 using namespace cossb;
 
 namespace cossb {
+namespace driver {
 
 component_driver::component_driver(const char* component_name)
 {
@@ -42,9 +44,9 @@ component_driver::component_driver(const char* component_name)
 			}
 		}
 		else
-			throw cossb::exception::cossb_exception(cossb::exception::excode::COMPONENT_LOAD_FAIL);
+			throw exception(excode::COMPONENT_LOAD_FAIL);
 	}
-	catch(exception::cossb_exception& e) {
+	catch(driver::exception& e) {
 		cossb_log->log(log::loglevel::ERROR, fmt::format("<{}> : {}", component_name, e.what()));
 	}
 }
@@ -54,7 +56,7 @@ component_driver::~component_driver()
 	try {
 		unload();
 	}
-	catch(exception::cossb_exception& e) {
+	catch(driver::exception& e) {
 		cossb_log->log(log::loglevel::ERROR, e.what());
 	}
 }
@@ -64,7 +66,6 @@ bool component_driver::load(const char* component_path)
 	string fullpath = fmt::format("{}{}",component_path, __COMPONENT_EXT__);
 
 	_handle = dlopen(fullpath.c_str(), RTLD_LAZY|RTLD_GLOBAL);
-
 
 	if(_handle)
 	{
@@ -80,38 +81,34 @@ bool component_driver::load(const char* component_path)
 		_ptr_component = pfcreate();
 		return true;
 	}
+	else
+		throw exception(excode::COMPONENT_LOAD_FAIL);
 
 	return false;
 }
 
 void component_driver::unload()
 {
-	try {
-		if(_ptr_component)
-			{
-				destroy_component pfdestroy = (destroy_component)dlsym(_handle, "destroy");
+	if(_ptr_component)
+	{
+		destroy_component pfdestroy = (destroy_component)dlsym(_handle, "destroy");
 
-				destroy_task(_request_proc_task);
+		destroy_task(_request_proc_task);
 
-				if(pfdestroy) {
-					pfdestroy();
-				}
-				else
-					throw cossb::exception::cossb_exception(cossb::exception::excode::COMPONENT_UNLOAD_FAIL);
+		if(pfdestroy) {
+			pfdestroy();
+		}
+		else
+			throw exception(excode::COMPONENT_UNLOAD_FAIL);
 
-				_ptr_component = nullptr;
-			}
-
-			if(_handle)
-			{
-				dlclose(_handle);
-				_handle = nullptr;
-			}
-	}catch(exception::cossb_exception& e){
-		cossb_log->log(log::loglevel::ERROR, "{}");
+		_ptr_component = nullptr;
 	}
 
-
+	if(_handle)
+	{
+		dlclose(_handle);
+		_handle = nullptr;
+	}
 }
 
 bool component_driver::setup()
@@ -183,4 +180,6 @@ bool component_driver::mine(const char* component_name)
 }
 
 
+
+} /* namespace dirver */
 } /* namespace cossb */
