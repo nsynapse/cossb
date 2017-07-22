@@ -261,7 +261,7 @@ $(OUTDIR)sysmanager_test.o: $(TEST_FILES)sysmanager_test.cpp
 
 # make cossb
 all: cossb serial.comp tcpserver.comp example_tcpserver.comp example_uart.comp example_messageout.comp example_messageprint.comp
-picat : cossb cv_capture
+picat : cossb cv_capture.comp
 base: cossb
 components: serial.comp tcpserver.comp uart_protocol.comp wsclient.comp cat_protocol.comp
 edison: edison_i2c.comp edison_uart.comp edison_gpio.comp
