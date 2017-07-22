@@ -11,7 +11,7 @@ CC = gcc
 CXX = g++
 CXXFLAGS = -O3 -fPIC -Wall -std=c++11 -D__cplusplus=201103L -D__boostthread__
 CCFLAGS = $(CXXFLAGS)
-LDFLAGS = -Wl
+LDFLAGS = 
 LDFLAGS2 = -Wl, --export-dynamic
 LDLIBS = -lboost_system-mt -lboost_thread-mt -lboost_filesystem-mt -ldl -luuid -lsqlite3 -lpthread
 EDISON_LDLIBS = -lmraa
