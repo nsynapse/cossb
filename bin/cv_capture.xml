@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<info>
+	<uuid>00000000000000000000</uuid>
+	<name>cv_capture</name>
+	<description>Video Captyre component for RPi with OpenCV</description>
+	<company>Nsynapse Inc.</company>
+	<developer>Byunghun Hwang</developer>
+	<email>bhhwang@nsynapse.com</email>
+	<url>http://www.nsynapse.com</url>
+	<license>MIT</license> 
+	<version>0.0.1</version>
+	<category></category>
+	<tags></tags>
+</info>
+
+<property>
+	<id>0</id>
+	<resolution_width>640</resolution_width>
+	<resolution_height>480</resolution_height>
+</property>
+
+<service name="cv_capture" method="publish" topic="service/pi/cv_capture"></service>

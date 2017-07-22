@@ -75,6 +75,7 @@ $(OUTDIR)broadcaster.o: $(UTIL_FILES)websocket/broadcaster.cpp
 
 		
 #examples
+	
 helloworld.comp: $(OUTDIR)helloworld.o 
 	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
 $(OUTDIR)helloworld.o: $(EXAMPLE_FILES)01_Helloworld/helloworld.cpp
@@ -192,6 +193,11 @@ compcontroller.comp: $(OUTDIR)compcontroller.o
 $(OUTDIR)compcontroller.o: $(COMPONENT_FILES)compcontroller/compcontroller.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
+cv_capture.comp: $(OUTDIR)cv_capture.o
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+$(OUTDIR)filelog.o: $(COMPONENT_FILES)cv_capture/cv_capture.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
 
 $(OUTDIR)message_any.o: $(INCLUDE_FILES)base/message_any.cpp 
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
@@ -255,6 +261,7 @@ $(OUTDIR)sysmanager_test.o: $(TEST_FILES)sysmanager_test.cpp
 
 # make cossb
 all: cossb serial.comp tcpserver.comp example_tcpserver.comp example_uart.comp example_messageout.comp example_messageprint.comp
+picat : cossb cv_capture
 base: cossb
 components: serial.comp tcpserver.comp uart_protocol.comp wsclient.comp cat_protocol.comp
 edison: edison_i2c.comp edison_uart.comp edison_gpio.comp

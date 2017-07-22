@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+	
+	<!-- system information (IMPORTANT section, do not edit) -->
+	<info>
+		<guid>NSGW00000000FFFFFFFFFFFF</guid>
+		<manufacturer>Nsynapse Inc.</manufacturer>
+		<license>cdefabcd-cdefabcd-cdefabcd-cdefabcd</license>
+		<hostname>cossbgw.local</hostname>
+	</info>
+	
+	<!-- system setup -->
+	<system>
+		<enable name="auth"/>
+		<enable name="secure"/>
+	</system>
+	
+	<auth>
+		<uri>http://www.bitspark.kr/auth</uri>
+	</auth>
+	
+	<!-- required component cannot be stopped by user -->
+	<!-- required library for advanced user or our support -->
+
+	<!--<required type="component">example_cat_monitoring</required>--> <!-- example for test -->
+	<required type="component">edison_uart</required> <!-- serial communication -->
+	<required type="component">cat_protocol</required> <!-- cat protocol -->
+	<required type="component">wsclient</required> <!-- websocket client -->
+	<required type="component">filelog</required> <!-- save log into single file -->
+	<required type="component">cv_capture</required> <!-- capture image by opencv -->
+	
+	
+	<!-- do not edit this path -->
+	<property>
+		<path name="home">./cossb_home/</path>
+		<path name="include">./include/</path>
+		<path name="component">./</path>
+		<path name="utility">./</path>
+		<path name="library">./</path>
+		<path name="template">./template/</path>
+		<path name="localdb">./</path>
+	</property>
+	
+</manifest>
