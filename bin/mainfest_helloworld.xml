@@ -24,7 +24,6 @@
 
 	<required type="component">helloworld</required>
 	
-	
 	<!-- do not edit this path -->
 	<property>
 		<path name="home">./cossb_home/</path>
