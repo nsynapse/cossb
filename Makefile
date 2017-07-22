@@ -195,7 +195,7 @@ $(OUTDIR)compcontroller.o: $(COMPONENT_FILES)compcontroller/compcontroller.cpp
 	
 cv_capture.comp: $(OUTDIR)cv_capture.o
 	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
-$(OUTDIR)filelog.o: $(COMPONENT_FILES)cv_capture/cv_capture.cpp
+$(OUTDIR)cv_capture.o: $(COMPONENT_FILES)cv_capture/cv_capture.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
 
