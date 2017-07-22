@@ -30,13 +30,12 @@ public:
 	/**
 	 * @brief	request interface function
 	 */
-	void request(cossb::base::message* const msg);
+	void request(cossb::message* const msg);
 
 private:
 	void read();
 
 private:
-	//mraa::Uart* _uart = nullptr;
 
 	cossb::base::task _read_task;
 };

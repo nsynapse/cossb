@@ -8,124 +8,67 @@
 #include "rpi_spi.hpp"
 #include <cossb.hpp>
 #include <string>
-#include <base/message.hpp>
+#include "bcm2835.h"
 
 using namespace std;
 
 USE_COMPONENT_INTERFACE(rpi_spi)
 
 rpi_spi::rpi_spi()
-:cossb::interface::icomponent(COMPONENT(edison_uart)){
+:cossb::interface::icomponent(COMPONENT(rpi_spi)){
 	// TODO Auto-generated constructor stub
 
 }
 
 rpi_spi::~rpi_spi() {
-//	if(_uart)
-//		delete _uart;
+
 }
 
 bool rpi_spi::setup()
 {
-	string port = get_profile()->get(profile::section::property, "port").asString("/dev/ttyMFD0");
-	int baudrate = get_profile()->get(profile::section::property, "baudrate").asInt(115200);
+	if(!bcm2835_init())
+		return false;
 
-	cossb_log->log(log::loglevel::INFO, fmt::format("UART Profile Info : {}, {}", port, baudrate));
+	if(!bcm2835_spi_begin())
+		return false;
 
-
-//	try {
-//		_uart = new mraa::Uart(0);
-//	} catch (std::exception& e) {
-//		cossb_log->log(log::loglevel::ERROR, fmt::format("{}, likely invalid platform config", e.what()));
-//	}
-//
-//	try {
-//		_uart = new mraa::Uart(port);
-//
-//		if(_uart->setBaudRate(baudrate) != mraa::SUCCESS)
-//			cossb_log->log(log::loglevel::ERROR, "Error setting parity on UART");
-//
-//		if(_uart->setMode(8, mraa::UART_PARITY_NONE, 1) != mraa::SUCCESS)
-//			cossb_log->log(log::loglevel::ERROR, "Error setting parity on UART");
-//
-//		if (_uart->setFlowcontrol(false, false) != mraa::SUCCESS)
-//			cossb_log->log(log::loglevel::ERROR, "Error setting flow control UART");
-//
-//		if(_uart->setTimeout(10, 10, 10)!=mraa::SUCCESS)
-//			cossb_log->log(log::loglevel::ERROR, "Error setting timeout UART");
-//
-//	} catch (std::exception& e) {
-//		cossb_log->log(log::loglevel::ERROR, fmt::format("{}, Error while setting up raw UART, do you have a uart?", e.what()));
-//		return false;
-//	    }
+	bcm2835_spi_setBitOrder(BCM2835_SPI_BIT_ORDER_MSBFIRST);      // The default
+	bcm2835_spi_setDataMode(BCM2835_SPI_MODE0);                   // The default
+	bcm2835_spi_setClockDivider(BCM2835_SPI_CLOCK_DIVIDER_65536); // The default
+	bcm2835_spi_chipSelect(BCM2835_SPI_CS0);                      // The default
+	bcm2835_spi_setChipSelectPolarity(BCM2835_SPI_CS0, LOW);      // the default
 
 	return true;
 }
 
 bool rpi_spi::run()
 {
-//	if(!_read_task)
-//		_read_task = create_task(edison_uart::read);
+	while(1) {
+
+	}
+	unsigned char send_data = 0x23;
+	unsigned char read_data = bcm2835_spi_transfer(send_data);
 
 	return true;
 }
 
 bool rpi_spi::stop()
 {
-	destroy_task(_read_task);
+	bcm2835_spi_end();
+
+	if(!bcm2835_close())
+		return false;
 
 	return true;
 }
 
-void rpi_spi::request(cossb::base::message* const msg)
+void rpi_spi::request(cossb::message* const msg)
 {
-//	switch(msg->get_frame()->type) {
-//	case cossb::base::msg_type::REQUEST: {
-//		//write
-//		if(msg->exist("data")){
-//			if((*msg)["data"].is_array()){
-//				std::vector<unsigned char> raw = (*msg)["data"];
-//				_uart->write((const char*)raw.data(), raw.size());
-//				cossb_log->log(log::loglevel::INFO, fmt::format("Write {} byte(s) to the serial : {}", raw.size(), (*msg)["data"].dump()));
-//			}
-//		}
-//	} break;
-//	case cossb::base::msg_type::DATA: break;
-//	case cossb::base::msg_type::RESPONSE: break;
-//	case cossb::base::msg_type::SIGNAL: break;
-//	}
+
 }
 
 void rpi_spi::read()
 {
-//	while(1) {
-//		try {
-//			if(_uart) {
-//				if(_uart->dataAvailable(10)){	//waiting 10ms for reading
-//					const unsigned int len = 1024;
-//					unsigned char* buffer = new unsigned char[len];
-//
-//					int readsize = _uart->read((char*)buffer, len);
-//					if(readsize>0) {
-//						cossb_log->log(log::loglevel::INFO, fmt::format("Read {} Byte(s) from serial",readsize));
-//						//publish message with received data
-//						cossb::base::message msg(this, base::msg_type::REQUEST);
-//
-//						for(int i=0;i<readsize;i++){
-//							msg["data"].push_back(buffer[i]);
-//						}
-//
-//						cossb_broker->publish("edison_uart_read", msg);
-//					}
-//
-//					delete []buffer;
-//					boost::this_thread::sleep(boost::posix_time::milliseconds(10));
-//				}
-//			}
-//		}
-//		catch(thread_interrupted&) {
-//			break;
-//		}
-//	}
+
 }
 

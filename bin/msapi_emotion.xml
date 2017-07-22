@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<info>
+	<uuid>00000000000000000000</uuid>
+	<name>msapi emotion</name>
+	<description>MS Face API component</description>
+	<company>Nsynapse Inc.</company>
+	<developer>Byunghun Hwang</developer>
+	<email>bhhwang@nsynapse.com</email>
+	<url>http://www.nsynapse.com</url>
+	<license>MIT</license> 
+	<version>0.0.1</version>
+	<category></category>
+	<tags></tags>
+</info>
+
+<property>
+	<key></key>
+</property>
+
+<service name="filelog_write" method="subscribe" topic="service/cat/protocol/align"></service>
+<service name="filelog_write_test" method="subscribe" topic="service/example/filelog/write"></service> <!-- for test -->

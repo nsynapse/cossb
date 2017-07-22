@@ -1,0 +1,25 @@
+Face API
+
+사진에서 얼굴을 감지, 식별, 분석, 구성 및 태그 지정
+
+30,000개의 트랜잭션, 분당 20개.
+이 API 키는 현재 활성 상태입니다.
+
+30일 남음 (2017. 7. 22일 기준)
+
+끝점: https://westcentralus.api.cognitive.microsoft.com/face/v1.0
+
+키 1: 9a551f4e28424866a0108ab7eabe81e5
+
+키 2: 7aa23ea1b1f64e408dac7f3a08e34812
+
+
+
+West US - westus.api.cognitive.microsoft.com
+East US 2 - eastus2.api.cognitive.microsoft.com
+West Central US - westcentralus.api.cognitive.microsoft.com
+West Europe - westeurope.api.cognitive.microsoft.com
+Southeast Asia - southeastasia.api.cognitive.microsoft.com
+
+
+https://[location].api.cognitive.microsoft.com/face/v1.0/detect[?returnFaceId][&returnFaceLandmarks][&returnFaceAttributes]

@@ -36,7 +36,7 @@ bool example_uart::stop()
 	return true;
 }
 
-void example_uart::request(cossb::base::message* const msg)
+void example_uart::request(cossb::message* const msg)
 {
 
 }
@@ -47,7 +47,7 @@ void example_uart::do_write()
 
 		try {
 
-		cossb::base::message _msg(this);
+		cossb::message _msg(this);
 		_msg["data"] = "this is test message";
 
 		cossb_broker->publish(_msg);
