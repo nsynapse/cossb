@@ -31,7 +31,7 @@ bool helloworld::stop()
 	return true;
 }
 
-void helloworld::request(cossb::base::message* const msg)
+void helloworld::request(cossb::message* const msg)
 {
 	cossb_log->log(cossb::log::loglevel::INFO, "called helloworld component request");
 }
