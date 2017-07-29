@@ -44,9 +44,7 @@ public:
 	}
 	void clear() {  }
 
-	void set(boost::any data){
-		this->msg_frame.data = data;
-	}
+	void set(boost::any data);
 
 
 };
