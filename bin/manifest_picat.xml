@@ -22,12 +22,7 @@
 	<!-- required component cannot be stopped by user -->
 	<!-- required library for advanced user or our support -->
 
-	<!--<required type="component">example_cat_monitoring</required>--> <!-- example for test -->
-	<required type="component">edison_uart</required> <!-- serial communication -->
-	<required type="component">cat_protocol</required> <!-- cat protocol -->
-	<required type="component">wsclient</required> <!-- websocket client -->
-	<required type="component">filelog</required> <!-- save log into single file -->
-	<required type="component">cv_capture</required> <!-- capture image by opencv -->
+	<required type="component">camcapture</required> <!-- example for test -->
 	
 	
 	<!-- do not edit this path -->

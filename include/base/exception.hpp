@@ -65,6 +65,7 @@ namespace driver {
 enum class excode : int {
 	COMPONENT_LOAD_FAIL = 0,	//driver cannnot be loaded own component
 	COMPONENT_UNLOAD_FAIL,
+	PROFILE_LOAD_FAIL,
 };
 
 /**
@@ -76,6 +77,7 @@ public:
 		switch(code) {
 		case excode::COMPONENT_LOAD_FAIL: set("Component load fail"); break;
 		case excode::COMPONENT_UNLOAD_FAIL: set("Component unload fail"); break;
+		case excode::PROFILE_LOAD_FAIL:	set("Component Porfile load fail"); break;
 		default: set("Unknown exception");
 		}
 	}

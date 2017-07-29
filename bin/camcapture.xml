@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<info>
+	<uuid>0</uuid>
+	<name>camcapture</name>
+	<description>Video Capture component for RPi with OpenCV</description>
+	<company>Nsynapse Inc.</company>
+	<developer>Byunghun Hwang</developer>
+	<email>bhhwang@nsynapse.com</email>
+	<url>http://www.nsynapse.com</url>
+	<license>MIT</license> 
+	<version>0.0.1</version>
+</info>
+
+<property>
+	<interval>1</interval>
+	<camid>0</camid>
+	<resolution_width>640</resolution_width>
+	<resolution_height>480</resolution_height>
+</property>
+
+<service name="capture" method="publish" topic="service/capture/image"></service>

@@ -9,19 +9,30 @@ USE_COMPONENT_INTERFACE(camcapture)
 
 camcapture::camcapture()
 :cossb::interface::icomponent(COMPONENT(camcapture)){
-	_camera = new cv::VideoCapture(0);
-	_camera->set(cv::CAP_PROP_FRAME_WIDTH, 640);
-	_camera->set(cv::CAP_PROP_FRAME_HEIGHT, 480);
+
 }
 
 camcapture::~camcapture() {
-	if(_camera->isOpened())
-		_camera->release();
+
 }
 
 bool camcapture::setup()
 {
-	return true;
+	_camera_id = get_profile()->get(profile::section::property, "camid").asInt(0);
+	_resolution_width = get_profile()->get(profile::section::property, "resolution_width").asUInt(640);
+	_resolution_height = get_profile()->get(profile::section::property, "resolution_height").asUInt(480);
+
+
+	cossb_log->log(log::loglevel::INFO, fmt::format("Camera #{} : {}x{} resolution", _camera_id, _resolution_width, _resolution_height));
+
+	_camera = new cv::VideoCapture(_camera_id);
+	if(_camera->isOpened()){
+		_camera->set(cv::CAP_PROP_FRAME_WIDTH, 640);
+		_camera->set(cv::CAP_PROP_FRAME_HEIGHT, 480);
+		return true;
+	}
+	cossb_log->log(log::loglevel::ERROR, "Camera Open Failed");
+	return false;
 }
 
 bool camcapture::run()
@@ -41,6 +52,8 @@ bool camcapture::run()
 
 bool camcapture::stop()
 {
+	if(_camera->isOpened())
+		_camera->release();
 	return true;
 }
 

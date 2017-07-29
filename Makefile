@@ -12,7 +12,7 @@ CXX = g++
 CXXFLAGS = -O3 -fPIC -Wall -std=c++11 -D__cplusplus=201103L -D__boostthread__
 CCFLAGS = $(CXXFLAGS)
 LDFLAGS = -Wl,--export-dynamic
-LDLIBS = -lboost_system -lboost_thread -lboost_filesystem -ldl -luuid
+LDLIBS = -lboost_system -lboost_thread -lboost_filesystem -ldl -luuid 
 EDISON_LDLIBS = -lmraa
 INCLUDE = -I./include -I/usr/include -I/usr/local/include
 RM	= rm -rf
@@ -193,7 +193,7 @@ $(OUTDIR)compcontroller.o: $(COMPONENT_FILES)compcontroller/compcontroller.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
 camcapture.comp: $(OUTDIR)camcapture.o
-	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS) -lopencv_core -lopencv_videoio -lopencv_video -lopencv_highgui
 $(OUTDIR)camcapture.o: $(COMPONENT_FILES)camcapture/camcapture.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	

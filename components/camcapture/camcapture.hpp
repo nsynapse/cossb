@@ -41,6 +41,9 @@ private:
 
 private:
 	cv::VideoCapture* _camera = nullptr;
+	int _camera_id = 0;
+	unsigned int _resolution_width = 640;
+	unsigned int _resolution_height = 480;
 	cv::Mat _colorImage;
 
 
