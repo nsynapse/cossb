@@ -106,6 +106,11 @@ private:
 	 */
 	string _name;
 
+	/*
+	 * @brief	interval
+	 */
+
+
 	/**
 	 * @brief	component profile interface
 	 */

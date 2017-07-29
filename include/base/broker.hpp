@@ -17,12 +17,12 @@
 #include <base/manager.hpp>
 #include <base/log.hpp>
 #include <base/exception.hpp>
-#include <base/message_any.hpp>
 
 using namespace std;
 using namespace cossb;
 
 namespace cossb {
+class message;
 namespace driver { class component_driver; }
 namespace manager { class component_manager; }
 namespace broker {

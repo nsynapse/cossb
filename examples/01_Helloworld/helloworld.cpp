@@ -23,6 +23,12 @@ bool helloworld::setup()
 bool helloworld::run()
 {
 	cossb_log->log(cossb::log::loglevel::INFO, "called helloworld component run");
+
+	cossb::message msg(this);
+	msg.set(1);
+	cossb_broker->publish("service/test", msg);
+
+
 	return true;
 }
 bool helloworld::stop()

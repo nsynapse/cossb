@@ -14,7 +14,7 @@
 </info>
 
 <property>
-	<periodic>10</periodic>
+	<interval>500</interval>
 </property>
 
 <service method="publish" topic="service/print"></service>

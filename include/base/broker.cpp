@@ -1,4 +1,5 @@
 #include "broker.hpp"
+#include <base/message_any.hpp>
 
 namespace cossb {
 namespace broker {

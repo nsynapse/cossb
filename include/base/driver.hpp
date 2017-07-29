@@ -30,7 +30,7 @@ class component_driver {
 	friend class broker::component_broker;
 
 public:
-	component_driver(const char* component_name, int interval_us);
+	component_driver(const char* component_name, int interval_ms);
 	virtual ~component_driver();
 
 	/**
@@ -132,7 +132,7 @@ private:
 
 	boost::condition_variable _condition;
 	boost::mutex _mutex;
-	int _interval_us = 0;
+	int _interval_ms = 0;
 
 };
 

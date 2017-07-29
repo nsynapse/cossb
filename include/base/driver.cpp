@@ -26,8 +26,8 @@ using namespace cossb;
 namespace cossb {
 namespace driver {
 
-component_driver::component_driver(const char* component_name, int interval_us=-1)
-:_interval_us(interval_us)
+component_driver::component_driver(const char* component_name, int interval_ms=-1)
+:_interval_ms(interval_ms)
 {
 	try {
 		string comp_dir = cossb_manifest->get_path()[__COMPONENT__];
@@ -115,6 +115,7 @@ void component_driver::unload()
 bool component_driver::setup()
 {
 	if(_ptr_component) {
+		_interval_ms = _ptr_component->get_profile()->get(profile::section::property, "interval").asInt(-1);
 		return _ptr_component->setup();
 	}
 
@@ -151,7 +152,7 @@ void component_driver::request_proc()
 	if(_ptr_component) {
 		while(1){
 			try {
-				if(_interval_us<0){
+				if(_interval_ms<0){
 					boost::mutex::scoped_lock __lock(_mutex);
 					_condition.wait(__lock);
 
@@ -164,7 +165,7 @@ void component_driver::request_proc()
 				{
 					_ptr_component->run();
 					if(_request_proc_task->interruption_requested()) break;
-					boost::this_thread::sleep(boost::posix_time::microseconds(_interval_us));
+					boost::this_thread::sleep(boost::posix_time::milliseconds(_interval_ms));
 				}
 			}
 			catch(thread_interrupted&) {
