@@ -22,17 +22,31 @@ namespace cossb {
 /**
  * @brief	message class with boost::any
  */
+
 class message : public cossb::interface::imessage<boost::any> {
 
 public:
-	message(const char* component_name);
+	message(const char* component_name)
+	:cossb::interface::imessage<boost::any>(component_name){
+
+	}
+	message(interface::icomponent* component)
+	:cossb::interface::imessage<boost::any>(component){
+
+	}
 	virtual ~message();
 
 	/*
 	 * @brief	message interface functions
 	 */
-	bool is_empty() { return msg_frame.data.empty(); }
-	void clear() { msg_frame.data.clear(); }
+	bool is_empty() {
+		return false;
+	}
+	void clear() {  }
+
+	void set(boost::any data){
+		this->msg_frame.data = data;
+	}
 
 
 };

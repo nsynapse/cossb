@@ -26,7 +26,8 @@ using namespace cossb;
 namespace cossb {
 namespace driver {
 
-component_driver::component_driver(const char* component_name)
+component_driver::component_driver(const char* component_name, int interval_us=-1)
+:_interval_us(interval_us)
 {
 	try {
 		string comp_dir = cossb_manifest->get_path()[__COMPONENT__];
@@ -122,12 +123,11 @@ bool component_driver::setup()
 
 bool component_driver::run()
 {
-	if(_ptr_component)
-	{
-		if(!_request_proc_task)
+	if(_ptr_component){
+		if(!_request_proc_task.get()){
 			_request_proc_task = create_task(component_driver::request_proc);
-
-		return _ptr_component->run();
+			return true;
+		}
 	}
 
 	return false;
@@ -139,26 +139,33 @@ void component_driver::stop()
 	if(_ptr_component)
 		_ptr_component->stop();
 
-	_condition.notify_one();
-	destroy_task(_request_proc_task);
+	_request_proc_task->interrupt();
+	_request_proc_task->join();
+	//_condition.notify_one();
+	//destroy_task(_request_proc_task);
 }
 
 
 void component_driver::request_proc()
 {
 	if(_ptr_component) {
-		while(1)
-		{
+		while(1){
 			try {
-			boost::mutex::scoped_lock __lock(_mutex);
-			_condition.wait(__lock);
+				if(_interval_us<0){
+					boost::mutex::scoped_lock __lock(_mutex);
+					_condition.wait(__lock);
 
-			while(!_mailbox.empty()) {
-				_ptr_component->request(&_mailbox.front());
-				_mailbox.pop();
-			}
-
-			boost::this_thread::sleep(boost::posix_time::milliseconds(0));
+					while(!_mailbox.empty()){
+						_ptr_component->request(&_mailbox.front());
+						_mailbox.pop();
+					}
+				}
+				else
+				{
+					_ptr_component->run();
+					if(_request_proc_task->interruption_requested()) break;
+					boost::this_thread::sleep(boost::posix_time::microseconds(_interval_us));
+				}
 			}
 			catch(thread_interrupted&) {
 				break;

@@ -18,7 +18,6 @@
 #include <interface/ilog.hpp>
 #include <interface/icomm.hpp>
 #include <interface/iutility.hpp>
-#include <interface/iservice.hpp>
 #include <base/task.hpp>
 //#include <base/message.hpp>
 

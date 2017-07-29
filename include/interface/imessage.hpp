@@ -11,6 +11,7 @@
 #define _COSSB_IMESSAGE_HPP_
 
 #include <string>
+#include <tuple>
 
 using namespace std;
 
@@ -77,6 +78,11 @@ public:
 	 * @brief
 	 */
 	const char* get_from() { return msg_frame.from.c_str(); }
+
+	/*
+	 * @brief
+	 */
+	void set(_T& data){  msg_frame.data = data; }
 
 	/*
 	 * @brief	(interface) check if message data is empty

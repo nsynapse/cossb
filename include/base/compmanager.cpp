@@ -45,7 +45,7 @@ bool component_manager::install(const char* component_name)
 
 	cossb_log->log(log::loglevel::INFO, fmt::format("Install <{}>", component_name));
 
-	if(cossb_component_container->add(component_name, new driver::component_driver(component_name)))
+	if(cossb_component_container->add(component_name, new driver::component_driver(component_name, -1)))
 	{
 		driver::component_driver* driver = cossb_component_container->get_driver(component_name);
 

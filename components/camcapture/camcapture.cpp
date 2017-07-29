@@ -26,8 +26,16 @@ bool camcapture::setup()
 
 bool camcapture::run()
 {
-	cossb::message<cv::Mat> msg(this);
-	//cossb_broker->publish("service/camera/capture", msg);
+	if(_camera->isOpened()){
+		(*_camera) >> _colorImage;
+
+		cossb::message _msg(this);
+		_msg.set(_colorImage.clone());
+		cossb_broker->publish("service/camcapture/image", _msg);
+	}
+	else
+		_colorImage.release();
+
 	return true;
 }
 
@@ -39,15 +47,5 @@ bool camcapture::stop()
 void camcapture::request(cossb::message* const msg)
 {
 
-}
-
-cv::Mat& camcapture::capture()
-{
-	if(_camera->isOpened())
-		(*_camera) >> _colorImage;
-	else
-		_colorImage.release();
-
-	return _colorImage;
 }
 
