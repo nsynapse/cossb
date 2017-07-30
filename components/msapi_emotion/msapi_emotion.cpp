@@ -42,6 +42,8 @@ bool msapi_emotion::stop()
 
 void msapi_emotion::request(cossb::message* const msg)
 {
+	cossb_log->log(log::loglevel::INFO, "(emotion)received message");
+
 	switch(msg->get_frame()->type) {
 			case cossb::base::msg_type::REQUEST: break;
 			case cossb::base::msg_type::DATA: {
