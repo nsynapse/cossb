@@ -18,4 +18,4 @@
 	<resolution_height>480</resolution_height>
 </property>
 
-<service name="capture" method="publish" topic="service/capture/image"></service>
+<service name="camera_capture" method="publish" topic="service/capture/image"></service>

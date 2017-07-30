@@ -42,7 +42,7 @@ bool camcapture::run()
 
 		cossb::message _msg(this);
 		_msg.set(_colorImage.clone());
-		cossb_broker->publish("service/camcapture/image", _msg);
+		cossb_broker->publish("service/capture/image", _msg);
 	}
 	else
 		_colorImage.release();
