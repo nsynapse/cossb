@@ -13,7 +13,7 @@
 
 using namespace std;
 
-#define PIN RPI_GPIO_P1_05
+#define PIN RPI_BPLUS_GPIO_J8_05
 
 using namespace std;
 
