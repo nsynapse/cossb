@@ -8,7 +8,7 @@
 #include "rpi_spi.hpp"
 #include <cossb.hpp>
 #include <string>
-#include "bcm2835.h"
+#include <3rdparty/bcm2835.h>
 #include <tuple>
 
 using namespace std;
