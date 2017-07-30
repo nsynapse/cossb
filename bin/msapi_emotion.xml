@@ -15,6 +15,8 @@
 
 <property>
 	<interval>500</interval>
+	<url>https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceAttributes=emotion</url>
+	<key>7aa23ea1b1f64e408dac7f3a08e34812</key>
 </property>
 
 <service name="face_emotion" method="publish" topic="service/msapi/emotion"></service>

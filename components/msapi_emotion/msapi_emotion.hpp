@@ -35,6 +35,9 @@ public:
 
 private:
 
+	string _request_url;
+	string _key;
+
 };
 
 COMPONENT_EXPORT

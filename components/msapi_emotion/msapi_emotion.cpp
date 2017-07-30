@@ -23,6 +23,9 @@ msapi_emotion::~msapi_emotion() {
 
 bool msapi_emotion::setup()
 {
+	_request_url = get_profile()->get(profile::section::property, "url").asString("https://localhost");
+	_key = get_profile()->get(profile::section::property, "key").asString("");
+
 
 	return true;
 }

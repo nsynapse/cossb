@@ -60,6 +60,10 @@ bool rpi_spi::run()
 	if(value!=0x00){
 		cossb_log->log(log::loglevel::INFO, "GPIO : HIGH");
 		unsigned char readata = bcm2835_spi_transfer(_write_byte);
+		cossb_log->log(log::loglevel::INFO, fmt::format("Read SPI : {}", readata));
+	}
+	else {
+		cossb_log->log(log::loglevel::INFO, "GPIO : LOW");
 	}
 
 	return true;
