@@ -41,7 +41,7 @@ bool camcapture::run()
 		(*_camera) >> _colorImage;
 
 		cossb::message _msg(this, base::msg_type::DATA);
-		_msg.set(_colorImage);
+		_msg.set(_colorImage.clone());
 		cossb_broker->publish("camera_capture", _msg);
 
 		cossb_log->log(log::loglevel::INFO, "Camera Capture and publish data");

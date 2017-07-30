@@ -5,6 +5,7 @@
 
 #include <interface/icomponent.hpp>
 #include <map>
+#include <curl/curl.h>
 
 using namespace std;
 
@@ -34,9 +35,14 @@ public:
 	void request(cossb::message* const msg);
 
 private:
+	void get_post_data(std::ostringstream& postBuf, const char** pp);
+
+private:
 
 	string _request_url;
 	string _key;
+
+	CURL* _ctx = nullptr;
 
 };
 

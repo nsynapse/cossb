@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<info>
+	<uuid>00000000000000000000</uuid>
+	<name>raspberry pi I2C</name>
+	<description>SPI component</description>
+	<company>Nsynapse Inc.</company>
+	<developer>Byunghun Hwang</developer>
+	<email>bhhwang@nsynapse.com</email>
+	<url>http://www.nsynapse.com</url>
+	<license>MIT</license> 
+	<version>0.0.1</version>
+	<category></category>
+	<tags></tags>
+</info>
+
+<property>
+	<interval>100</interval>
+	<address>22</address>
+</property>
+
+<service name="cat_spi_emotion" method="subscribe" topic="service/msapi/emotion"></service>
