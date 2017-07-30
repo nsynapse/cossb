@@ -55,6 +55,8 @@ void msapi_emotion::request(cossb::message* const msg)
 					_msg.set((unsigned char)0x01);
 					cossb_broker->publish("face_emotion", _msg);
 
+					cossb_log->log(log::loglevel::INFO, "send message to spi");
+
 					}
 					catch(const boost::bad_any_cast&){
 						cossb_log->log(log::loglevel::ERROR, "Invalid type casting..");
