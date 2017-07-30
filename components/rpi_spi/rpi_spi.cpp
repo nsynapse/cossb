@@ -39,7 +39,7 @@ bool rpi_spi::setup()
 
 	//set gpio as input
 	bcm2835_gpio_fsel(PIN, BCM2835_GPIO_FSEL_INPT);
-	bcm2835_gpio_set_pud(PIN, BCM2835_GPIO_PUD_UP);
+	//bcm2835_gpio_set_pud(PIN, BCM2835_GPIO_PUD_UP);
 
 	//set default spi
 	bcm2835_spi_setBitOrder(BCM2835_SPI_BIT_ORDER_MSBFIRST);      // The default
