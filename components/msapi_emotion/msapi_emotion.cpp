@@ -8,6 +8,7 @@
 #include "msapi_emotion.hpp"
 #include <cossb.hpp>
 #include <curl/curl.h>
+#include <opencv2/core.hpp>
 
 USE_COMPONENT_INTERFACE(msapi_emotion)
 
@@ -41,6 +42,20 @@ void msapi_emotion::request(cossb::message* const msg)
 	switch(msg->get_frame()->type) {
 			case cossb::base::msg_type::REQUEST: break;
 			case cossb::base::msg_type::DATA: {
+				try {
+					cv::Mat image = boost::any_cast<cv::Mat>(*msg);
+
+					//process
+
+					//after process
+					cossb::message _msg(this, base::msg_type::DATA);
+					_msg.set((unsigned char)0x01);
+					cossb_broker->publish("face_emotion", _msg);
+
+					}
+					catch(const boost::bad_any_cast&){
+						cossb_log->log(log::loglevel::ERROR, "Invalid type casting..");
+					}
 			} break;
 			case cossb::base::msg_type::RESPONSE: break;
 			case cossb::base::msg_type::EVENT:  break;

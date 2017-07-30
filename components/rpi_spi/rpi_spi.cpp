@@ -86,6 +86,8 @@ void rpi_spi::request(cossb::message* const msg)
 			try {
 			unsigned char emotion_data = boost::any_cast<unsigned char>(*msg);
 			_write_byte = emotion_data;	//copy
+
+			cossb_log->log(log::loglevel::INFO, fmt::format("SPI write : {}", emotion_data));
 			}
 			catch(const boost::bad_any_cast&){
 				cossb_log->log(log::loglevel::ERROR, "Invalid type casting..");
