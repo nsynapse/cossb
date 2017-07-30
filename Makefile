@@ -192,7 +192,7 @@ compcontroller.comp: $(OUTDIR)compcontroller.o
 $(OUTDIR)compcontroller.o: $(COMPONENT_FILES)compcontroller/compcontroller.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
-camcapture.comp: $(OUTDIR)camcapture.o
+camcapture.comp: $(OUTDIR)camcapture.o $(OUTDIR)message_any.o
 	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS) -lopencv_core -lopencv_videoio -lopencv_video -lopencv_highgui
 $(OUTDIR)camcapture.o: $(COMPONENT_FILES)camcapture/camcapture.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@

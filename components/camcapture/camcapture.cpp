@@ -40,7 +40,7 @@ bool camcapture::run()
 	if(_camera->isOpened()){
 		(*_camera) >> _colorImage;
 
-		cossb::message _msg(this);
+		cossb::message _msg(this, base::msg_type::DATA);
 		_msg.set(_colorImage.clone());
 		cossb_broker->publish("service/capture/image", _msg);
 	}
