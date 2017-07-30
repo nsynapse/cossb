@@ -61,7 +61,7 @@ bool rpi_spi::run()
 
 	if(value!=0x00){
 		//cossb_log->log(log::loglevel::INFO, "GPIO : HIGH");
-		//unsigned char readata = bcm2835_spi_transfer(_write_byte);
+		unsigned char readata = bcm2835_spi_transfer(_write_byte);
 		cossb_log->log(log::loglevel::INFO, fmt::format("SPI Write : {}", _write_byte));
 	}
 	else {
@@ -93,7 +93,7 @@ void rpi_spi::request(cossb::message* const msg)
 			unsigned char emotion_data = boost::any_cast<unsigned char>(*msg);
 			_write_byte = emotion_data;	//copy
 
-			cossb_log->log(log::loglevel::INFO, fmt::format("SPI write : {}", emotion_data));
+			cossb_log->log(log::loglevel::INFO, fmt::format("request SPI write : {}", emotion_data));
 			}
 			catch(const boost::bad_any_cast&){
 				cossb_log->log(log::loglevel::ERROR, "Invalid type casting..");
