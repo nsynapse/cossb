@@ -62,12 +62,6 @@ private:
 		_condition.notify_one();
 	}
 
-//	void request(cossb::base::message* msg) {
-//		msg->serialize();
-//		_mailbox.push(*msg);
-//		_condition.notify_one();
-//	}
-
 
 	/**
 	 * @brief	setup component
@@ -102,6 +96,7 @@ private:
 	 * @brief	request process task
 	 */
 	void request_proc();
+	void run_proc();
 
 	/**
 	 * for test, insert message
@@ -112,10 +107,10 @@ private:
 	}
 
 	/**
-	 * @brief	request
+	 * @brief	request task
 	 */
-	base::task		_request_proc_task;
-
+	base::task	_request_proc_task;
+	base::task	_run_proc_task;
 
 private:
 	/**
