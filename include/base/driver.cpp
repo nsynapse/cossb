@@ -159,6 +159,8 @@ void component_driver::run_proc()
 	if(_ptr_component) {
 			while(1){
 				try {
+					boost::mutex::scoped_lock __lock(_mutex);
+
 					_ptr_component->run();
 					if(_run_proc_task->interruption_requested()) break;
 					boost::this_thread::sleep(boost::posix_time::milliseconds(_interval_ms));
