@@ -38,8 +38,9 @@ bool rpi_spi::setup()
 		return false;
 
 	//set gpio as input
-	bcm2835_gpio_fsel(PIN, BCM2835_GPIO_FSEL_INPT);
-	bcm2835_gpio_set_pud(PIN, BCM2835_GPIO_PUD_UP);
+	//bcm2835_gpio_fsel(PIN, BCM2835_GPIO_FSEL_INPT);
+	bcm2835_gpio_fsel(PIN, BCM2835_GPIO_FSEL_OUTP);
+	//bcm2835_gpio_set_pud(PIN, BCM2835_GPIO_PUD_UP);
 
 	//set default spi
 	bcm2835_spi_setBitOrder(BCM2835_SPI_BIT_ORDER_MSBFIRST);      // The default
@@ -55,18 +56,19 @@ bool rpi_spi::run()
 {
 
 	//1. check gpio
-	unsigned char value = bcm2835_gpio_lev(PIN);
+	//unsigned char value = bcm2835_gpio_lev(PIN);
+	bcm2835_gpio_write(PIN, HIGH);
 
-	cossb_log->log(log::loglevel::INFO, fmt::format("GPIO : {}", value));
+	//cossb_log->log(log::loglevel::INFO, fmt::format("GPIO : {}", value));
 
-	if(value!=0x00){
+	/*if(value!=0x00){
 		//cossb_log->log(log::loglevel::INFO, "GPIO : HIGH");
 		unsigned char readata = bcm2835_spi_transfer(_write_byte);
 		cossb_log->log(log::loglevel::INFO, fmt::format("Read SPI : {}", readata));
 	}
 	else {
 		//cossb_log->log(log::loglevel::INFO, "GPIO : LOW");
-	}
+	}*/
 
 	return true;
 }
