@@ -16,6 +16,7 @@ unsigned int component_broker::publish(const char* service_name, cossb::message&
 			if(_drv)
 			{
 				if(!_drv->mine(msg.get_from())) {
+					cossb_log->log(log::loglevel::INFO, "Request Message");
 					_drv->request(&msg);
 					times++;
 				}
