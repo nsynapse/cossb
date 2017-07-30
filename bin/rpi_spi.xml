@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <info>
 	<uuid>00000000000000000000</uuid>
-	<name>helloworld</name>
-	<description>Hellow World component</description>
+	<name>raspberry pi SPI</name>
+	<description>SPI component</description>
 	<company>Nsynapse Inc.</company>
 	<developer>Byunghun Hwang</developer>
 	<email>bhhwang@nsynapse.com</email>
@@ -17,4 +17,4 @@
 	<interval>500</interval>
 </property>
 
-<service name="helloworld" method="publish" topic="service/print"></service>
+<service name="cat_spi" method="publish" topic="service/cat/spi"></service>
