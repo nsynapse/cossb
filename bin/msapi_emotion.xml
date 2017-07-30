@@ -14,8 +14,8 @@
 </info>
 
 <property>
-	<key></key>
+	<interval>500</interval>
 </property>
 
-<service name="filelog_write" method="subscribe" topic="service/cat/protocol/align"></service>
-<service name="filelog_write_test" method="subscribe" topic="service/example/filelog/write"></service> <!-- for test -->
+<service name="face_emotion" method="publish" topic="service/msapi/emotion"></service>
+<service name="face_image" method="subscribe" topic="service/capture/image"></service>

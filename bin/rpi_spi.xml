@@ -14,7 +14,7 @@
 </info>
 
 <property>
-	<interval>500</interval>
+	<interval>100</interval>
 </property>
 
-<service name="cat_spi" method="publish" topic="service/cat/spi"></service>
+<service name="cat_spi_emotion" method="subscribe" topic="service/msapi/emotion"></service>

@@ -22,7 +22,9 @@
 	<!-- required component cannot be stopped by user -->
 	<!-- required library for advanced user or our support -->
 
-	<required type="component">camcapture</required> <!-- example for test -->
+	<required type="component">camcapture</required>
+	<required type="component">rpi_spi</required>
+	<required type="component">msapi_emotion</required>
 	
 	
 	<!-- do not edit this path -->

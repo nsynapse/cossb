@@ -36,7 +36,7 @@ private:
 	void read();
 
 private:
-
+	unsigned char _write_byte = 0x00;
 	cossb::base::task _read_task;
 };
 
