@@ -202,13 +202,15 @@ msapi_emotion.comp: $(OUTDIR)msapi_emotion.o
 $(OUTDIR)msapi_emotion.o: $(COMPONENT_FILES)msapi_emotion/msapi_emotion.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
-rpi_spi.comp: $(OUTDIR)rpi_spi.o
+rpi_spi.comp: $(OUTDIR)rpi_spi.o $(OUTDIR)bcm2835.o
 	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
 $(OUTDIR)rpi_spi.o: $(COMPONENT_FILES)rpi_spi/rpi_spi.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
 	
-	
+
+$(OUTDIR)bcm2835.o: $(INCLUDE_FILES)3rdparty/bcm2835.c 
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@	
 	
 $(OUTDIR)message_any.o: $(INCLUDE_FILES)base/message_any.cpp 
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
