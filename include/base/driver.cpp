@@ -125,9 +125,9 @@ bool component_driver::setup()
 bool component_driver::run()
 {
 	if(_ptr_component){
-		if(!_run_proc_task.get() && _interval_ms>0){
-			_run_proc_task = create_task(component_driver::run_proc);
-		}
+//		if(!_run_proc_task.get() && _interval_ms>0){
+//			_run_proc_task = create_task(component_driver::run_proc);
+//		}
 
 		if(!_request_proc_task.get()){
 			_request_proc_task = create_task(component_driver::request_proc);
@@ -177,10 +177,12 @@ void component_driver::request_proc()
 	if(_ptr_component) {
 		while(1){
 			try {
-				if(_interval_ms<0){
-					boost::mutex::scoped_lock __lock(_mutex);
-					_condition.wait(__lock);
+				boost::mutex::scoped_lock __lock(_mutex);
 
+				if(!_condition.timed_wait(__lock, boost::posix_time::milliseconds(_interval_ms))){
+					_ptr_component->run();
+				}
+				else {
 					while(!_mailbox.empty()){
 						_ptr_component->request(&_mailbox.front());
 						_mailbox.pop();
