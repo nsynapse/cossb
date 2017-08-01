@@ -14,7 +14,6 @@
 #include <base/version.hpp>
 #include <base/instance.hpp>
 #include <base/log.hpp>
-
 #include <base/broker.hpp>
 #include <base/task.hpp>
 #include <base/exception.hpp>

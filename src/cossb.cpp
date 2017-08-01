@@ -59,7 +59,7 @@ void sigc_interrupt(int param) {
 
 /**
  * @brief	Main routine
- * @param	command
+ * @param	arguments
  * @details	Start with default components
  */
 int main(int argc, char* argv[])
@@ -91,6 +91,7 @@ int main(int argc, char* argv[])
 			cossb::core::start();
 			pause();
 		}
+		else{ std::cout << options.help({ "", "Group" }) << std::endl; exit(0);}
 	}
 	catch(const cxxopts::OptionException& e) {
 		std::cout << "error parsing options : " << e.what() << std::endl;

@@ -48,23 +48,6 @@ cossb:	$(OUTDIR)cossb.o \
 		$(OUTDIR)format.o \
 		$(OUTDIR)tinyxml2.o
 		$(CXX) $(LDFLAGS) -o $(OUTDIR)$@ $^ $(LDLIBS)
-		
-cossb_test:	$(OUTDIR)cossb_test.o \
-		$(OUTDIR)sysmanager_test.o \
-		$(OUTDIR)instance.o	\
-		$(OUTDIR)manifest.o \
-		$(OUTDIR)sysmanager.o \
-		$(OUTDIR)compmanager.o \
-		$(OUTDIR)driver.o \
-		$(OUTDIR)broker.o \
-		$(OUTDIR)xmlprofile.o \
-		$(OUTDIR)message_any.o \
-		$(OUTDIR)log.o \
-		$(OUTDIR)localtime.o \
-		$(OUTDIR)ostream.o \
-		$(OUTDIR)format.o \
-		$(OUTDIR)tinyxml2.o
-		$(CXX) $(LDFLAGS) -o $(OUTDIR)$@ $^ $(LDLIBS)
 
 # Util
 wsbroadcaster: $(OUTDIR)broadcaster.o
@@ -75,7 +58,8 @@ $(OUTDIR)broadcaster.o: $(UTIL_FILES)websocket/broadcaster.cpp
 		
 #examples
 	
-helloworld.comp: $(OUTDIR)helloworld.o 
+helloworld.comp: $(OUTDIR)helloworld.o \
+					$(OUTDIR)message_any.o
 	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
 $(OUTDIR)helloworld.o: $(EXAMPLE_FILES)01_Helloworld/helloworld.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
@@ -155,7 +139,8 @@ tcpserver.comp: $(OUTDIR)tcpserver.o
 $(OUTDIR)tcpserver.o: $(COMPONENT_FILES)tcpserver/tcpserver.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
-serial.comp: $(OUTDIR)serial.o $(OUTDIR)libserial.o
+serial.comp: $(OUTDIR)serial.o \
+				$(OUTDIR)libserial.o
 	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
 $(OUTDIR)serial.o: $(COMPONENT_FILES)serial/serial.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
@@ -192,17 +177,20 @@ compcontroller.comp: $(OUTDIR)compcontroller.o
 $(OUTDIR)compcontroller.o: $(COMPONENT_FILES)compcontroller/compcontroller.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
-camcapture.comp: $(OUTDIR)camcapture.o $(OUTDIR)message_any.o
+camcapture.comp: $(OUTDIR)camcapture.o \
+					$(OUTDIR)message_any.o
 	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS) -lopencv_core -lopencv_videoio -lopencv_video -lopencv_highgui
 $(OUTDIR)camcapture.o: $(COMPONENT_FILES)camcapture/camcapture.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
-msapi_emotion.comp: $(OUTDIR)msapi_emotion.o $(OUTDIR)message_any.o
+msapi_emotion.comp: $(OUTDIR)msapi_emotion.o \
+					  $(OUTDIR)message_any.o
 	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
 $(OUTDIR)msapi_emotion.o: $(COMPONENT_FILES)msapi_emotion/msapi_emotion.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
-rpi_spi.comp: $(OUTDIR)rpi_spi.o $(OUTDIR)message_any.o
+rpi_spi.comp: $(OUTDIR)rpi_spi.o \
+				$(OUTDIR)message_any.o
 	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS) -lbcm2835
 $(OUTDIR)rpi_spi.o: $(COMPONENT_FILES)rpi_spi/rpi_spi.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
@@ -256,15 +244,6 @@ $(OUTDIR)format.o: $(INCLUDE_FILES)util/format.cc
 	
 $(OUTDIR)tinyxml2.o: $(INCLUDE_FILES)ext/tinyxml2.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
-
-	
-#for test code	
-$(OUTDIR)cossb_test.o: $(TEST_FILES)cossb_test.cpp 
-	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
-	
-$(OUTDIR)sysmanager_test.o: $(TEST_FILES)sysmanager_test.cpp
-	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
-
 
 
 

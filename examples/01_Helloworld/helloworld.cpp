@@ -24,9 +24,9 @@ bool helloworld::run()
 {
 	cossb_log->log(cossb::log::loglevel::INFO, "called helloworld component run");
 
-	cossb::message msg(this);
+	cossb::message msg(this, base::msg_type::DATA);
 	msg.set(1);
-	cossb_broker->publish("service/test", msg);
+	cossb_broker->publish("capture", msg);
 
 
 	return true;
