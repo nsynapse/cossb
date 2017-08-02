@@ -1,18 +1,22 @@
-# Makefile for all component project
+# COSSB Makefile
 
-# compiler flags
-#	-g	--Enable debugging
-#	-Wall	--Turn on all warnings
-#	-D_USE_FIXED_PROTOTYPES_
-#	--Force the compiler to use the correct headers
-#	-ansi	--Don't use GNU ext; do use ansi standard.
+OS := $(shell uname)
 
-CC = gcc
+ifeq ($(OS),Darwin) #Mac OS
+	LDFLAGS = -dynamiclib
+	#LD_LIBRARY_PATH += -I/usr/local/Cellar/boost/1.64.0_1/lib/
+	LDLIBS = -lboost_thread-mt
+endif
+
+ifeq ($(OS),Linux) #Linux
+	LDFLAGS = -Wl,--export-dynamic
+	LDLIBS = -lboost_system -lboost_thread -lboost_filesystem -ldl -luuid 
+endif
+
 CXX = g++
 CXXFLAGS = -O3 -fPIC -Wall -std=c++11 -D__cplusplus=201103L -D__boostthread__
-CCFLAGS = $(CXXFLAGS)
-LDFLAGS = -Wl,--export-dynamic
-LDLIBS = -lboost_system -lboost_thread -lboost_filesystem -ldl -luuid 
+
+
 EDISON_LDLIBS = -lmraa
 INCLUDE = -I./include -I/usr/include -I/usr/local/include
 RM	= rm -rf
@@ -47,7 +51,7 @@ cossb:	$(OUTDIR)cossb.o \
 		$(OUTDIR)ostream.o \
 		$(OUTDIR)format.o \
 		$(OUTDIR)tinyxml2.o
-		$(CXX) $(LDFLAGS) -o $(OUTDIR)$@ $^ $(LDLIBS)
+		$(CXX) $(LDFLAGS) $(LD_LIBRARY_PATH) -o $(OUTDIR)$@ $^ $(LDLIBS)
 
 # Util
 wsbroadcaster: $(OUTDIR)broadcaster.o
