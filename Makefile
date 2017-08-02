@@ -16,7 +16,6 @@ endif
 CXX = g++
 CXXFLAGS = -O3 -fPIC -Wall -std=c++11 -D__cplusplus=201103L -D__boostthread__
 
-
 EDISON_LDLIBS = -lmraa
 INCLUDE = -I./include -I/usr/include -I/usr/local/include
 RM	= rm -rf
