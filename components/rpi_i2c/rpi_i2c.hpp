@@ -30,14 +30,13 @@ public:
 	/**
 	 * @brief	request interface function
 	 */
-	void request(cossb::message* const msg);
+	void subscribe(cossb::message* const msg);
 
 private:
 	void read();
 
 private:
 	unsigned char _write_byte = 0x00;
-	cossb::base::task _read_task;
 };
 
 COMPONENT_EXPORT

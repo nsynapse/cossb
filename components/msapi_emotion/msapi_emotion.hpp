@@ -32,7 +32,7 @@ public:
 	/**
 	 * @brief	request interface function
 	 */
-	void request(cossb::message* const msg);
+	void subscribe(cossb::message* const msg);
 
 private:
 	void get_post_data(std::ostringstream& postBuf, const char** pp);

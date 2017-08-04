@@ -26,8 +26,17 @@ rpi_i2c::~rpi_i2c() {
 
 bool rpi_i2c::setup()
 {
+	int address = get_profile()->get(profile::section::property, "address").asInt(1);
+	address = (int)(address/10)*16+(int)(address/10);
+
+	cossb_log->log(log::loglevel::INFO, fmt::format("Set I2C Address : 0x{0:x}", address));
+
+	return true;
+
 	if(!bcm2835_init())
 		return false;
+
+	cossb_log->log(log::loglevel::INFO, fmt::format("Set I2C Address : 0x{0:x}", address));
 
 	if(!bcm2835_spi_begin())
 		return false;
@@ -49,6 +58,8 @@ bool rpi_i2c::setup()
 bool rpi_i2c::run()
 {
 
+	return true;
+
 	//1. check gpio
 	unsigned char value = bcm2835_gpio_lev(PIN);
 
@@ -68,6 +79,8 @@ bool rpi_i2c::run()
 
 bool rpi_i2c::stop()
 {
+	return true;
+
 	//1. close spi
 	bcm2835_spi_end();
 
@@ -77,7 +90,7 @@ bool rpi_i2c::stop()
 	return true;
 }
 
-void rpi_i2c::request(cossb::message* const msg)
+void rpi_i2c::subscribe(cossb::message* const msg)
 {
 	switch(msg->get_frame()->type) {
 		case cossb::base::msg_type::REQUEST: break;
@@ -85,10 +98,10 @@ void rpi_i2c::request(cossb::message* const msg)
 
 			//subscribe emotion data
 			try {
-			unsigned char emotion_data = boost::any_cast<unsigned char>(*msg);
-			_write_byte = emotion_data;	//copy
+//			unsigned char emotion_data = boost::any_cast<unsigned char>(*msg);
+//			_write_byte = emotion_data;	//copy
 
-			cossb_log->log(log::loglevel::INFO, fmt::format("request SPI write : {}", emotion_data));
+			//cossb_log->log(log::loglevel::INFO, fmt::format("request SPI write : {}", emotion_data));
 			}
 			catch(const boost::bad_any_cast&){
 				cossb_log->log(log::loglevel::ERROR, "Invalid type casting..");

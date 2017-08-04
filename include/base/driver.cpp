@@ -93,7 +93,7 @@ void component_driver::unload()
 	{
 		destroy_component pfdestroy = (destroy_component)dlsym(_handle, "destroy");
 
-		if(_request_proc_task.get())	destroy_task(_request_proc_task);
+		if(_subscribe_proc_task.get())	destroy_task(_subscribe_proc_task);
 		if(_run_proc_task.get())		destroy_task(_run_proc_task);
 
 		if(pfdestroy) {
@@ -125,8 +125,8 @@ bool component_driver::setup()
 bool component_driver::run()
 {
 	if(_ptr_component){
-		if(!_request_proc_task.get()){
-			_request_proc_task = create_task(component_driver::_request_process);
+		if(!_subscribe_proc_task.get()){
+			_subscribe_proc_task = create_task(component_driver::_subscribe_process);
 		}
 
 		if(!_run_proc_task.get() && _interval_ms>0){
@@ -142,8 +142,8 @@ void component_driver::stop()
 	if(_ptr_component)
 		_ptr_component->stop();
 
-	if(_request_proc_task.get())
-		destroy_task(_request_proc_task);
+	if(_subscribe_proc_task.get())
+		destroy_task(_subscribe_proc_task);
 	if(_run_proc_task.get())
 		destroy_task(_run_proc_task);
 }
@@ -166,20 +166,20 @@ void component_driver::_run_process()
 	}
 }
 
-void component_driver::_request_process()
+void component_driver::_subscribe_process()
 {
 	if(_ptr_component) {
 		while(1){
 			try {
 				boost::mutex::scoped_lock __lock(_mutex);
-				_request_cv.wait(__lock);
+				_subscribe_cv.wait(__lock);
 
 				while(!_mailbox.empty()){
-					_ptr_component->request(&_mailbox.front());
+					_ptr_component->subscribe(&_mailbox.front());
 					_mailbox.pop();
 				}
 
-				if(_request_proc_task->interruption_requested()) break;
+				if(_subscribe_proc_task->interruption_requested()) break;
 			}
 			catch(thread_interrupted&) {
 				break;

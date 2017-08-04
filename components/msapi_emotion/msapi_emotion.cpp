@@ -29,16 +29,21 @@ bool msapi_emotion::setup()
 	curl_global_init(CURL_GLOBAL_ALL) ;
 	_ctx = curl_easy_init();
 
-	if(_ctx==nullptr)
+	if(_ctx==nullptr){
+		cossb_log->log(log::loglevel::ERROR, "Curl cannot be initialized.");
 		return false;
+	}
 
 	curl_slist* header = nullptr;
 	header = curl_slist_append(header, "Host: westcentralus.api.cognitive.microsoft.com");
 	header = curl_slist_append(header, fmt::format("Ocp-Apim-Subscription-Key:{}",_key).c_str());
 	header = curl_slist_append(header , "Content-Type: application/json" ) ;
 	curl_easy_setopt(_ctx , CURLOPT_HTTPHEADER , header);
+	curl_easy_setopt(_ctx , CURLOPT_NOPROGRESS , 1);
 	curl_easy_setopt(_ctx , CURLOPT_URL,  _request_url);
 	curl_easy_setopt(_ctx, CURLOPT_POSTFIELDS, "returnFaceAttributes=emotion");
+
+
 
 	return true;
 }
@@ -49,12 +54,14 @@ bool msapi_emotion::run()
 	CURLcode res = curl_easy_perform(_ctx);
 
 	if(res!=CURLE_OK) {
+		cossb_log->log(log::loglevel::INFO, fmt::format("curl perform fail : {}",_request_url));
 		cossb_log->log(log::loglevel::ERROR, fmt::format("curl perform fail : {}",curl_easy_strerror(res)));
 	}
-
-	string data;
-	curl_easy_setopt(_ctx, CURLOPT_WRITEDATA, &data);
-
+	else{
+		string data;
+		curl_easy_setopt(_ctx, CURLOPT_WRITEDATA, &data);
+		cossb_log->log(log::loglevel::ERROR, data);
+	}
 
 	return true;
 }
@@ -66,7 +73,7 @@ bool msapi_emotion::stop()
 	return true;
 }
 
-void msapi_emotion::request(cossb::message* const msg)
+void msapi_emotion::subscribe(cossb::message* const msg)
 {
 	cossb_log->log(log::loglevel::INFO, "(emotion)received message");
 
@@ -74,14 +81,13 @@ void msapi_emotion::request(cossb::message* const msg)
 			case cossb::base::msg_type::REQUEST: break;
 			case cossb::base::msg_type::DATA: {
 				try {
-					cv::Mat image = boost::any_cast<cv::Mat>(*msg);
-
+					cv::Mat image = boost::any_cast<cv::Mat>(*msg->get_data());
 					//process
 
 					//after process
-					cossb::message _msg(this, base::msg_type::DATA);
-					_msg.set((unsigned char)0x01);
-					cossb_broker->publish("face_emotion", _msg);
+//					cossb::message _msg(this, base::msg_type::DATA);
+//					_msg.set((unsigned char)0x01);
+//					cossb_broker->publish("face_emotion", _msg);
 
 					cossb_log->log(log::loglevel::INFO, "send message to spi");
 

@@ -33,7 +33,7 @@ public:
 	/**
 	 * @brief	request interface function
 	 */
-	void request(cossb::message* const msg);
+	void subscribe(cossb::message* const msg);
 
 };
 

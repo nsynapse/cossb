@@ -69,10 +69,10 @@ public:
 	virtual bool stop() = 0;
 
 	/**
-	 * @brief	message request
+	 * @brief	message subscribe
 	 * @details	if request message comes in, this function will be called
 	 */
-	virtual void request(cossb::message* const msg) = 0;
+	virtual void subscribe(cossb::message* const msg) = 0;
 
 	/**
 	 * @brief

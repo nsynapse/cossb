@@ -24,6 +24,8 @@
 
 	<required type="component">camcapture</required>
 	<required type="component">imageviewer</required>
+	<required type="component">msapi_emotion</required>
+	<required type="component">rpi_i2c</required>
 	
 	
 	<!-- do not edit this path -->

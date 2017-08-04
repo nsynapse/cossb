@@ -34,7 +34,7 @@ bool imageviewer::stop()
 	return true;
 }
 
-void imageviewer::request(cossb::message* const msg)
+void imageviewer::subscribe(cossb::message* const msg)
 {
 	switch(msg->get_frame()->type) {
 		case cossb::base::msg_type::REQUEST: break;

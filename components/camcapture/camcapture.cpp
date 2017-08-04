@@ -74,7 +74,7 @@ bool camcapture::stop()
 	return true;
 }
 
-void camcapture::request(cossb::message* const msg)
+void camcapture::subscribe(cossb::message* const msg)
 {
 	cossb_log->log(log::loglevel::INFO, "camcapture, Received Message");
 }

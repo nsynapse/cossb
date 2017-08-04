@@ -50,12 +50,12 @@ public:
 
 private:
 
-	void request(cossb::message* msg){
+	void subscribe(cossb::message* msg){
 		boost::mutex::scoped_lock __lock(_mutex);
 		_mailbox.push(*msg);
 		__lock.unlock();
 
-		_request_cv.notify_one();
+		_subscribe_cv.notify_one();
 	}
 
 
@@ -91,13 +91,13 @@ private:
 	/**
 	 * @brief	request process task
 	 */
-	void _request_process();
+	void _subscribe_process();
 	void _run_process();
 
 	/**
 	 * @brief	request task
 	 */
-	base::task	_request_proc_task;
+	base::task	_subscribe_proc_task;
 	base::task _run_proc_task;
 
 private:
@@ -113,7 +113,7 @@ private:
 	 */
 	std::queue<cossb::message> _mailbox;
 
-	boost::condition_variable _request_cv;
+	boost::condition_variable _subscribe_cv;
 	boost::condition_variable _run_cv;
 	boost::mutex _mutex;
 	int _interval_ms = 0;

@@ -188,7 +188,7 @@ $(OUTDIR)camcapture.o: $(COMPONENT_FILES)camcapture/camcapture.cpp
 	
 msapi_emotion.comp: $(OUTDIR)msapi_emotion.o \
 					  $(OUTDIR)message_any.o
-	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS) -lcurl
 $(OUTDIR)msapi_emotion.o: $(COMPONENT_FILES)msapi_emotion/msapi_emotion.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
@@ -202,6 +202,13 @@ imageviewer.comp: $(OUTDIR)imageviewer.o \
 				$(OUTDIR)message_any.o
 	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
 $(OUTDIR)imageviewer.o: $(COMPONENT_FILES)imageviewer/imageviewer.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
+	
+rpi_i2c.comp: $(OUTDIR)rpi_i2c.o \
+				$(OUTDIR)message_any.o
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS) -lbcm2835
+$(OUTDIR)rpi_i2c.o: $(COMPONENT_FILES)rpi_i2c/rpi_i2c.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
 	
