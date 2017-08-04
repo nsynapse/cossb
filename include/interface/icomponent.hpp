@@ -70,7 +70,7 @@ public:
 
 	/**
 	 * @brief	message subscribe
-	 * @details	if request message comes in, this function will be called
+	 * @details	if subscribe message comes in, this function will be called
 	 */
 	virtual void subscribe(cossb::message* const msg) = 0;
 

@@ -89,7 +89,7 @@ private:
 	void unload();
 
 	/**
-	 * @brief	request process task
+	 * @brief	subscribe process task
 	 */
 	void _subscribe_process();
 	void _run_process();
