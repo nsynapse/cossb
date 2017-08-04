@@ -8,7 +8,6 @@
 #ifndef _COSSB_TASK_HPP_
 #define _COSSB_TASK_HPP_
 
-//#if defined __BOOSTTHREAD__ || __boostthread__
 #include <boost/thread.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/thread/mutex.hpp>

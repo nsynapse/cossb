@@ -95,22 +95,12 @@ private:
 	/**
 	 * @brief	request process task
 	 */
-	void request_proc();
-	void run_proc();
-
-	/**
-	 * for test, insert message
-	 */
-	template<typename... Args>
-	void query(const char* head, const Args&... args) {
-
-	}
+	void _process();
 
 	/**
 	 * @brief	request task
 	 */
 	base::task	_request_proc_task;
-	base::task	_run_proc_task;
 
 private:
 	/**
