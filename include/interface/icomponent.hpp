@@ -72,8 +72,7 @@ public:
 	 * @brief	message request
 	 * @details	if request message comes in, this function will be called
 	 */
-//	virtual void request(cossb::base::message* const msg) = 0;
-	void request(cossb::message* const msg){ }
+	virtual void request(cossb::message* const msg) = 0;
 
 	/**
 	 * @brief
@@ -105,11 +104,6 @@ private:
 	 * @brief	component name
 	 */
 	string _name;
-
-	/*
-	 * @brief	interval
-	 */
-
 
 	/**
 	 * @brief	component profile interface

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<info>
+	<uuid>0</uuid>
+	<name>imageviewer</name>
+	<description>Image Viewer Component</description>
+	<company>Nsynapse Inc.</company>
+	<developer>Byunghun Hwang</developer>
+	<email>bhhwang@nsynapse.com</email>
+	<url>http://www.nsynapse.com</url>
+	<license>MIT</license> 
+	<version>0.0.1</version>
+</info>
+
+<property>
+</property>
+
+<service name="image_view" method="subscribe" topic="service/capture/image"></service>

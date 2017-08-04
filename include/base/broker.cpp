@@ -13,10 +13,9 @@ unsigned int component_broker::publish(const char* service_name, cossb::message&
 		msg.msg_frame.topic = _service_map[service_name].topic;
 		for(topic_map::iterator itr = range.first; itr!=range.second; ++itr) {
 			driver::component_driver* _drv = cossb_component_manager->get_driver(itr->second.c_str());
-			if(_drv)
-			{
+			if(_drv){
 				if(!_drv->mine(msg.get_from())) {
-					cossb_log->log(log::loglevel::INFO, fmt::format("Request Message : {}", msg.msg_frame.topic));
+					cossb_log->log(log::loglevel::INFO, fmt::format("Request Message {} from {} to {}", msg.msg_frame.topic, msg.get_from(), _drv->get_component()->get_name()));
 					_drv->request(&msg);
 					times++;
 				}

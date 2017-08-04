@@ -39,6 +39,7 @@ public:
 	void clear() {  }
 
 	void set(boost::any data);
+	void pack(boost::any data);
 
 
 };

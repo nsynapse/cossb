@@ -93,7 +93,8 @@ void component_driver::unload()
 	{
 		destroy_component pfdestroy = (destroy_component)dlsym(_handle, "destroy");
 
-		destroy_task(_request_proc_task);
+		if(_request_proc_task.get())	destroy_task(_request_proc_task);
+		if(_run_proc_task.get())		destroy_task(_run_proc_task);
 
 		if(pfdestroy) {
 			pfdestroy();
@@ -125,14 +126,15 @@ bool component_driver::run()
 {
 	if(_ptr_component){
 		if(!_request_proc_task.get()){
-			_request_proc_task = create_task(component_driver::_process);
+			_request_proc_task = create_task(component_driver::_request_process);
 		}
 
+		if(!_run_proc_task.get() && _interval_ms>0){
+			_run_proc_task = create_task(component_driver::_run_process);
+		}
 		return true;
 	}
-
 	return false;
-
 }
 
 void component_driver::stop()
@@ -140,29 +142,42 @@ void component_driver::stop()
 	if(_ptr_component)
 		_ptr_component->stop();
 
-	//_condition.notify_one();
-	destroy_task(_request_proc_task);
+	if(_request_proc_task.get())
+		destroy_task(_request_proc_task);
+	if(_run_proc_task.get())
+		destroy_task(_run_proc_task);
 }
 
-void component_driver::_process()
+void component_driver::_run_process()
+{
+	if(_ptr_component){
+		while(1){
+			try {
+				boost::mutex::scoped_lock __lock(_mutex);
+				if(!_run_cv.timed_wait(__lock, boost::posix_time::milliseconds(_interval_ms))){
+					if(_run_proc_task->interruption_requested()) break;
+					_ptr_component->run();
+				}
+			}
+			catch(thread_interrupted&) {
+				break;
+			}
+		}
+	}
+}
+
+void component_driver::_request_process()
 {
 	if(_ptr_component) {
 		while(1){
 			try {
 				boost::mutex::scoped_lock __lock(_mutex);
+				_request_cv.wait(__lock);
 
-				if(!_condition.timed_wait(__lock, boost::posix_time::milliseconds(_interval_ms))){
-					_ptr_component->run();
-					cout << "call run" << endl;
+				while(!_mailbox.empty()){
+					_ptr_component->request(&_mailbox.front());
+					_mailbox.pop();
 				}
-				else {
-					while(!_mailbox.empty()){
-						_ptr_component->request(&_mailbox.front());
-						_mailbox.pop();
-					}
-				}
-
-				//boost::this_thread::sleep(boost::posix_time::milliseconds(_interval_ms));
 
 				if(_request_proc_task->interruption_requested()) break;
 			}

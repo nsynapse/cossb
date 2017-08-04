@@ -69,6 +69,8 @@ public:
 
 	base::msgframe<_T>* get_frame() { return &msg_frame; }
 
+	_T* get_data() { return &msg_frame.data; }
+
 	/*
 	 * @brief	get message topic
 	 */

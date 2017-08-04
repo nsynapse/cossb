@@ -51,12 +51,10 @@ bool camcapture::run()
 			cv::waitKey(1);
 		}
 
-//		cossb::message _msg(this, base::msg_type::DATA);
-//		_msg.set(_colorImage.clone());
-//		cossb_broker->publish("camera_capture", _msg);
+		cossb::message _msg(this, base::msg_type::DATA);
+		_msg.set(_colorImage.clone());
+		cossb_broker->publish("camera_capture", _msg);
 
-
-		//cossb_log->log(log::loglevel::INFO, "Camera Capture and publish data");
 	}
 	else
 		_colorImage.release();
@@ -78,6 +76,6 @@ bool camcapture::stop()
 
 void camcapture::request(cossb::message* const msg)
 {
-
+	cossb_log->log(log::loglevel::INFO, "camcapture, Received Message");
 }
 

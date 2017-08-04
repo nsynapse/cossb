@@ -49,17 +49,13 @@ public:
 	bool mine(const char* component_name);
 
 private:
-	/**
-	 * @brief	request message
-	 */
-//	template<typename... Args>
-//	void request(const char* head, const Args&... args) {
-//		//not implemented.
-//	}
 
 	void request(cossb::message* msg){
+		boost::mutex::scoped_lock __lock(_mutex);
 		_mailbox.push(*msg);
-		_condition.notify_one();
+		__lock.unlock();
+
+		_request_cv.notify_one();
 	}
 
 
@@ -95,12 +91,14 @@ private:
 	/**
 	 * @brief	request process task
 	 */
-	void _process();
+	void _request_process();
+	void _run_process();
 
 	/**
 	 * @brief	request task
 	 */
 	base::task	_request_proc_task;
+	base::task _run_proc_task;
 
 private:
 	/**
@@ -115,7 +113,8 @@ private:
 	 */
 	std::queue<cossb::message> _mailbox;
 
-	boost::condition_variable _condition;
+	boost::condition_variable _request_cv;
+	boost::condition_variable _run_cv;
 	boost::mutex _mutex;
 	int _interval_ms = 0;
 

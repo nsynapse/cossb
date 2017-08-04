@@ -23,6 +23,7 @@
 	<!-- required library for advanced user or our support -->
 
 	<required type="component">camcapture</required>
+	<required type="component">imageviewer</required>
 	
 	
 	<!-- do not edit this path -->
