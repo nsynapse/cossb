@@ -5,6 +5,7 @@
 
 #include <interface/icomponent.hpp>
 #include <base/task.hpp>
+#include <3rdparty/bcm2835.h>
 
 typedef enum {
     NO_ACTION,

@@ -3,7 +3,6 @@
 #include "rpi_i2c.hpp"
 #include <cossb.hpp>
 #include <string>
-#include <3rdparty/bcm2835.h>
 #include <tuple>
 
 using namespace std;
