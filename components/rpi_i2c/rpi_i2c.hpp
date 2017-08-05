@@ -6,6 +6,15 @@
 #include <interface/icomponent.hpp>
 #include <base/task.hpp>
 
+typedef enum {
+    NO_ACTION,
+    I2C_BEGIN,
+    I2C_END
+} i2c_init;
+
+#define MODE_READ 0
+#define MODE_WRITE 1
+
 
 class rpi_i2c : public interface::icomponent  {
 public:
@@ -37,6 +46,9 @@ private:
 
 private:
 	unsigned char _write_byte = 0x00;
+
+	unsigned short _clk_div = BCM2835_I2C_CLOCK_DIVIDER_148;
+	unsigned char  _mode = MODE_READ;
 };
 
 COMPONENT_EXPORT
