@@ -18,4 +18,5 @@
 	<address>22</address>
 </property>
 
-<service name="cat_spi_emotion" method="subscribe" topic="service/msapi/emotion"></service>
+<service name="rpi_i2c_write" method="subscribe" topic="service/msapi/emotion"></service>
+<service name="rpi_i2c_read" method="publish" topic="service/rpi_i2c/read"></service>

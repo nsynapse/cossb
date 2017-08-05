@@ -34,6 +34,9 @@ bool rpi_i2c::setup()
 		return false;
 	}
 
+	if(!_read_task.get())
+		_read_task = create_task(rpi_i2c::read);
+
 	bcm2835_i2c_setSlaveAddress((unsigned char)address);
 	bcm2835_i2c_setClockDivider(_clk_div);
 
@@ -61,6 +64,7 @@ bool rpi_i2c::stop()
 
 void rpi_i2c::subscribe(cossb::message* const msg)
 {
+	//write data via I2C
 	switch(msg->get_frame()->type) {
 		case cossb::base::msg_type::REQUEST: break;
 		case cossb::base::msg_type::DATA: {
@@ -83,6 +87,30 @@ void rpi_i2c::subscribe(cossb::message* const msg)
 
 void rpi_i2c::read()
 {
+	while(1){
+		try{
+			char readbyte = 0x00;
+			unsigned char code = bcm2835_i2c_read(&readbyte, 1);
+
+			switch(code){
+			case BCM2835_I2C_REASON_OK: {
+				if(readbyte!=0x00){
+
+					//publish data read from i2c
+					cossb::message _msg(this, base::msg_type::DATA);
+					_msg.set(readbyte);
+					cossb_broker->publish("rpi_i2c_read", _msg);
+					cossb_log->log(log::loglevel::INFO, "Publish i2c data read");
+				}
+			}
+				break;
+			case BCM2835_I2C_REASON_ERROR_NACK: cossb_log->log(log::loglevel::INFO, "Received a NACK"); break;
+			case BCM2835_I2C_REASON_ERROR_CLKT: cossb_log->log(log::loglevel::WARN, "Received Clock Stretch Timeout"); break;
+			case BCM2835_I2C_REASON_ERROR_DATA: cossb_log->log(log::loglevel::ERROR, "Not all data is sent / received"); break;
+			}
+		}
+		catch(const boost::bad_any_cast&){ }
+	}
 
 }
 
