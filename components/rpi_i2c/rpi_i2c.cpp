@@ -71,7 +71,7 @@ void rpi_i2c::subscribe(cossb::message* const msg)
 			//subscribe emotion data
 			try {
 			char emotion_data = boost::any_cast<char>(*msg->get_data());
-			bcm2835_i2c_write((const char*)&emotion_data, 1);
+			bcm2835_i2c_write(&(const char)emotion_data, 1);
 
 			cossb_log->log(log::loglevel::INFO, fmt::format("Write 0x{0:x} via I2C", emotion_data));
 			}
