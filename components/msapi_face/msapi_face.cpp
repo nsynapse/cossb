@@ -24,16 +24,24 @@ msapi_face::~msapi_face() {
 bool msapi_face::setup()
 {
 	Py_Initialize();
+	if(!Py_IsInitialized())
+		return false;
 
 	_url = get_profile()->get(profile::section::property, "url").asString("https://localhost");
 	_key = get_profile()->get(profile::section::property, "key").asString("");
 
-	PyObject* _module_string = PyString_FromString((char*)"msapi2");
-	PyObject* _module = PyImport_Import(_module_string);
-	PyObject* _dict = PyModule_GetDict(_module);
-	_pyFunc = PyDict_GetItemString(_dict, "get_emotion");
+	PyObject* _module = PyImport_ImportModule("msapi2");
+	if(_module){
+		PyObject* _result = PyObject_CallMethod(_module, "get_emotion", "(sss)", _url.c_str(), _key.c_str(), "test.jpg");
+		string result = PyString_AsString(_result);
+		cossb_log->log(log::loglevel::INFO, result);
+		//PyObject* _dict = PyModule_GetDict(_module);
+		//_pyFunc = PyDict_GetItemString(_dict, "get_emotion");
+	}
+	else
+		cossb_log->log(log::loglevel::ERROR, "No module to import");
 
-	return true;
+	return false;
 }
 
 bool msapi_face::run()
@@ -44,7 +52,7 @@ bool msapi_face::run()
 	PyTuple_SetItem(pArgs, 1, PyString_FromString(_key.c_str()));
 	PyTuple_SetItem(pArgs, 2, PyString_FromString("test.jpg"));
 
-	if(_pyFunc){
+	if(PyCallable_Check(_pyFunc)){
 		PyObject* pResult = PyObject_CallObject(_pyFunc, pArgs);
 		if(pResult!=Py_None){
 			string result = PyString_AsString(pResult);
