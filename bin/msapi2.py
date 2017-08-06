@@ -2,7 +2,12 @@ import httplib, urllib, base64, json
 
 #subscription_key = '7aa23ea1b1f64e408dac7f3a08e34812'
 
-def get_emotion(url, key, image_path):
+#def get_emotion(url, key, image_path):
+def get_emotion(args):
+    url = args[0]
+    key = args[1]
+    image_path = args[2]
+    
     ret = ""
     subscription_key = key
     headers = {
@@ -16,7 +21,7 @@ def get_emotion(url, key, image_path):
         'returnFaceLandmarks': 'false',
     })
     
-    imageFile = open("image_path", "rb")
+    imageFile = open(image_path, "rb")
     data = imageFile.read()
     body = bytearray(data)
     
@@ -37,4 +42,4 @@ def get_emotion(url, key, image_path):
     except Exception as e:
         ret = "[Errno {0}] {1}".format(e.errno, e.strerror)
         
-    return ret
+    return str(ret)

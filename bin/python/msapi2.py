@@ -16,7 +16,7 @@ def get_emotion(url, key, image_path):
         'returnFaceLandmarks': 'false',
     })
     
-    imageFile = open("image_path", "rb")
+    imageFile = open(image_path, "rb")
     data = imageFile.read()
     body = bytearray(data)
     

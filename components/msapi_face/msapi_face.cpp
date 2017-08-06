@@ -30,37 +30,82 @@ bool msapi_face::setup()
 	_url = get_profile()->get(profile::section::property, "url").asString("https://localhost");
 	_key = get_profile()->get(profile::section::property, "key").asString("");
 
+	//add path
+	PyObject *sysPath = PySys_GetObject((char*)"path");
+	PyObject *path = PyString_FromString(".");
+	PyList_Insert(sysPath, 0, path);
+
 	PyObject* _module = PyImport_ImportModule("msapi2");
 	if(_module){
-		PyObject* _result = PyObject_CallMethod(_module, "get_emotion", "(sss)", _url.c_str(), _key.c_str(), "test.jpg");
-		string result = PyString_AsString(_result);
-		cossb_log->log(log::loglevel::INFO, result);
-		//PyObject* _dict = PyModule_GetDict(_module);
-		//_pyFunc = PyDict_GetItemString(_dict, "get_emotion");
-	}
-	else
-		cossb_log->log(log::loglevel::ERROR, "No module to import");
 
-	return false;
+		PyObject* pArgs = PyTuple_New(3);
+		PyTuple_SetItem(pArgs, 0, PyString_FromString(_url.c_str()));
+		PyTuple_SetItem(pArgs, 1, PyString_FromString(_key.c_str()));
+		PyTuple_SetItem(pArgs, 2, PyString_FromString("test.jpg"));
+
+		PyObject* _dict = PyModule_GetDict(_module);
+		_pyFunc = PyDict_GetItemString(_dict, "get_emotion");
+		if(_pyFunc){
+			if(PyCallable_Check(_pyFunc)){
+					PyObject* pResult = PyObject_CallObject(_pyFunc, pArgs);
+					string result = PyString_AsString(pResult);
+					//Py_DECREF(pResult);
+					cossb_log->log(log::loglevel::ERROR, "ok");
+					//cossb_log->log(log::loglevel::INFO, result);
+			}
+		}
+
+//		PyObject* _dict = PyModule_GetDict(_module);
+//		PyErr_Print();
+//		if(!_dict)
+//			cossb_log->log(log::loglevel::ERROR, "No dict");
+//
+//		_pyFunc = PyDict_GetItemString(_dict, "get_emotion");
+//
+//		PyObject* pArgs = PyTuple_New(3);
+//		PyTuple_SetItem(pArgs, 0, PyString_FromString(_url.c_str()));
+//		PyTuple_SetItem(pArgs, 1, PyString_FromString(_key.c_str()));
+//		PyTuple_SetItem(pArgs, 2, PyString_FromString("test.jpg"));
+//
+//		if(PyCallable_Check(_pyFunc)){
+//				PyObject* pResult = PyObject_CallObject(_pyFunc, pArgs);
+//				string result = PyString_AsString(pResult);
+//				cossb_log->log(log::loglevel::INFO, result);
+//		}
+//		else
+//			cossb_log->log(log::loglevel::ERROR, "Not Callable");
+
+		//PyObject* _result = PyObject_CallMethod(_module, "get_emotion", "sss", _url.c_str(), _key.c_str(), "test.jpg");
+		//string result = PyString_AsString(_result);
+		//cossb_log->log(log::loglevel::INFO, result);
+		//PyObject* _dict = PyModule_GetDict(_module);
+		//_pyFunc = PyDict_GetItemString(_dict, "get_emotion");PyErr_Print();
+	}
+	else{
+		cossb_log->log(log::loglevel::ERROR, "No module to import");
+		PyErr_Print();
+	}
+
+	return true;
 }
 
 bool msapi_face::run()
 {
-	PyObject* pArgs = PyTuple_New(3);
-
-	PyTuple_SetItem(pArgs, 0, PyString_FromString(_url.c_str()));
-	PyTuple_SetItem(pArgs, 1, PyString_FromString(_key.c_str()));
-	PyTuple_SetItem(pArgs, 2, PyString_FromString("test.jpg"));
-
-	if(PyCallable_Check(_pyFunc)){
-		PyObject* pResult = PyObject_CallObject(_pyFunc, pArgs);
-		if(pResult!=Py_None){
-			string result = PyString_AsString(pResult);
-			cossb_log->log(log::loglevel::INFO, result);
-		}
-	}
-
-	cossb_log->log(log::loglevel::ERROR, "Cannot call the python function");
+//	PyObject* pArgs = PyTuple_New(3);
+//
+//	PyTuple_SetItem(pArgs, 0, PyString_FromString(_url.c_str()));
+//	PyTuple_SetItem(pArgs, 1, PyString_FromString(_key.c_str()));
+//	PyTuple_SetItem(pArgs, 2, PyString_FromString("test.jpg"));
+//
+//	if(PyCallable_Check(_pyFunc)){
+//		PyObject* pResult = PyObject_CallObject(_pyFunc, pArgs);
+//		if(pResult!=Py_None){
+//			string result = PyString_AsString(pResult);
+//			cossb_log->log(log::loglevel::INFO, result);
+//		}
+//	}
+//
+//	cossb_log->log(log::loglevel::ERROR, "Cannot call the python function");
 
 	return true;
 }
