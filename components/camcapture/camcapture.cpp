@@ -4,7 +4,6 @@
 
 #include <opencv2/core.hpp>
 #include <opencv2/videoio.hpp>
-#include <opencv2/highgui.hpp>
 
 USE_COMPONENT_INTERFACE(camcapture)
 
@@ -32,9 +31,6 @@ bool camcapture::setup()
 		_camera->set(cv::CAP_PROP_FRAME_WIDTH, 640);
 		_camera->set(cv::CAP_PROP_FRAME_HEIGHT, 480);
 
-		if(_show)
-			cv::namedWindow("Image");
-
 		return true;
 	}
 	cossb_log->log(log::loglevel::ERROR, "Camera Open Failed");
@@ -44,30 +40,24 @@ bool camcapture::setup()
 bool camcapture::run()
 {
 	if(_camera->isOpened()){
+		cv::Mat _colorImage;
 		(*_camera) >> _colorImage;
 
-		if(!_colorImage.empty() && _show){
-			cv::imshow("Image", _colorImage);
-			cv::waitKey(1);
+		if(!_colorImage.empty()){
+			cossb_log->log(log::loglevel::INFO, "Successfully captured");
 		}
 
 		cossb::message _msg(this, base::msg_type::DATA);
 		_msg.set(_colorImage.clone());
 		cossb_broker->publish("camera_capture", _msg);
 
+		return true;
 	}
-	else
-		_colorImage.release();
-
-
-	return true;
+	return false;
 }
 
 bool camcapture::stop()
 {
-	if(_show)
-		cv::destroyWindow("Image");
-
 	if(_camera->isOpened())
 		_camera->release();
 

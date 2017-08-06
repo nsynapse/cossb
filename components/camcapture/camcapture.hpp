@@ -45,7 +45,6 @@ private:
 	bool _show = false;
 	unsigned int _resolution_width = 640;
 	unsigned int _resolution_height = 480;
-	cv::Mat _colorImage;
 
 
 };
