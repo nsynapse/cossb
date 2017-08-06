@@ -82,7 +82,7 @@ bool component_driver::load(const char* component_path)
 		return true;
 	}
 	else
-		throw exception(excode::COMPONENT_LOAD_FAIL);
+		throw exception(excode::COMPONENT_CREATE_FAIL);
 
 	return false;
 }

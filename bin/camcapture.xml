@@ -13,7 +13,6 @@
 
 <property>
 	<interval>10</interval>
-	<show>0</show>
 	<camid>0</camid>
 	<resolution_width>640</resolution_width>
 	<resolution_height>480</resolution_height>
