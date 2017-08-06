@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<info>
+	<uuid>00000000000000000000</uuid>
+	<name>msapi emotion</name>
+	<description>MS Face API component</description>
+	<company>Nsynapse Inc.</company>
+	<developer>Byunghun Hwang</developer>
+	<email>bhhwang@nsynapse.com</email>
+	<url>http://www.nsynapse.com</url>
+	<license>MIT</license> 
+	<version>0.0.1</version>
+	<category></category>
+	<tags></tags>
+</info>
+
+<property>
+	<interval>500</interval>
+	<url>https://westcentralus.api.cognitive.microsoft.com</url>
+	<key>7aa23ea1b1f64e408dac7f3a08e34812</key>
+</property>
+
+<service name="face_emotion" method="publish" topic="service/msapi/emotion"></service>
+<service name="face_image" method="subscribe" topic="service/capture/image"></service>

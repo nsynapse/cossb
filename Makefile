@@ -192,6 +192,12 @@ msapi_emotion.comp: $(OUTDIR)msapi_emotion.o \
 $(OUTDIR)msapi_emotion.o: $(COMPONENT_FILES)msapi_emotion/msapi_emotion.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
+msapi_face.comp: $(OUTDIR)msapi_face.o \
+					  $(OUTDIR)message_any.o
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS) -lpython2.7 -lpthread
+$(OUTDIR)msapi_face.o: $(COMPONENT_FILES)msapi_face/msapi_face.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
 rpi_spi.comp: $(OUTDIR)rpi_spi.o \
 				$(OUTDIR)message_any.o
 	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS) -lbcm2835

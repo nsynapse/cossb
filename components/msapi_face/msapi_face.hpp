@@ -1,18 +1,18 @@
 
 
-#ifndef _COSSB_COMPONENT_MSAPI_EMOTION_HPP_
-#define _COSSB_COMPONENT_MSAPI_EMOTION_HPP_
+#ifndef _COSSB_COMPONENT_MSAPI_FACE_HPP_
+#define _COSSB_COMPONENT_MSAPI_FACE_HPP_
 
 #include <interface/icomponent.hpp>
 #include <map>
-#include <curl/curl.h>
+#include <python2.7/Python.h>
 
 using namespace std;
 
-class msapi_emotion : public interface::icomponent {
+class msapi_face : public interface::icomponent {
 public:
-	msapi_emotion();
-	virtual ~msapi_emotion();
+	msapi_face();
+	virtual ~msapi_face();
 
 	/**
 	 * @brief	setup interface function
@@ -35,17 +35,13 @@ public:
 	void subscribe(cossb::message* const msg);
 
 private:
-	void get_post_data(std::ostringstream& postBuf, const char** pp);
-
-private:
-
-	string _request_url;
+	PyObject* _pyFunc = nullptr;
+	string _url;
 	string _key;
 	unsigned char _emotion = 0x00;
-	CURL* _ctx = nullptr;
 
 };
 
 COMPONENT_EXPORT
 
-#endif /* _COSSB_COMPONENT_MSAPI_EMOTION_HPP_ */
+#endif /* _COSSB_COMPONENT_MSAPI_FACE_HPP_ */

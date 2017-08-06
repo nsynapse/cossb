@@ -8,6 +8,10 @@
 #include "msapi_emotion.hpp"
 #include <cossb.hpp>
 #include <opencv2/core.hpp>
+//#include <fstream>
+//#include <vector>
+
+using namespace std;
 
 USE_COMPONENT_INTERFACE(msapi_emotion)
 
@@ -37,20 +41,22 @@ bool msapi_emotion::setup()
 	curl_slist* header = nullptr;
 	header = curl_slist_append(header, "Host: westcentralus.api.cognitive.microsoft.com");
 	header = curl_slist_append(header, fmt::format("Ocp-Apim-Subscription-Key:{}",_key).c_str());
-	header = curl_slist_append(header , "Content-Type: application/json" ) ;
-	curl_easy_setopt(_ctx , CURLOPT_HTTPHEADER , header);
-	curl_easy_setopt(_ctx , CURLOPT_NOPROGRESS , 1);
-	curl_easy_setopt(_ctx , CURLOPT_URL,  _request_url);
-	curl_easy_setopt(_ctx, CURLOPT_POSTFIELDS, "returnFaceAttributes=emotion");
-
-
+	header = curl_slist_append(header , "Content-Type: application/octet-stream" ) ;
+	curl_easy_setopt(_ctx, CURLOPT_HTTPHEADER , header);
+	curl_easy_setopt(_ctx, CURLOPT_NOPROGRESS , 1);
+	curl_easy_setopt(_ctx, CURLOPT_POST, 1);
+	curl_easy_setopt(_ctx, CURLOPT_URL,  _request_url+"returnFaceAttributes=emotion");
 
 	return true;
 }
 
 bool msapi_emotion::run()
 {
-	//1. perform
+	//ifstream image( "test.jpg", ios::binary);
+	//vector<char> image_buffer((istreambuf_iterator<char>(image)), (istreambuf_iterator<char>()));
+
+	//curl_easy_setopt(_ctx, CURLOPT_POSTFIELDS, image_buffer.b);
+
 	CURLcode res = curl_easy_perform(_ctx);
 
 	if(res!=CURLE_OK) {
@@ -75,7 +81,6 @@ bool msapi_emotion::stop()
 
 void msapi_emotion::subscribe(cossb::message* const msg)
 {
-	cossb_log->log(log::loglevel::INFO, "(emotion)received message");
 
 	switch(msg->get_frame()->type) {
 			case cossb::base::msg_type::REQUEST: break;
