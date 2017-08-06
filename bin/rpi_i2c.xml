@@ -16,7 +16,8 @@
 <property>
 	<interval>100</interval>
 	<address>22</address>
+	<clock_divider>150</clock_divider> <!--{2500 = 10us = 100 kHz, 622 = 2.504us = 399.3610 kHz, 150 = 60ns = 1.666 MHz (default at reset), 148 = 59ns = 1.689 MHz}-->
 </property>
 
-<service name="rpi_i2c_write" method="subscribe" topic="service/msapi/emotion"></service>
 <service name="rpi_i2c_read" method="publish" topic="service/rpi_i2c/read"></service>
+<service name="rpi_i2c_write" method="subscribe" topic="service/msapi/emotion"></service>

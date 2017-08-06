@@ -49,7 +49,7 @@ private:
 	unsigned char _write_byte = 0x00;
 	base::task _read_task;
 	unsigned short _clk_div = BCM2835_I2C_CLOCK_DIVIDER_150;
-	unsigned char  _mode = MODE_READ;
+
 };
 
 COMPONENT_EXPORT

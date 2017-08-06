@@ -25,6 +25,17 @@ bool rpi_i2c::setup()
 	address = (int)(address/10)*16+(int)(address/10);
 	cossb_log->log(log::loglevel::INFO, fmt::format("Set I2C Address : 0x{0:x}", address));
 
+	int clock_div = get_profile()->get(profile::section::property, "clock_divier").asInt(BCM2835_I2C_CLOCK_DIVIDER_150);
+	switch(clock_div){
+	case 2500: _clk_div = BCM2835_I2C_CLOCK_DIVIDER_2500; break;
+	case 626: _clk_div = BCM2835_I2C_CLOCK_DIVIDER_626; break;
+	case 150: _clk_div = BCM2835_I2C_CLOCK_DIVIDER_150; break;
+	case 148: _clk_div = BCM2835_I2C_CLOCK_DIVIDER_148; break;
+	default:
+		_clk_div = BCM2835_I2C_CLOCK_DIVIDER_150;
+		cossb_log->log(log::loglevel::INFO, "Undefined clock divider, set default clock divider(150)");
+	}
+
 	if(!bcm2835_init())
 		return false;
 
@@ -47,12 +58,13 @@ bool rpi_i2c::setup()
 
 bool rpi_i2c::run()
 {
-
 	return true;
 }
 
 bool rpi_i2c::stop()
 {
+	destroy_task(_read_task);
+
 	bcm2835_i2c_end();
 
 	if(!bcm2835_close())
@@ -88,6 +100,9 @@ void rpi_i2c::read()
 {
 	while(1){
 		try{
+
+			if(_read_task->interruption_requested()) break;
+
 			char readbyte = 0x00;
 			unsigned char code = bcm2835_i2c_read(&readbyte, 1);
 
@@ -103,12 +118,14 @@ void rpi_i2c::read()
 				}
 			}
 				break;
-			case BCM2835_I2C_REASON_ERROR_NACK: cossb_log->log(log::loglevel::INFO, "Received a NACK"); break;
-			case BCM2835_I2C_REASON_ERROR_CLKT: cossb_log->log(log::loglevel::WARN, "Received Clock Stretch Timeout"); break;
-			case BCM2835_I2C_REASON_ERROR_DATA: cossb_log->log(log::loglevel::ERROR, "Not all data is sent / received"); break;
+			case BCM2835_I2C_REASON_ERROR_NACK:  break;
+			case BCM2835_I2C_REASON_ERROR_CLKT:  break;
+			case BCM2835_I2C_REASON_ERROR_DATA:  break;
 			}
 		}
 		catch(const boost::bad_any_cast&){ }
+
+		boost::this_thread::sleep(boost::posix_time::milliseconds(100));
 	}
 
 }
