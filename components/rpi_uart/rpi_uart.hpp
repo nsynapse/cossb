@@ -5,6 +5,7 @@
 
 #include <interface/icomponent.hpp>
 #include <base/task.hpp>
+#include "libserial.hpp"
 
 class rpi_uart : public interface::icomponent  {
 public:
@@ -29,14 +30,14 @@ public:
 	/**
 	 * @brief	request interface function
 	 */
-	void request(cossb::base::message* const msg);
+	void subscribe(cossb::message* const msg);
 
 private:
 	void read();
 
 private:
-	//mraa::Uart* _uart = nullptr;
-
+	libserial* _uart = nullptr;
+	string _port;
 	cossb::base::task _read_task;
 };
 

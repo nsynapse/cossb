@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<info>
+	<uuid>00000000000000000000</uuid>
+	<name>raspberry pi UART</name>
+	<description>SPI component</description>
+	<company>Nsynapse Inc.</company>
+	<developer>Byunghun Hwang</developer>
+	<email>bhhwang@nsynapse.com</email>
+	<url>http://www.nsynapse.com</url>
+	<license>MIT</license> 
+	<version>0.0.1</version>
+	<category></category>
+	<tags></tags>
+</info>
+
+<property>
+	<interval>100</interval>
+	<port>/dev/ttyS0</port>
+	<baudrate>115200</baudrate>
+</property>
+
+<service name="rpi_uart_read" method="publish" topic="service/uart/read"></service>
+<service name="read_emotion" method="subscribe" topic="service/msapi/emotion"></service>

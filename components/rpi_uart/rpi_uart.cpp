@@ -8,7 +8,6 @@
 #include "rpi_uart.hpp"
 #include <cossb.hpp>
 #include <string>
-#include <base/message.hpp>
 
 using namespace std;
 
@@ -21,51 +20,36 @@ rpi_uart::rpi_uart()
 }
 
 rpi_uart::~rpi_uart() {
-//	if(_uart)
-//		delete _uart;
+	if(_uart)
+		delete _uart;
 }
 
 bool rpi_uart::setup()
 {
-	string port = get_profile()->get(profile::section::property, "port").asString("/dev/ttyMFD0");
-	int baudrate = get_profile()->get(profile::section::property, "baudrate").asInt(115200);
+	_port = get_profile()->get(profile::section::property, "port").asString("/dev/ttyS0");
+	unsigned int baudrate = get_profile()->get(profile::section::property, "baudrate").asInt(115200);
 
-	cossb_log->log(log::loglevel::INFO, fmt::format("UART Profile Info : {}, {}", port, baudrate));
+	if(!_uart)
+		_uart = new libserial;
 
+	if(!_uart->open(_port.c_str(), baudrate)) {
+		if(_uart) {
+			delete _uart;
+			_uart = nullptr;
+		}
+		cossb_log->log(log::loglevel::ERROR, fmt::format("Cannot open {}({})",_port, baudrate));
+		return false;
+	}
 
-//	try {
-//		_uart = new mraa::Uart(0);
-//	} catch (std::exception& e) {
-//		cossb_log->log(log::loglevel::ERROR, fmt::format("{}, likely invalid platform config", e.what()));
-//	}
-//
-//	try {
-//		_uart = new mraa::Uart(port);
-//
-//		if(_uart->setBaudRate(baudrate) != mraa::SUCCESS)
-//			cossb_log->log(log::loglevel::ERROR, "Error setting parity on UART");
-//
-//		if(_uart->setMode(8, mraa::UART_PARITY_NONE, 1) != mraa::SUCCESS)
-//			cossb_log->log(log::loglevel::ERROR, "Error setting parity on UART");
-//
-//		if (_uart->setFlowcontrol(false, false) != mraa::SUCCESS)
-//			cossb_log->log(log::loglevel::ERROR, "Error setting flow control UART");
-//
-//		if(_uart->setTimeout(10, 10, 10)!=mraa::SUCCESS)
-//			cossb_log->log(log::loglevel::ERROR, "Error setting timeout UART");
-//
-//	} catch (std::exception& e) {
-//		cossb_log->log(log::loglevel::ERROR, fmt::format("{}, Error while setting up raw UART, do you have a uart?", e.what()));
-//		return false;
-//	    }
+	cossb_log->log(log::loglevel::INFO, fmt::format("Open {}({})",_port, baudrate));
 
 	return true;
 }
 
 bool rpi_uart::run()
 {
-//	if(!_read_task)
-//		_read_task = create_task(edison_uart::read);
+	if(!_read_task)
+		_read_task = create_task(rpi_uart::read);
 
 	return true;
 }
@@ -77,55 +61,57 @@ bool rpi_uart::stop()
 	return true;
 }
 
-void rpi_uart::request(cossb::base::message* const msg)
+void rpi_uart::subscribe(cossb::message* const msg)
 {
-//	switch(msg->get_frame()->type) {
-//	case cossb::base::msg_type::REQUEST: {
-//		//write
-//		if(msg->exist("data")){
-//			if((*msg)["data"].is_array()){
-//				std::vector<unsigned char> raw = (*msg)["data"];
-//				_uart->write((const char*)raw.data(), raw.size());
-//				cossb_log->log(log::loglevel::INFO, fmt::format("Write {} byte(s) to the serial : {}", raw.size(), (*msg)["data"].dump()));
-//			}
-//		}
-//	} break;
-//	case cossb::base::msg_type::DATA: break;
-//	case cossb::base::msg_type::RESPONSE: break;
-//	case cossb::base::msg_type::SIGNAL: break;
-//	}
+	if(!_uart->is_opened()){
+		cossb_log->log(log::loglevel::ERROR, fmt::format("{} is not opened", _port));
+		return;
+	}
+
+	switch(msg->get_frame()->type) {
+	case cossb::base::msg_type::REQUEST: break;
+	case cossb::base::msg_type::DATA: {
+		try {
+			vector<unsigned char> data = boost::any_cast<vector<unsigned char>>(*msg->get_data());
+			_uart->write((const char*)data.data(), data.size());
+			cossb_log->log(log::loglevel::INFO, fmt::format("Write {} byte(s) to the serial", data.size()));
+
+		}
+		catch(const boost::bad_any_cast&){
+			cossb_log->log(log::loglevel::ERROR, "Invalid type casting");
+		}
+	}break;
+	case cossb::base::msg_type::RESPONSE: break;
+	case cossb::base::msg_type::EVENT:  break;
+	}
 }
 
 void rpi_uart::read()
 {
-//	while(1) {
-//		try {
-//			if(_uart) {
-//				if(_uart->dataAvailable(10)){	//waiting 10ms for reading
-//					const unsigned int len = 1024;
-//					unsigned char* buffer = new unsigned char[len];
-//
-//					int readsize = _uart->read((char*)buffer, len);
-//					if(readsize>0) {
-//						cossb_log->log(log::loglevel::INFO, fmt::format("Read {} Byte(s) from serial",readsize));
-//						//publish message with received data
-//						cossb::base::message msg(this, base::msg_type::REQUEST);
-//
-//						for(int i=0;i<readsize;i++){
-//							msg["data"].push_back(buffer[i]);
-//						}
-//
-//						cossb_broker->publish("edison_uart_read", msg);
-//					}
-//
-//					delete []buffer;
-//					boost::this_thread::sleep(boost::posix_time::milliseconds(10));
-//				}
-//			}
-//		}
-//		catch(thread_interrupted&) {
-//			break;
-//		}
-//	}
+	while(1) {
+		try {
+			if(_uart) {
+					const unsigned int len = 2048;
+					unsigned char* buffer = new unsigned char[len];
+
+					int readsize = _uart->read(buffer, len);
+					if(readsize>0) {
+						cossb_log->log(log::loglevel::INFO, fmt::format("Read {} Byte(s) from serial",readsize));
+
+						cossb::message _msg(this, base::msg_type::DATA);
+						vector<unsigned char> data(buffer, buffer+readsize);
+						_msg.set(data);
+						cossb_broker->publish("rpi_uart_read", _msg);
+						cossb_log->log(log::loglevel::INFO, "Publish data received from UART");
+					}
+
+					delete []buffer;
+					boost::this_thread::sleep(boost::posix_time::milliseconds(10));
+			}
+		}
+		catch(thread_interrupted&) {
+			break;
+		}
+	}
 }
 

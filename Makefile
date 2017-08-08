@@ -204,6 +204,16 @@ rpi_spi.comp: $(OUTDIR)rpi_spi.o \
 $(OUTDIR)rpi_spi.o: $(COMPONENT_FILES)rpi_spi/rpi_spi.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
+rpi_uart.comp: $(OUTDIR)rpi_uart.o \
+				$(OUTDIR)message_any.o \
+				$(OUTDIR)librpiuart.o
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+$(OUTDIR)rpi_uart.o: $(COMPONENT_FILES)rpi_uart/rpi_uart.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+$(OUTDIR)librpiuart.o: $(COMPONENT_FILES)rpi_uart/libserial.cpp 
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+
+	
 imageviewer.comp: $(OUTDIR)imageviewer.o \
 				$(OUTDIR)message_any.o
 	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
