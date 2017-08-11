@@ -15,10 +15,10 @@
 
 <property>
 	<interval>100</interval>
-	<output>20</output>
-	<output>21</output>
-	<output>22</output>
-	<input>23</input>
+	<output>5</output>
+	<output>6</output>
+	<output>13</output>
+	<input>19</input>
 </property>
 
 <service name="rpi_gpio_read" method="publish" topic="service/rpi_gpio/read"></service>
