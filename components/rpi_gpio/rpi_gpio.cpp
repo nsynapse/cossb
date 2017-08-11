@@ -22,16 +22,17 @@ bool rpi_gpio::setup()
 	if(!bcm2835_init())
 		return false;
 
-	vector<int> outports = get_profile()->gets(profile::section::property, "output");
-	vector<int> inports = get_profile()->gets(profile::section::property, "input");
-
-	for(auto const& port:outports){
-		_portmap[port] = 1;
+	//set output port
+	for(auto outport:get_profile()->gets(profile::section::property, "output")){
+		int port = outport.asInt(-1);
+		_portmap[port] = true;
 		bcm2835_gpio_fsel(port, BCM2835_GPIO_FSEL_OUTP);
 	}
 
-	for(auto const& port:inports){
-		_portmap[port] = 0;
+	//set input port
+	for(auto inport:get_profile()->gets(profile::section::property, "input")){
+		int port = inport.asInt(-1);
+		_portmap[port] = false;
 		bcm2835_gpio_fsel(port, BCM2835_GPIO_FSEL_INPT);
 		bcm2835_gpio_set_pud(port, BCM2835_GPIO_PUD_UP);
 	}
