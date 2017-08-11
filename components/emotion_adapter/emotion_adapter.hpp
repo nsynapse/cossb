@@ -1,7 +1,7 @@
 
 
-#ifndef _COSSB_COMPONENT_MSAPI_SWITCHER_HPP_
-#define _COSSB_COMPONENT_MSAPI_SWITCHER_HPP_
+#ifndef _COSSB_COMPONENT_EMOTION_ADAPTER_HPP_
+#define _COSSB_COMPONENT_EMOTION_ADAPTER_HPP_
 
 #include <interface/icomponent.hpp>
 #include <base/task.hpp>
@@ -10,10 +10,10 @@
 using namespace std;
 
 
-class msapi_switcher : public interface::icomponent  {
+class emotion_adapter : public interface::icomponent  {
 public:
-	msapi_switcher();
-	virtual ~msapi_switcher();
+	emotion_adapter();
+	virtual ~emotion_adapter();
 
 	/**
 	 * @brief	setup interface function
@@ -45,4 +45,4 @@ private:
 
 COMPONENT_EXPORT
 
-#endif /* _COSSB_COMPONENT_MSAPI_SWITCHER_HPP_ */
+#endif /* _COSSB_COMPONENT_EMOTION_ADAPTER_HPP_ */

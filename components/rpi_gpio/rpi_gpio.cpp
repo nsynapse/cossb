@@ -43,6 +43,7 @@ bool rpi_gpio::setup()
 
 bool rpi_gpio::run()
 {
+	//Read GPIO Data
 	map<int, unsigned char> port_read;
 	for(auto const& port:_portmap){
 		if(!port.second){
@@ -51,12 +52,13 @@ bool rpi_gpio::run()
 		}
 	}
 
+	//Publish Data
 	if(!port_read.empty()){
 		cossb::message msg(this, cossb::base::msg_type::DATA);
 		msg.pack(port_read);
 		cossb_broker->publish("rpi_gpio_read", msg);
+		cossb_log->log(log::loglevel::INFO, fmt::format("Published Read GPIO Data"));
 	}
-
 
 	return true;
 }
@@ -89,7 +91,7 @@ void rpi_gpio::subscribe(cossb::message* const msg)
 					if(_portmap.find(key)!=_portmap.end()){
 						if(_portmap[key]){ //output port
 							bcm2835_gpio_write(key, data[key]); //write data
-							cossb_log->log(log::loglevel::INFO, fmt::format("Write GPIO({}) : 0x{0:x}", key, data[key]));
+							cossb_log->log(log::loglevel::INFO, fmt::format("Write GPIO({}) : {}", key, (int)data[key]));
 						}
 					}
 				}

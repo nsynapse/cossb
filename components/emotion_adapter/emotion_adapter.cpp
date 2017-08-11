@@ -1,42 +1,37 @@
-/*
- * msapi_switcher.cpp
- *
- *  Created on: 2016. 2. 26.
- *      Author: hwang
- */
 
-#include "msapi_switcher.hpp"
+
+#include "emotion_adapter.hpp"
 #include <cossb.hpp>
 #include <3rdparty/bcm2835.h>
 
 using namespace std;
 
-USE_COMPONENT_INTERFACE(msapi_switcher)
+USE_COMPONENT_INTERFACE(emotion_adapter)
 
-msapi_switcher::msapi_switcher()
-:cossb::interface::icomponent(COMPONENT(msapi_switcher)){
+emotion_adapter::emotion_adapter()
+:cossb::interface::icomponent(COMPONENT(emotion_adapter)){
 	// TODO Auto-generated constructor stub
 
 }
 
-msapi_switcher::~msapi_switcher() {
+emotion_adapter::~emotion_adapter() {
 
 }
 
-bool msapi_switcher::setup()
+bool emotion_adapter::setup()
 {
 	_gpio = get_profile()->get(profile::section::property, "gpio").asInt(-1);
 
 	return true;
 }
 
-bool msapi_switcher::run()
+bool emotion_adapter::run()
 {
 
 	return true;
 }
 
-bool msapi_switcher::stop()
+bool emotion_adapter::stop()
 {
 	if(!bcm2835_close())
 		return false;
@@ -44,7 +39,7 @@ bool msapi_switcher::stop()
 	return true;
 }
 
-void msapi_switcher::subscribe(cossb::message* const msg)
+void emotion_adapter::subscribe(cossb::message* const msg)
 {
 	switch(msg->get_frame()->type) {
 		case cossb::base::msg_type::REQUEST: break;

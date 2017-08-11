@@ -218,7 +218,6 @@ $(OUTDIR)rpi_uart.o: $(COMPONENT_FILES)rpi_uart/rpi_uart.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 $(OUTDIR)librpiuart.o: $(COMPONENT_FILES)rpi_uart/libserial.cpp 
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
-
 	
 imageviewer.comp: $(OUTDIR)imageviewer.o \
 				$(OUTDIR)message_any.o
@@ -226,13 +225,17 @@ imageviewer.comp: $(OUTDIR)imageviewer.o \
 $(OUTDIR)imageviewer.o: $(COMPONENT_FILES)imageviewer/imageviewer.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
-	
 rpi_i2c.comp: $(OUTDIR)rpi_i2c.o \
 				$(OUTDIR)message_any.o
 	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS) -lbcm2835
 $(OUTDIR)rpi_i2c.o: $(COMPONENT_FILES)rpi_i2c/rpi_i2c.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
+emotion_adapter.comp: $(OUTDIR)emotion_adapter.o \
+				$(OUTDIR)message_any.o
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+$(OUTDIR)emotion_adapter.o: $(COMPONENT_FILES)emotion_adapter/emotion_adapter.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@	
 	
 	
 $(OUTDIR)message_any.o: $(INCLUDE_FILES)base/message_any.cpp 

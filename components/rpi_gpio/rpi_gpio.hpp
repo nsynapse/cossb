@@ -39,7 +39,6 @@ private:
 	void read();
 
 private:
-
 	map<int, bool> _portmap; //{port, set(1=output, 0=input)}
 };
 
