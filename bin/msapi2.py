@@ -27,10 +27,8 @@ def get_emotion(url, key, image_path):
         data = response.read().decode('utf-8')
     
         # 'data' contains the JSON data. The following formats the JSON data for display.
-        parsed = json.loads(data)
-        #print ("Response:")
-        #print (json.dumps(parsed, sort_keys=True, indent=2))
-        ret = json.dumps(parsed, sort_keys=True, indent=2)
+        parsed = json.loads(data)[0]
+        ret = json.dumps(parsed, sort_keys=True)
         conn.close()
     
     except Exception as e:

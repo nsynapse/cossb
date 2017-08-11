@@ -6,6 +6,7 @@
 #include <interface/icomponent.hpp>
 #include <map>
 #include <python2.7/Python.h>
+#include <ext/json.hpp>
 
 using namespace std;
 
@@ -35,11 +36,12 @@ public:
 	void subscribe(cossb::message* const msg);
 
 private:
-	PyObject* _pyFunc = nullptr;
 	string _url;
 	string _key;
 	string _file;
-	unsigned char _emotion = 0x00;
+	nlohmann::json _api_data;
+
+	map<string, double> _emotion;
 
 };
 

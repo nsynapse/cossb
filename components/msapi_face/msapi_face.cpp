@@ -23,16 +23,31 @@ msapi_face::~msapi_face() {
 
 bool msapi_face::setup()
 {
-	Py_Initialize();
-	if(!Py_IsInitialized())
-		return false;
-
 	_url = get_profile()->get(profile::section::property, "url").asString("https://localhost");
 	_key = get_profile()->get(profile::section::property, "key").asString("");
 	_file = get_profile()->get(profile::section::property, "file").asString("capture.jpg");
 
+	//set default emotion
+	_emotion["anger"] = 0.0;
+	_emotion["contempt"] = 0.0;
+	_emotion["disgust"] = 0.0;
+	_emotion["fear"] = 0.0;
+	_emotion["happiness"] = 0.0;
+	_emotion["neutral"] = 0.0;
+	_emotion["sadness"] = 0.0;
+	_emotion["surprise"] = 0.0;
+
 	cossb_log->log(log::loglevel::INFO, fmt::format("MSAPI URL : {}", _url));
 	cossb_log->log(log::loglevel::INFO, fmt::format("MSAPI Key : {}", _key));
+
+	return true;
+}
+
+bool msapi_face::run()
+{
+	Py_Initialize();
+	if(!Py_IsInitialized())
+		return false;
 
 	//add path
 	PyObject* sysPath = PySys_GetObject((char*)"path");
@@ -45,15 +60,36 @@ bool msapi_face::setup()
 
 	if(pyModule){
 		PyObject* pyFunc = PyObject_GetAttrString(pyModule, "get_emotion");
-		 if(pyFunc && PyCallable_Check(pyFunc)){
-			 PyObject* pResult = PyObject_CallFunction(pyFunc, "(sss)", _url.c_str(), _key.c_str(), _file.c_str());
-			 if(pResult){
-				 string result = PyString_AsString(pResult);
-				 //process json string
-			 }
-			 else
-				 PyErr_Print();
-			 Py_XDECREF(pResult);
+		if(pyFunc && PyCallable_Check(pyFunc)){
+			PyObject* pResult = PyObject_CallFunction(pyFunc, "(sss)", _url.c_str(), _key.c_str(), _file.c_str());
+			if(pResult){
+				string result = PyString_AsString(pResult);
+				//cossb_log->log(log::loglevel::INFO, fmt::format("Emotion Data : {}", result));
+
+				//process json string
+				_api_data = nlohmann::json::parse(result.c_str());
+				if(_api_data.find("faceAttributes")!=_api_data.end()){
+					_emotion["anger"] = _api_data["faceAttributes"]["emotion"]["anger"];
+					_emotion["contempt"] = _api_data["faceAttributes"]["emotion"]["contempt"];
+					_emotion["disgust"] = _api_data["faceAttributes"]["emotion"]["disgust"];
+					_emotion["fear"] = _api_data["faceAttributes"]["emotion"]["fear"];
+					_emotion["happiness"] = _api_data["faceAttributes"]["emotion"]["happiness"];
+					_emotion["neutral"] = _api_data["faceAttributes"]["emotion"]["neutral"];
+					_emotion["sadness"] = _api_data["faceAttributes"]["emotion"]["sadness"];
+					_emotion["surprise"] = _api_data["faceAttributes"]["emotion"]["surprise"];
+
+					//message publish
+					cossb::message msg(this, base::msg_type::DATA);
+					msg.pack(_emotion);
+					cossb_broker->publish("face_emotion", msg);
+					cossb_log->log(log::loglevel::INFO, fmt::format("Published {} Emotion Data", _emotion.size()));
+				}
+				else
+					cossb_log->log(log::loglevel::ERROR, "cannot find faceAttributes");
+			}
+			else
+				PyErr_Print();
+			Py_XDECREF(pResult);
 		 }
 		 else
 			 PyErr_Print();
@@ -67,26 +103,7 @@ bool msapi_face::setup()
 	Py_XDECREF(pyName);
 	Py_XDECREF(pyModule);
 
-	return true;
-}
-
-bool msapi_face::run()
-{
-//	PyObject* pArgs = PyTuple_New(3);
-//
-//	PyTuple_SetItem(pArgs, 0, PyString_FromString(_url.c_str()));
-//	PyTuple_SetItem(pArgs, 1, PyString_FromString(_key.c_str()));
-//	PyTuple_SetItem(pArgs, 2, PyString_FromString("test.jpg"));
-//
-//	if(PyCallable_Check(_pyFunc)){
-//		PyObject* pResult = PyObject_CallObject(_pyFunc, pArgs);
-//		if(pResult!=Py_None){
-//			string result = PyString_AsString(pResult);
-//			cossb_log->log(log::loglevel::INFO, result);
-//		}
-//	}
-//
-//	cossb_log->log(log::loglevel::ERROR, "Cannot call the python function");
+	Py_Finalize();
 
 	return true;
 }
