@@ -204,6 +204,12 @@ rpi_spi.comp: $(OUTDIR)rpi_spi.o \
 $(OUTDIR)rpi_spi.o: $(COMPONENT_FILES)rpi_spi/rpi_spi.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
+rpi_gpio.comp: $(OUTDIR)rpi_gpio.o \
+				$(OUTDIR)message_any.o
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS) -lbcm2835
+$(OUTDIR)rpi_gpio.o: $(COMPONENT_FILES)rpi_gpio/rpi_gpio.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
 rpi_uart.comp: $(OUTDIR)rpi_uart.o \
 				$(OUTDIR)message_any.o \
 				$(OUTDIR)librpiuart.o

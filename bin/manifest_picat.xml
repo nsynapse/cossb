@@ -24,7 +24,7 @@
 
 	<!--<required type="component">camcapture</required>-->
 	<!--<required type="component">imageviewer</required>-->
-	<!--<required type="component">msapi_emotion</required>-->
+	<required type="component">msapi_face</required>
 	<required type="component">rpi_uart</required>
 	
 	

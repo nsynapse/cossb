@@ -1,9 +1,3 @@
-/*
- * rpi_gpio.cpp
- *
- *  Created on: 2016. 2. 26.
- *      Author: hwang
- */
 
 #include "rpi_gpio.hpp"
 #include <cossb.hpp>
