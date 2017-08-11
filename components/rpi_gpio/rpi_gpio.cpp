@@ -44,11 +44,10 @@ bool rpi_gpio::setup()
 bool rpi_gpio::run()
 {
 	map<int, unsigned char> port_read;
-	string read="";
 	for(auto const& port:_portmap){
 		if(!port.second){
 			port_read[port.first] = bcm2835_gpio_lev(port.first);
-			read += fmt::format("{}:0x{0:x}\t",port.first, port_read[port.first]);
+			cossb_log->log(log::loglevel::INFO, fmt::format("Read GPIO({}):0x{0:x}",port.first, port_read[port.first]));
 		}
 	}
 
@@ -56,7 +55,6 @@ bool rpi_gpio::run()
 		cossb::message msg(this, cossb::base::msg_type::DATA);
 		msg.pack(port_read);
 		cossb_broker->publish("rpi_gpio_read", msg);
-		cossb_log->log(log::loglevel::INFO, fmt::format("Read GPIO: {}",read));
 	}
 
 
