@@ -194,7 +194,7 @@ $(OUTDIR)msapi_emotion.o: $(COMPONENT_FILES)msapi_emotion/msapi_emotion.cpp
 	
 msapi_face.comp: $(OUTDIR)msapi_face.o \
 					  $(OUTDIR)message_any.o
-	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS) -lpython2.7 -lpthread
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS) -lpython2.7
 $(OUTDIR)msapi_face.o: $(COMPONENT_FILES)msapi_face/msapi_face.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	

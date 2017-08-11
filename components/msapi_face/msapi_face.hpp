@@ -38,6 +38,7 @@ private:
 	PyObject* _pyFunc = nullptr;
 	string _url;
 	string _key;
+	string _file;
 	unsigned char _emotion = 0x00;
 
 };
