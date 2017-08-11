@@ -47,7 +47,7 @@ bool rpi_gpio::run()
 	for(auto const& port:_portmap){
 		if(!port.second){
 			port_read[port.first] = bcm2835_gpio_lev(port.first);
-			cossb_log->log(log::loglevel::INFO, fmt::format("Read GPIO({}):0x{0:x}",port.first, port_read[port.first]));
+			cossb_log->log(log::loglevel::INFO, fmt::format("Read GPIO({}):{}",port.first, (int)port_read[port.first]));
 		}
 	}
 
