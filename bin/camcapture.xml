@@ -12,7 +12,7 @@
 </info>
 
 <property>
-	<interval>10</interval>
+	<interval>500</interval>
 	<camid>0</camid>
 	<resolution_width>640</resolution_width>
 	<resolution_height>480</resolution_height>

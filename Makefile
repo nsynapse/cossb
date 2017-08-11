@@ -186,15 +186,9 @@ camcapture.comp: $(OUTDIR)camcapture.o \
 $(OUTDIR)camcapture.o: $(COMPONENT_FILES)camcapture/camcapture.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
-msapi_emotion.comp: $(OUTDIR)msapi_emotion.o \
-					  $(OUTDIR)message_any.o
-	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS) -lcurl
-$(OUTDIR)msapi_emotion.o: $(COMPONENT_FILES)msapi_emotion/msapi_emotion.cpp
-	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
-	
 msapi_face.comp: $(OUTDIR)msapi_face.o \
 					  $(OUTDIR)message_any.o
-	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS) -lpython2.7
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS) -lpython2.7 -lopencv_core -lopencv_imgcodecs
 $(OUTDIR)msapi_face.o: $(COMPONENT_FILES)msapi_face/msapi_face.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	

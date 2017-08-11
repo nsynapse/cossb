@@ -22,10 +22,10 @@
 	<!-- required component cannot be stopped by user -->
 	<!-- required library for advanced user or our support -->
 
-	<!--<required type="component">camcapture</required>-->
-	<!--<required type="component">imageviewer</required>-->
+	<required type="component">camcapture</required>
+	<required type="component">emotion_adapter</required>
 	<required type="component">msapi_face</required>
-	<required type="component">rpi_uart</required>
+	<required type="component">rpi_gpio</required>
 	
 	
 	<!-- do not edit this path -->

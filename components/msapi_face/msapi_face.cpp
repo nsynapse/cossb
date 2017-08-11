@@ -7,6 +7,8 @@
 
 #include "msapi_face.hpp"
 #include <cossb.hpp>
+#include <opencv2/core.hpp>
+#include <opencv2/imgcodecs.hpp>
 
 using namespace std;
 
@@ -45,6 +47,36 @@ bool msapi_face::setup()
 
 bool msapi_face::run()
 {
+	return true;
+}
+
+bool msapi_face::stop()
+{
+	Py_Finalize();
+	return true;
+}
+
+void msapi_face::subscribe(cossb::message* const msg)
+{
+	switch(msg->get_frame()->type) {
+			case cossb::base::msg_type::REQUEST: break;
+			case cossb::base::msg_type::DATA: {
+				try {
+					cv::Mat image = boost::any_cast<cv::Mat>(*msg->get_data());
+					cv::imwrite(_file.c_str(), image);
+					get_emotion(_file.c_str());
+					}
+					catch(const boost::bad_any_cast&){
+						cossb_log->log(log::loglevel::ERROR, "Invalid type casting.");
+					}
+			} break;
+			case cossb::base::msg_type::RESPONSE: break;
+			case cossb::base::msg_type::EVENT:  break;
+			}
+}
+
+bool msapi_face::get_emotion(const char* image_file)
+{
 	Py_Initialize();
 	if(!Py_IsInitialized())
 		return false;
@@ -61,7 +93,7 @@ bool msapi_face::run()
 	if(pyModule){
 		PyObject* pyFunc = PyObject_GetAttrString(pyModule, "get_emotion");
 		if(pyFunc && PyCallable_Check(pyFunc)){
-			PyObject* pResult = PyObject_CallFunction(pyFunc, "(sss)", _url.c_str(), _key.c_str(), _file.c_str());
+			PyObject* pResult = PyObject_CallFunction(pyFunc, "(sss)", _url.c_str(), _key.c_str(), image_file);
 			if(pResult){
 				string result = PyString_AsString(pResult);
 				//cossb_log->log(log::loglevel::INFO, fmt::format("Emotion Data : {}", result));
@@ -104,41 +136,7 @@ bool msapi_face::run()
 	Py_XDECREF(pyModule);
 
 	Py_Finalize();
-
 	return true;
-}
-
-bool msapi_face::stop()
-{
-	Py_Finalize();
-	return true;
-}
-
-void msapi_face::subscribe(cossb::message* const msg)
-{
-
-	switch(msg->get_frame()->type) {
-			case cossb::base::msg_type::REQUEST: break;
-			case cossb::base::msg_type::DATA: {
-				try {
-					//cv::Mat image = boost::any_cast<cv::Mat>(*msg->get_data());
-					//process
-
-					//after process
-//					cossb::message _msg(this, base::msg_type::DATA);
-//					_msg.set((unsigned char)0x01);
-//					cossb_broker->publish("face_emotion", _msg);
-
-					cossb_log->log(log::loglevel::INFO, "send message to spi");
-
-					}
-					catch(const boost::bad_any_cast&){
-						cossb_log->log(log::loglevel::ERROR, "Invalid type casting..");
-					}
-			} break;
-			case cossb::base::msg_type::RESPONSE: break;
-			case cossb::base::msg_type::EVENT:  break;
-			}
 }
 
 

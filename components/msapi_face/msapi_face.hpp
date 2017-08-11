@@ -36,6 +36,9 @@ public:
 	void subscribe(cossb::message* const msg);
 
 private:
+	bool get_emotion(const char* image_path);
+
+private:
 	string _url;
 	string _key;
 	string _file;
