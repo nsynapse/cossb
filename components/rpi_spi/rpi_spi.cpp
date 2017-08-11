@@ -82,7 +82,7 @@ bool rpi_spi::stop()
 	return true;
 }
 
-void rpi_spi::request(cossb::message* const msg)
+void rpi_spi::subscribe(cossb::message* const msg)
 {
 	switch(msg->get_frame()->type) {
 		case cossb::base::msg_type::REQUEST: break;

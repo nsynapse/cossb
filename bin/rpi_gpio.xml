@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<info>
+	<uuid>00000000000000000000</uuid>
+	<name>raspberry pi GPIO</name>
+	<description>GPIO component</description>
+	<company>Nsynapse Inc.</company>
+	<developer>Byunghun Hwang</developer>
+	<email>bhhwang@nsynapse.com</email>
+	<url>http://www.nsynapse.com</url>
+	<license>MIT</license> 
+	<version>0.0.1</version>
+	<category></category>
+	<tags></tags>
+</info>
+
+<property>
+	<interval>100</interval>
+	<output>20</output>
+	<output>21</output>
+	<output>22</output>
+	<input>23</input>
+</property>
+
+<service name="rpi_gpio_read" method="publish" topic="service/rpi_gpio/read"></service>
+<service name="rpi_gpio_write" method="subscribe" topic="service/rpi_gpio/write"></service>

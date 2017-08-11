@@ -1,16 +1,19 @@
 
 
-#ifndef _COSSB_COMPONENT_RPI_SPI_HPP_
-#define _COSSB_COMPONENT_RPI_SPI_HPP_
+#ifndef _COSSB_COMPONENT_RPI_GPIO_HPP_
+#define _COSSB_COMPONENT_RPI_GPIO_HPP_
 
 #include <interface/icomponent.hpp>
 #include <base/task.hpp>
+#include <map>
+
+using namespace std;
 
 
-class rpi_spi : public interface::icomponent  {
+class rpi_gpio : public interface::icomponent  {
 public:
-	rpi_spi();
-	virtual ~rpi_spi();
+	rpi_gpio();
+	virtual ~rpi_gpio();
 
 	/**
 	 * @brief	setup interface function
@@ -36,10 +39,10 @@ private:
 	void read();
 
 private:
-	unsigned char _write_byte = 0x00;
-	cossb::base::task _read_task;
+
+	map<int, bool> _portmap; //{port, set(1=output, 0=input)}
 };
 
 COMPONENT_EXPORT
 
-#endif /* _COSSB_COMPONENT_RPI_SPI_HPP_ */
+#endif /* _COSSB_COMPONENT_RPI_GPIO_HPP_ */

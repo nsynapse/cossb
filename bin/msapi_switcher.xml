@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<info>
+	<uuid>00000000000000000000</uuid>
+	<name>msapi switcher</name>
+	<description>MS Face switcher component</description>
+	<company>Nsynapse Inc.</company>
+	<developer>Byunghun Hwang</developer>
+	<email>bhhwang@nsynapse.com</email>
+	<url>http://www.nsynapse.com</url>
+	<license>MIT</license> 
+	<version>0.0.1</version>
+	<category></category>
+	<tags></tags>
+</info>
+
+<property>
+	<gpio>22</gpio>
+</property>
+
+<service name="msapi_sw_read" method="subscribe" topic="service/rpi_gpio/read"></service>
+<service name="msapi_sw_on" method="publish" topic="service/msapi/sswitch"></service>
