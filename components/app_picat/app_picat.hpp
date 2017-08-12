@@ -36,10 +36,10 @@ public:
 	void subscribe(cossb::message* const msg);
 
 private:
-	void encode(map<string, double> emotion);
+	unsigned short encode(map<string, double> emotion);
 
 private:
-	int _emotion_trigger = -1;
+	int _gpio_trigger = -1;
 	unsigned char _prev_read = 0x00;
 	map<string, double> _emotion;
 

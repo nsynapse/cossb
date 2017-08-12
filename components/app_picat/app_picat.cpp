@@ -15,7 +15,7 @@ app_picat::~app_picat() {
 
 bool app_picat::setup()
 {
-	_emotion_trigger = get_profile()->get(profile::section::property, "gpio").asInt(-1);
+	_gpio_trigger = get_profile()->get(profile::section::property, "gpio").asInt(-1);
 
 	return true;
 }
@@ -40,10 +40,10 @@ void app_picat::subscribe(cossb::message* const msg)
 		try {
 			map<int, unsigned char> gpio_data = boost::any_cast<map<int, unsigned char>>(*msg); //{key, value} pair
 
-			if(gpio_data.find(_emotion_trigger)!=gpio_data.end()){
-				unsigned char read = gpio_data[_emotion_trigger];
+			if(gpio_data.find(_gpio_trigger)!=gpio_data.end()){
+				unsigned char read = gpio_data[_gpio_trigger];
 				if(_prev_read==0x00 && read!=0x00){
-					int code = encode(_emotion);
+					unsigned short code = encode(_emotion);
 
 					cossb::message msg(this, cossb::base::msg_type::DATA);
 					msg.pack(code);
@@ -61,31 +61,31 @@ void app_picat::subscribe(cossb::message* const msg)
 	}
 }
 
-void app_picat::encode(map<string, double> emotion)
+unsigned short app_picat::encode(map<string, double> emotion)
 {
-	//max probability
-//	double max = 0.0;
-//	string max_string = "";
-//	for(auto const& element:emotion){
-//		if(element.second>max){
-//			max = element.second;
-//			max_string = element.first;
-//		}
-//	}
-//
-//	map<int, unsigned char> gpio_write;
-//	gpio_write[5] = 0x00;
-//	gpio_write[6] = 0x00;
-//	gpio_write[13] = 0x00;
-//
+	//choose max probability
+	double max_value = 0.0;
+	string max_emotion = "";
+	for(auto const& element:emotion){
+		if(element.second>max_value){
+			max_value = element.second;
+			max_emotion = element.first;
+		}
+	}
+
+	unsigned char code = 0x00;
+
 //	//emotion code
-//	if(!max_string.compare("anger")) { gpio_write[5] = 0x01; };
-//	else if(!max_string.compare("contempt")) gpio_write[6] = 0x01;
-//	else if(!max_string.compare("disgust")) return 3;
-//	else if(!max_string.compare("fear")) return 4;
-//	else if(!max_string.compare("happiness")) return 5;
-//	else if(!max_string.compare("sadness")) return 6;
-//	else if(!max_string.compare("surprise")) return 7;
+//	if(!max_emotion.compare("anger")) 	{ gpio_write[5] = 0x00; gpio_write[6] = 0x00; gpio_write[13] = 0x01; }
+//	else if(!max_emotion.compare("contempt")){ gpio_write[5] = 0x00; gpio_write[6] = 0x01; gpio_write[13] = 0x00; }
+//	else if(!max_emotion.compare("disgust")) { gpio_write[5] = 0x00; gpio_write[6] = 0x01; gpio_write[13] = 0x01; }
+//	else if(!max_emotion.compare("fear")) 	{ gpio_write[5] = 0x01; gpio_write[6] = 0x00; gpio_write[13] = 0x00; }
+//	else if(!max_emotion.compare("happiness")){gpio_write[5] = 0x01; gpio_write[6] = 0x00; gpio_write[13] = 0x01; }
+//	else if(!max_emotion.compare("sadness")) { gpio_write[5] = 0x01; gpio_write[6] = 0x01; gpio_write[13] = 0x00; }
+//	else if(!max_emotion.compare("surprise")){ gpio_write[5] = 0x01; gpio_write[6] = 0x01; gpio_write[13] = 0x01; }
+//	else { gpio_write[5] = 0x00; gpio_write[6] = 0x00; gpio_write[13] = 0x00; } //neutral and else
+//
+//	return gpio_write;
 }
 
 
