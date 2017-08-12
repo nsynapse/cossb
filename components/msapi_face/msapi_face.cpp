@@ -114,17 +114,22 @@ bool msapi_face::get_emotion(const char* image_file)
 					cossb::message msg(this, base::msg_type::DATA);
 					msg.pack(_emotion);
 					cossb_broker->publish("face_emotion", msg);
-					cossb_log->log(log::loglevel::INFO, fmt::format("Published {} Emotion Data", _emotion.size()));
+					cossb_log->log(log::loglevel::INFO, fmt::format("Published Emotion Data : {}, {}, {}, {}, {}, {}, {}, {}",
+							_emotion["anger"], _emotion["contempt"], _emotion["disgust"], _emotion["fear"], _emotion["happiness"], _emotion["neutral"], _emotion["sadness"], _emotion["surprise"]));
 				}
 				else
 					cossb_log->log(log::loglevel::ERROR, "cannot find faceAttributes");
 			}
-			else
+			else{
+				cossb_log->log(log::loglevel::ERROR, "No result");
 				PyErr_Print();
+			}
 			Py_XDECREF(pResult);
 		 }
-		 else
+		 else{
+			 cossb_log->log(log::loglevel::ERROR, "No function");
 			 PyErr_Print();
+		 }
 		 Py_XDECREF(pyFunc);
 	}
 	else
