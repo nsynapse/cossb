@@ -18,5 +18,5 @@
 </property>
 
 <service name="picat_gpio_read" method="subscribe" topic="service/rpi_gpio/read"></service>
-<service name="picat_emotion_read" method="subscribe" topic="service/emotion/get"></service>
+<service name="picat_emotion_read" method="subscribe" topic="service/msapi/emotion"></service>
 <service name="picat_gpio_write" method="publish" topic="service/rpi_gpio/write"></service>

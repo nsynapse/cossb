@@ -36,7 +36,7 @@ public:
 	void subscribe(cossb::message* const msg);
 
 private:
-	unsigned short encode(map<string, double> emotion);
+	unsigned char encode(map<string, double> emotion);
 
 private:
 	int _gpio_trigger = -1;

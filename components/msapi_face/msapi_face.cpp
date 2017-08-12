@@ -27,7 +27,7 @@ bool msapi_face::setup()
 {
 	_url = get_profile()->get(profile::section::property, "url").asString("https://localhost");
 	_key = get_profile()->get(profile::section::property, "key").asString("");
-	_file = get_profile()->get(profile::section::property, "file").asString("capture.jpg");
+	_file = get_profile()->get(profile::section::property, "filesave").asString("capture.jpg");
 
 	//set default emotion
 	_emotion["anger"] = 0.0;
@@ -96,29 +96,32 @@ bool msapi_face::get_emotion(const char* image_file)
 			PyObject* pResult = PyObject_CallFunction(pyFunc, "(sss)", _url.c_str(), _key.c_str(), image_file);
 			if(pResult){
 				string result = PyString_AsString(pResult);
-				//cossb_log->log(log::loglevel::INFO, fmt::format("Emotion Data : {}", result));
 
-				//process json string
-				_api_data = nlohmann::json::parse(result.c_str());
-				if(_api_data.find("faceAttributes")!=_api_data.end()){
-					_emotion["anger"] = _api_data["faceAttributes"]["emotion"]["anger"];
-					_emotion["contempt"] = _api_data["faceAttributes"]["emotion"]["contempt"];
-					_emotion["disgust"] = _api_data["faceAttributes"]["emotion"]["disgust"];
-					_emotion["fear"] = _api_data["faceAttributes"]["emotion"]["fear"];
-					_emotion["happiness"] = _api_data["faceAttributes"]["emotion"]["happiness"];
-					_emotion["neutral"] = _api_data["faceAttributes"]["emotion"]["neutral"];
-					_emotion["sadness"] = _api_data["faceAttributes"]["emotion"]["sadness"];
-					_emotion["surprise"] = _api_data["faceAttributes"]["emotion"]["surprise"];
+				if(!result.empty()){
+					//process json string
+					_api_data = nlohmann::json::parse(result.c_str());
+					if(_api_data.find("faceAttributes")!=_api_data.end()){
+						_emotion["anger"] = _api_data["faceAttributes"]["emotion"]["anger"];
+						_emotion["contempt"] = _api_data["faceAttributes"]["emotion"]["contempt"];
+						_emotion["disgust"] = _api_data["faceAttributes"]["emotion"]["disgust"];
+						_emotion["fear"] = _api_data["faceAttributes"]["emotion"]["fear"];
+						_emotion["happiness"] = _api_data["faceAttributes"]["emotion"]["happiness"];
+						_emotion["neutral"] = _api_data["faceAttributes"]["emotion"]["neutral"];
+						_emotion["sadness"] = _api_data["faceAttributes"]["emotion"]["sadness"];
+						_emotion["surprise"] = _api_data["faceAttributes"]["emotion"]["surprise"];
 
-					//message publish
-					cossb::message msg(this, base::msg_type::DATA);
-					msg.pack(_emotion);
-					cossb_broker->publish("face_emotion", msg);
-					cossb_log->log(log::loglevel::INFO, fmt::format("Published Emotion Data : {}, {}, {}, {}, {}, {}, {}, {}",
-							_emotion["anger"], _emotion["contempt"], _emotion["disgust"], _emotion["fear"], _emotion["happiness"], _emotion["neutral"], _emotion["sadness"], _emotion["surprise"]));
+						//message publish
+						cossb::message msg(this, base::msg_type::DATA);
+						msg.pack(_emotion);
+						cossb_broker->publish("face_emotion", msg);
+						cossb_log->log(log::loglevel::INFO, fmt::format("Published Emotion Data : {}, {}, {}, {}, {}, {}, {}, {}",
+								_emotion["anger"], _emotion["contempt"], _emotion["disgust"], _emotion["fear"], _emotion["happiness"], _emotion["neutral"], _emotion["sadness"], _emotion["surprise"]));
+					}
+					else
+						cossb_log->log(log::loglevel::ERROR, "cannot find faceAttributes");
 				}
 				else
-					cossb_log->log(log::loglevel::ERROR, "cannot find faceAttributes");
+					cossb_log->log(log::loglevel::ERROR, "No result");
 			}
 			else{
 				cossb_log->log(log::loglevel::ERROR, "No result");

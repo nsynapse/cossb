@@ -33,6 +33,6 @@ def get_emotion(url, key, image_path):
     
     except Exception as e:
         print url, key, image_path
-        ret = "Error"
+        ret = "" #error is empty
         
     return ret

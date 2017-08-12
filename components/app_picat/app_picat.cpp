@@ -1,6 +1,9 @@
 
 #include "app_picat.hpp"
 #include <cossb.hpp>
+#include <string>
+
+using namespace std;
 
 USE_COMPONENT_INTERFACE(app_picat)
 
@@ -36,32 +39,51 @@ void app_picat::subscribe(cossb::message* const msg)
 	case cossb::base::msg_type::REQUEST: break;
 	case cossb::base::msg_type::DATA: {
 
-		//* gpio read subscribe
-		try {
-			map<int, unsigned char> gpio_data = boost::any_cast<map<int, unsigned char>>(*msg); //{key, value} pair
+		//topic service/rpi_gpio/read
+		if(!msg->get_frame()->topic.compare("service/rpi_gpio/read")) {
+			//* gpio read subscribe
+			try {
+				map<int, unsigned char> gpio_data = boost::any_cast<map<int, unsigned char>>(*msg); //{key, value} pair
 
-			if(gpio_data.find(_gpio_trigger)!=gpio_data.end()){
-				unsigned char read = gpio_data[_gpio_trigger];
-				if(_prev_read==0x00 && read!=0x00){
-					unsigned short code = encode(_emotion);
+				if(gpio_data.find(_gpio_trigger)!=gpio_data.end()){
+					unsigned char read = gpio_data[_gpio_trigger];
+					if(_prev_read==0x00 && read!=0x00){
 
-					cossb::message msg(this, cossb::base::msg_type::DATA);
-					msg.pack(code);
-					cossb_broker->publish("picat_gpio_write", msg);
+						//get emotion code
+						unsigned char code = encode(_emotion);
+
+						//message publish emotion data
+						cossb::message msg(this, cossb::base::msg_type::DATA);
+						msg.pack(code);
+						cossb_broker->publish("picat_gpio_write", msg);
+						cossb_log->log(log::loglevel::INFO, fmt::format("Published Emotion code : {}", (int)code));
+					}
+					_prev_read = read;
 				}
-				_prev_read = read;
+			}
+			catch(const boost::bad_any_cast&){
+				//cossb_log->log(log::loglevel::ERROR, "Invalid type casting, should be map<int, unsigned char> type.");
 			}
 		}
-		catch(const boost::bad_any_cast&){
-			cossb_log->log(log::loglevel::ERROR, "Invalid type casting, should be map<int, unsigned char> type.");
+
+		//topic
+		else if(!msg->get_frame()->topic.compare("service/msapi/emotion")){
+			try {
+				map<string, double> emo = boost::any_cast<map<string, double>>(*msg); //{key, value} pair
+				_emotion = emo;
+			}
+			catch(const boost::bad_any_cast&){
+			}
 		}
+
+
 	} break;
 	case cossb::base::msg_type::RESPONSE: break;
 	case cossb::base::msg_type::EVENT:  break;
 	}
 }
 
-unsigned short app_picat::encode(map<string, double> emotion)
+unsigned char app_picat::encode(map<string, double> emotion)
 {
 	//choose max probability
 	double max_value = 0.0;
@@ -76,16 +98,16 @@ unsigned short app_picat::encode(map<string, double> emotion)
 	unsigned char code = 0x00;
 
 //	//emotion code
-//	if(!max_emotion.compare("anger")) 	{ gpio_write[5] = 0x00; gpio_write[6] = 0x00; gpio_write[13] = 0x01; }
-//	else if(!max_emotion.compare("contempt")){ gpio_write[5] = 0x00; gpio_write[6] = 0x01; gpio_write[13] = 0x00; }
-//	else if(!max_emotion.compare("disgust")) { gpio_write[5] = 0x00; gpio_write[6] = 0x01; gpio_write[13] = 0x01; }
-//	else if(!max_emotion.compare("fear")) 	{ gpio_write[5] = 0x01; gpio_write[6] = 0x00; gpio_write[13] = 0x00; }
-//	else if(!max_emotion.compare("happiness")){gpio_write[5] = 0x01; gpio_write[6] = 0x00; gpio_write[13] = 0x01; }
-//	else if(!max_emotion.compare("sadness")) { gpio_write[5] = 0x01; gpio_write[6] = 0x01; gpio_write[13] = 0x00; }
-//	else if(!max_emotion.compare("surprise")){ gpio_write[5] = 0x01; gpio_write[6] = 0x01; gpio_write[13] = 0x01; }
-//	else { gpio_write[5] = 0x00; gpio_write[6] = 0x00; gpio_write[13] = 0x00; } //neutral and else
-//
-//	return gpio_write;
+	if(!max_emotion.compare("anger")) 			code = 0x01;
+	else if(!max_emotion.compare("contempt")) code = 0x02;
+	else if(!max_emotion.compare("disgust")) code = 0x03;
+	else if(!max_emotion.compare("fear")) code = 0x04;
+	else if(!max_emotion.compare("happiness")) code = 0x05;
+	else if(!max_emotion.compare("sadness")) code = 0x06;
+	else if(!max_emotion.compare("surprise")) code = 0x07;
+	else code = 0x00;
+
+	return code;
 }
 
 

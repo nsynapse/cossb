@@ -231,6 +231,12 @@ emotion_adapter.comp: $(OUTDIR)emotion_adapter.o \
 $(OUTDIR)emotion_adapter.o: $(COMPONENT_FILES)emotion_adapter/emotion_adapter.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@	
 	
+app_picat.comp: $(OUTDIR)app_picat.o \
+				$(OUTDIR)message_any.o
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+$(OUTDIR)app_picat.o: $(COMPONENT_FILES)app_picat/app_picat.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
 	
 $(OUTDIR)message_any.o: $(INCLUDE_FILES)base/message_any.cpp 
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@

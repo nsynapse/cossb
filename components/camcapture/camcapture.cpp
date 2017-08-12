@@ -44,13 +44,12 @@ bool camcapture::run()
 		(*_camera) >> _colorImage;
 
 		if(!_colorImage.empty()){
-			cossb_log->log(log::loglevel::INFO, "Successfully captured");
+			cossb::message _msg(this, base::msg_type::DATA);
+			_msg.set(_colorImage.clone());
+			cossb_broker->publish("camera_capture", _msg);
+
+			cossb_log->log(log::loglevel::INFO, "Published captured image");
 		}
-
-		cossb::message _msg(this, base::msg_type::DATA);
-		_msg.set(_colorImage.clone());
-		cossb_broker->publish("camera_capture", _msg);
-
 		return true;
 	}
 	return false;
@@ -66,6 +65,6 @@ bool camcapture::stop()
 
 void camcapture::subscribe(cossb::message* const msg)
 {
-	cossb_log->log(log::loglevel::INFO, "camcapture, Received Message");
+
 }
 
