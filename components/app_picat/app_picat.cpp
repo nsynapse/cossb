@@ -18,7 +18,7 @@ app_picat::~app_picat() {
 
 bool app_picat::setup()
 {
-	_gpio_trigger_port = get_profile()->get(profile::section::property, "gpio").asInt(-1);
+	_gpio_trigger_port = get_profile()->get(profile::section::property, "gpio_trigger").asInt(-1);
 
 	_emotion_gpio[5] = 0x00;
 	_emotion_gpio[6] = 0x00;

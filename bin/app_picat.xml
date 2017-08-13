@@ -14,7 +14,7 @@
 </info>
 
 <property>
-	<emotion_trigger>19</emotion_trigger>
+	<gpio_trigger>19</gpio_trigger>
 </property>
 
 <service name="picat_gpio_read" method="subscribe" topic="service/rpi_gpio/read"></service>
