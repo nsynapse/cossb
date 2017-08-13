@@ -53,48 +53,6 @@ void app_picat::subscribe(cossb::message* const msg)
 	case cossb::base::msg_type::REQUEST: break;
 	case cossb::base::msg_type::DATA: {
 
-		//topic service/rpi_gpio/read
-		/*if(!msg->get_frame()->topic.compare("service/rpi_gpio/read")) {
-			//* gpio read subscribe
-			try {
-				map<int, unsigned char> gpio_data = boost::any_cast<map<int, unsigned char>>(*msg->get_data()); //{key, value} pair
-
-				//if find gpio input signal
-				if(gpio_data.find(_gpio_trigger_port)!=gpio_data.end()){
-					unsigned char read = gpio_data[_gpio_trigger_port];
-
-					//rising edge
-					if(_prev_read==0x00 && read !=0x00){
-
-						//message publish emotion data
-						cossb::message msg(this, cossb::base::msg_type::DATA);
-						msg.pack(_emotion_gpio);
-						cossb_broker->publish("picat_gpio_write", msg);
-						cossb_log->log(log::loglevel::INFO, fmt::format("Published gpio write data {}, {}, {}", (int)_emotion_gpio[5], (int)_emotion_gpio[6], (int)_emotion_gpio[13]));
-					}
-					//falling edge
-					//else if(_prev_read!=0x00 && read==0x00){
-//					else if(read!=0x00){
-//						_emotion_gpio[5] = 0x00;
-//						_emotion_gpio[6] = 0x01;
-//						_emotion_gpio[13] = 0x00;
-//
-//						cossb::message msg(this, cossb::base::msg_type::DATA);
-//						msg.pack(_emotion_gpio);
-//						cossb_broker->publish("picat_gpio_write", msg);
-//						cossb_log->log(log::loglevel::INFO, fmt::format("Published gpio write {}, {}, {}", (int)_emotion_gpio[5], (int)_emotion_gpio[6], (int)_emotion_gpio[13]));
-//					}
-
-					//_prev_read = read;
-				}
-			}
-			catch(const boost::bad_any_cast&){
-				cossb_log->log(log::loglevel::ERROR, "Invalid type casting, should be map<int, unsigned char> type.");
-			}
-		}
-
-		//subscribe emotion data
-		else */
 		if(!msg->get_frame()->topic.compare("service/msapi/emotion")){
 			try {
 				map<string, double> emo = boost::any_cast<map<string, double>>(*msg->get_data()); //{key, value} pair
