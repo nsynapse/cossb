@@ -81,6 +81,8 @@ void rpi_gpio::subscribe(cossb::message* const msg)
 			try {
 				map<int, unsigned char> data = boost::any_cast<map<int, unsigned char>>(*msg->get_data()); //{key, value} pair
 
+				cossb_log->log(log::loglevel::INFO, fmt::format("GPIO write message size : {}", data.size()));
+
 				//1. extract keys
 				vector<int> keys;
 				for(auto const& port: data)
@@ -88,6 +90,7 @@ void rpi_gpio::subscribe(cossb::message* const msg)
 
 				//2. compare port set, then write data if it is outport
 				for(auto const& key:keys){
+					cossb_log->log(log::loglevel::INFO, fmt::format("GPIO write key : {}", key));
 					if(_portmap.find(key)!=_portmap.end()){
 						if(_portmap[key]){ //output port
 							bcm2835_gpio_write(key, data[key]); //write data

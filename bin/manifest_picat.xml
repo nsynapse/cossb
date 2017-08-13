@@ -24,7 +24,7 @@
 
 	<required type="component">camcapture</required>
 	<required type="component">app_picat</required>
-	<required type="component">msapi_face</required>
+	<!--<required type="component">msapi_face</required>-->
 	<required type="component">rpi_gpio</required>
 	
 	
