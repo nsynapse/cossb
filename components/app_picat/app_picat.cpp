@@ -48,11 +48,12 @@ bool app_picat::stop()
 
 void app_picat::subscribe(cossb::message* const msg)
 {
-	cossb_log->log(log::loglevel::INFO, fmt::format("Unrecognized Topic : {}", msg->get_topic()));
 
 	switch(msg->get_frame()->type) {
 	case cossb::base::msg_type::REQUEST: break;
 	case cossb::base::msg_type::DATA: {
+
+		cossb_log->log(log::loglevel::INFO, fmt::format("Subscribe Topic : {}", msg->get_topic()));
 
 		//topic service/rpi_gpio/read
 		if(!msg->get_frame()->topic.compare("service/rpi_gpio/read")) {
