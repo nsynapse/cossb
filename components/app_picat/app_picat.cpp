@@ -88,7 +88,7 @@ void app_picat::subscribe(cossb::message* const msg)
 				}
 			}
 			catch(const boost::bad_any_cast&){
-				//cossb_log->log(log::loglevel::ERROR, "Invalid type casting, should be map<int, unsigned char> type.");
+				cossb_log->log(log::loglevel::ERROR, "Invalid type casting, should be map<int, unsigned char> type.");
 			}
 		}
 
