@@ -18,7 +18,20 @@ app_picat::~app_picat() {
 
 bool app_picat::setup()
 {
-	_gpio_trigger = get_profile()->get(profile::section::property, "gpio").asInt(-1);
+	_gpio_trigger_port = get_profile()->get(profile::section::property, "gpio").asInt(-1);
+
+	_emotion_gpio[5] = 0x00;
+	_emotion_gpio[6] = 0x00;
+	_emotion_gpio[13] = 0x00;
+
+	_emotion["anger"] = 0.0;
+	_emotion["contempt"] = 0.0;
+	_emotion["disgust"] = 0.0;
+	_emotion["fear"] = 0.0;
+	_emotion["happiness"] = 0.0;
+	_emotion["neutral"] = 0.0;
+	_emotion["sadness"] = 0.0;
+	_emotion["surprise"] = 0.0;
 
 	return true;
 }
@@ -45,19 +58,31 @@ void app_picat::subscribe(cossb::message* const msg)
 			try {
 				map<int, unsigned char> gpio_data = boost::any_cast<map<int, unsigned char>>(*msg); //{key, value} pair
 
-				if(gpio_data.find(_gpio_trigger)!=gpio_data.end()){
-					unsigned char read = gpio_data[_gpio_trigger];
-					if(_prev_read==0x00 && read!=0x00){
+				//if find gpio input signal
+				if(gpio_data.find(_gpio_trigger_port)!=gpio_data.end()){
+					unsigned char read = gpio_data[_gpio_trigger_port];
 
-						//get emotion code
-						unsigned char code = encode(_emotion);
+					//rising edge
+					if(_prev_read==0x00 && read !=0x00){
 
 						//message publish emotion data
 						cossb::message msg(this, cossb::base::msg_type::DATA);
-						msg.pack(code);
+						msg.pack(_emotion_gpio);
 						cossb_broker->publish("picat_gpio_write", msg);
-						cossb_log->log(log::loglevel::INFO, fmt::format("Published Emotion code : {}", (int)code));
+						cossb_log->log(log::loglevel::INFO, fmt::format("Published gpio write data {}, {}, {}", (int)_emotion_gpio[5], (int)_emotion_gpio[6], (int)_emotion_gpio[13]));
 					}
+					//falling edge
+					else if(_prev_read!=0x00 && read==0x00){
+						_emotion_gpio[5] = 0x00;
+						_emotion_gpio[6] = 0x00;
+						_emotion_gpio[13] = 0x00;
+
+						cossb::message msg(this, cossb::base::msg_type::DATA);
+						msg.pack(_emotion_gpio);
+						cossb_broker->publish("picat_gpio_write", msg);
+						cossb_log->log(log::loglevel::INFO, fmt::format("Published gpio write {}, {}, {}", (int)_emotion_gpio[5], (int)_emotion_gpio[6], (int)_emotion_gpio[13]));
+					}
+
 					_prev_read = read;
 				}
 			}
@@ -66,11 +91,11 @@ void app_picat::subscribe(cossb::message* const msg)
 			}
 		}
 
-		//topic
+		//subscribe emotion data
 		else if(!msg->get_frame()->topic.compare("service/msapi/emotion")){
 			try {
 				map<string, double> emo = boost::any_cast<map<string, double>>(*msg); //{key, value} pair
-				_emotion = emo;
+				encode(emo);
 			}
 			catch(const boost::bad_any_cast&){
 			}
@@ -83,8 +108,11 @@ void app_picat::subscribe(cossb::message* const msg)
 	}
 }
 
-unsigned char app_picat::encode(map<string, double> emotion)
+void app_picat::encode(map<string, double>& emotion)
 {
+	if(emotion.empty())
+		return;
+
 	//choose max probability
 	double max_value = 0.0;
 	string max_emotion = "";
@@ -95,19 +123,15 @@ unsigned char app_picat::encode(map<string, double> emotion)
 		}
 	}
 
-	unsigned char code = 0x00;
-
-//	//emotion code
-	if(!max_emotion.compare("anger")) 			code = 0x01;
-	else if(!max_emotion.compare("contempt")) code = 0x02;
-	else if(!max_emotion.compare("disgust")) code = 0x03;
-	else if(!max_emotion.compare("fear")) code = 0x04;
-	else if(!max_emotion.compare("happiness")) code = 0x05;
-	else if(!max_emotion.compare("sadness")) code = 0x06;
-	else if(!max_emotion.compare("surprise")) code = 0x07;
-	else code = 0x00;
-
-	return code;
+	//emotion code
+	if(!max_emotion.compare("anger")) 			{ _emotion_gpio[5]=0x00; _emotion_gpio[6]=0x00; _emotion_gpio[13]=0x01; }
+	else if(!max_emotion.compare("contempt")) 	{ _emotion_gpio[5]=0x00; _emotion_gpio[6]=0x01; _emotion_gpio[13]=0x00; }
+	else if(!max_emotion.compare("disgust")) 	{ _emotion_gpio[5]=0x00; _emotion_gpio[6]=0x01; _emotion_gpio[13]=0x01; }
+	else if(!max_emotion.compare("fear")) 		{ _emotion_gpio[5]=0x01; _emotion_gpio[6]=0x00; _emotion_gpio[13]=0x00; }
+	else if(!max_emotion.compare("happiness")) 	{ _emotion_gpio[5]=0x01; _emotion_gpio[6]=0x00; _emotion_gpio[13]=0x01; }
+	else if(!max_emotion.compare("sadness")) 	{ _emotion_gpio[5]=0x01; _emotion_gpio[6]=0x01; _emotion_gpio[13]=0x00; }
+	else if(!max_emotion.compare("surprise")) 	{ _emotion_gpio[5]=0x01; _emotion_gpio[6]=0x01; _emotion_gpio[13]=0x01; }
+	else 										{ _emotion_gpio[5]=0x00; _emotion_gpio[6]=0x00; _emotion_gpio[13]=0x00; }
 }
 
 
