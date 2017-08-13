@@ -53,8 +53,6 @@ void app_picat::subscribe(cossb::message* const msg)
 	case cossb::base::msg_type::REQUEST: break;
 	case cossb::base::msg_type::DATA: {
 
-		cossb_log->log(log::loglevel::INFO, fmt::format("Subscribe Topic : {}", msg->get_topic()));
-
 		//topic service/rpi_gpio/read
 		if(!msg->get_frame()->topic.compare("service/rpi_gpio/read")) {
 			//* gpio read subscribe
@@ -90,7 +88,7 @@ void app_picat::subscribe(cossb::message* const msg)
 				}
 			}
 			catch(const boost::bad_any_cast&){
-				//cossb_log->log(log::loglevel::ERROR, "Invalid type casting, should be map<int, unsigned char> type.");
+				cossb_log->log(log::loglevel::ERROR, "Invalid type casting, should be map<int, unsigned char> type.");
 			}
 		}
 
