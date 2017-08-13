@@ -22,7 +22,7 @@ bool app_picat::setup()
 
 	_emotion_gpio[5] = 0x00;
 	_emotion_gpio[6] = 0x00;
-	_emotion_gpio[13] = 0x00;
+	_emotion_gpio[13] = 0x01;
 
 	_emotion["anger"] = 0.0;
 	_emotion["contempt"] = 0.0;
@@ -75,8 +75,8 @@ void app_picat::subscribe(cossb::message* const msg)
 					//falling edge
 					else if(_prev_read!=0x00 && read==0x00){
 						_emotion_gpio[5] = 0x00;
-						_emotion_gpio[6] = 0x00;
-						_emotion_gpio[13] = 0x01;
+						_emotion_gpio[6] = 0x01;
+						_emotion_gpio[13] = 0x00;
 
 						cossb::message msg(this, cossb::base::msg_type::DATA);
 						msg.pack(_emotion_gpio);
