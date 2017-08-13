@@ -79,7 +79,7 @@ void rpi_gpio::subscribe(cossb::message* const msg)
 
 			//subscribe emotion data
 			try {
-				map<int, unsigned char> data = boost::any_cast<map<int, unsigned char>>(*msg); //{key, value} pair
+				map<int, unsigned char> data = boost::any_cast<map<int, unsigned char>>(*msg->get_data()); //{key, value} pair
 
 				//1. extract keys
 				vector<int> keys;

@@ -57,7 +57,7 @@ void app_picat::subscribe(cossb::message* const msg)
 		if(!msg->get_frame()->topic.compare("service/rpi_gpio/read")) {
 			//* gpio read subscribe
 			try {
-				map<int, unsigned char> gpio_data = boost::any_cast<map<int, unsigned char>>(*msg); //{key, value} pair
+				map<int, unsigned char> gpio_data = boost::any_cast<map<int, unsigned char>>(*msg->get_data()); //{key, value} pair
 
 				//if find gpio input signal
 				if(gpio_data.find(_gpio_trigger_port)!=gpio_data.end()){
@@ -95,7 +95,7 @@ void app_picat::subscribe(cossb::message* const msg)
 		//subscribe emotion data
 		else if(!msg->get_frame()->topic.compare("service/msapi/emotion")){
 			try {
-				map<string, double> emo = boost::any_cast<map<string, double>>(*msg); //{key, value} pair
+				map<string, double> emo = boost::any_cast<map<string, double>>(*msg->get_data()); //{key, value} pair
 				encode(emo);
 			}
 			catch(const boost::bad_any_cast&){
