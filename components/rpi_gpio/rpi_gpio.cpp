@@ -51,9 +51,16 @@ bool rpi_gpio::run()
 			cossb_log->log(log::loglevel::INFO, fmt::format("Read GPIO({}):{}",port.first, (int)port_read[port.first]));
 
 			//for test
-			bcm2835_gpio_write(5, 0x01);
-			bcm2835_gpio_write(6, 0x00);
-			bcm2835_gpio_write(13, 0x01);
+			if(port_read[port.first]){
+				bcm2835_gpio_write(5, 0x01);
+				bcm2835_gpio_write(6, 0x00);
+				bcm2835_gpio_write(13, 0x01);
+			}
+			else {
+				bcm2835_gpio_write(5, 0x00);
+				bcm2835_gpio_write(6, 0x00);
+				bcm2835_gpio_write(13, 0x00);
+			}
 		}
 	}
 
