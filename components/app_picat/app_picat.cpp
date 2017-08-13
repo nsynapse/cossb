@@ -48,6 +48,8 @@ bool app_picat::stop()
 
 void app_picat::subscribe(cossb::message* const msg)
 {
+	cossb_log->log(log::loglevel::INFO, fmt::format("Unrecognized Topic : {}", msg->get_topic()));
+
 	switch(msg->get_frame()->type) {
 	case cossb::base::msg_type::REQUEST: break;
 	case cossb::base::msg_type::DATA: {
@@ -100,11 +102,6 @@ void app_picat::subscribe(cossb::message* const msg)
 			catch(const boost::bad_any_cast&){
 			}
 		}
-		else {
-			cossb_log->log(log::loglevel::INFO, fmt::format("Unrecognized Topic : {}", msg->get_topic()));
-		}
-
-
 	} break;
 	case cossb::base::msg_type::RESPONSE: break;
 	case cossb::base::msg_type::EVENT:  break;
