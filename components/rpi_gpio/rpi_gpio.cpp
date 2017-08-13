@@ -81,8 +81,6 @@ void rpi_gpio::subscribe(cossb::message* const msg)
 			try {
 				map<int, unsigned char> data = boost::any_cast<map<int, unsigned char>>(*msg->get_data()); //{key, value} pair
 
-				cossb_log->log(log::loglevel::INFO, fmt::format("GPIO write message size : {}", data.size()));
-
 				//1. extract keys
 				vector<int> keys;
 				for(auto const& port: data)

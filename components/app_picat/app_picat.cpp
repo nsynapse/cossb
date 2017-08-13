@@ -73,7 +73,8 @@ void app_picat::subscribe(cossb::message* const msg)
 						cossb_log->log(log::loglevel::INFO, fmt::format("Published gpio write data {}, {}, {}", (int)_emotion_gpio[5], (int)_emotion_gpio[6], (int)_emotion_gpio[13]));
 					}
 					//falling edge
-					else if(_prev_read!=0x00 && read==0x00){
+					//else if(_prev_read!=0x00 && read==0x00){
+					else if(read!=0x00){
 						_emotion_gpio[5] = 0x00;
 						_emotion_gpio[6] = 0x01;
 						_emotion_gpio[13] = 0x00;
