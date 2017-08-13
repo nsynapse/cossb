@@ -76,7 +76,7 @@ void app_picat::subscribe(cossb::message* const msg)
 					else if(_prev_read!=0x00 && read==0x00){
 						_emotion_gpio[5] = 0x00;
 						_emotion_gpio[6] = 0x00;
-						_emotion_gpio[13] = 0x00;
+						_emotion_gpio[13] = 0x01;
 
 						cossb::message msg(this, cossb::base::msg_type::DATA);
 						msg.pack(_emotion_gpio);
