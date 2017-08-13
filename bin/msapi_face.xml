@@ -21,4 +21,4 @@
 </property>
 
 <service name="face_emotion" method="publish" topic="service/msapi/emotion"></service>
-<!--<service name="face_image" method="subscribe" topic="service/capture/image"></service>-->
+<service name="face_image" method="subscribe" topic="service/capture/image"></service>
