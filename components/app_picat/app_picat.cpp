@@ -100,6 +100,9 @@ void app_picat::subscribe(cossb::message* const msg)
 			catch(const boost::bad_any_cast&){
 			}
 		}
+		else {
+			cossb_log->log(log::loglevel::INFO, fmt::format("Unrecognized Topic : {}", msg->get_topic()));
+		}
 
 
 	} break;
