@@ -13,7 +13,6 @@
 #include <string>
 #include <vector>
 #include <map>
-#include <boost/lexical_cast.hpp>
 #include <cstring>
 #include <algorithm>
 #include <util/format.h>
@@ -110,25 +109,40 @@ public:
 
 	friend class interface::iprofile;
 
-	template<typename T>
-	inline T as(T default_value) {
-		try {
-			T val = boost::lexical_cast<T>(value);
-			return val;
-		} catch( boost::bad_lexical_cast const& ) {
-			return default_value;
-		}
+
+	int asInt(int default_value) {
+		return (value.empty())?default_value:stoi(this->value.c_str());
 	}
 
-	int asInt(int default_value) { return as(default_value); }
-	unsigned int asUInt(unsigned int default_value) { return as(default_value); }
-	unsigned long asUlong(unsigned long default_value) { return as(default_value); }
-	double asDouble(double default_value) { return as(default_value); }
-	float asFloat(float default_value) { return as(default_value); }
-	bool asBool(bool default_value) { return as(default_value); }
-	string asString(string default_value) { return as(default_value); }
-	unsigned char asUChar(unsigned char default_value) { return as(default_value); }
-	char asChar(char default_value) { return as(default_value); }
+	unsigned int asUInt(unsigned int default_value) {
+		return (value.empty())?default_value:static_cast<unsigned int>(stoul(this->value.c_str()));
+	}
+
+	unsigned long asUling(unsigned long default_value){
+		return (value.empty())?default_value:stoul(this->value.c_str());
+	}
+
+	double asDouble(double default_value){
+		return (value.empty())?default_value:stod(this->value.c_str());
+	}
+
+	double asFloat(double default_value){
+		return (value.empty())?default_value:static_cast<float>(stod(this->value.c_str()));
+	}
+
+	bool asBool(bool default_value) {
+		return (!value.empty() && stoi(this->value.c_str())>0)?true:false;
+	}
+
+	string asString(string default_value){ return this->value; }
+
+	unsigned char asUChar(unsigned char default_value) {
+		return (value.empty())?default_value:(unsigned char)(*this->value.begin());
+	}
+
+	char asChar(char default_value) {
+		return (value.empty())?default_value:(char)(*this->value.begin());
+	}
 
 private:
 	std::string value;
