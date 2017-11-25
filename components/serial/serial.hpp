@@ -9,7 +9,8 @@
 #ifndef _COSSB_COMPONENT_SERIAL_HPP_
 #define _COSSB_COMPONENT_SERIAL_HPP_
 
-#include <base/interface.hpp>
+#include <interface/icomponent.hpp>
+#include <base/task.hpp>
 #include "libserial.hpp"
 
 using namespace cossb;
@@ -37,7 +38,7 @@ public:
 	/**
 	 * @brief	request interface function
 	 */
-	void request(cossb::base::message* const msg);
+	void subscribe(cossb::message* const msg);
 
 private:
 	/**
@@ -47,6 +48,7 @@ private:
 
 private:
 	libserial* _serial = nullptr;
+	string _port;
 	cossb::base::task _read_task;
 };
 

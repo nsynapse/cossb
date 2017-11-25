@@ -14,7 +14,7 @@ using namespace std;
 USE_COMPONENT_INTERFACE(rpi_uart)
 
 rpi_uart::rpi_uart()
-:cossb::interface::icomponent(COMPONENT(edison_uart)){
+:cossb::interface::icomponent(COMPONENT(rpi_uart)){
 	// TODO Auto-generated constructor stub
 
 }
