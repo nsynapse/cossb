@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<info>
+	<uuid>00000000000000000000</uuid>
+	<name>app picat</name>
+	<description>Picat Application component</description>
+	<company>Nsynapse Inc.</company>
+	<developer>Byunghun Hwang</developer>
+	<email>bhhwang@nsynapse.com</email>
+	<url>http://www.nsynapse.com</url>
+	<license>MIT</license> 
+	<version>0.0.1</version>
+	<category></category>
+	<tags></tags>
+</info>
+
+<property>
+	<gpio_trigger>19</gpio_trigger>
+</property>
+
+<service name="picat_gpio_read" method="subscribe" topic="service/rpi_gpio/read"></service>
+<service name="picat_emotion_read" method="subscribe" topic="service/msapi/emotion"></service>
+<service name="picat_gpio_write" method="publish" topic="service/rpi_gpio/write"></service>

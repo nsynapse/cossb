@@ -52,7 +52,10 @@ Examples
 * GPIO component for Intel Edison
 * UART component for Intel Edison
 
-
+Dependencies
+===============
+* Protobuf 3.1
+* Boost C++ library (thread, filesystem)
 
 License
 ===============
