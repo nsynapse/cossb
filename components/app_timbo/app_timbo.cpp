@@ -40,7 +40,8 @@ void app_timbo::subscribe(cossb::message* const msg)
 	case cossb::base::msg_type::REQUEST: break;
 	case cossb::base::msg_type::DATA: {
 
-		if(!msg->get_frame()->topic.compare("service/msapi/emotion")){
+		//
+		if(!msg->get_frame()->topic.compare("service/serial/read")){
 			try {
 				map<string, double> emo = boost::any_cast<map<string, double>>(*msg->get_data()); //{key, value} pair
 				encode(emo);
@@ -56,7 +57,7 @@ void app_timbo::subscribe(cossb::message* const msg)
 		}
 	} break;
 	case cossb::base::msg_type::RESPONSE: break;
-	case cossb::base::msg_type::EVENT:  break;
+	case cossb::base::msg_type::EVENT: break;
 	}
 }
 

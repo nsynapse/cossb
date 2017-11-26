@@ -42,7 +42,7 @@ public:
 	/**
 	 * @brief	request interface function
 	 */
-	void request(cossb::base::message* const msg);
+	void subscribe(cossb::message* const msg);
 
 private:
 	base::task _socket_task;

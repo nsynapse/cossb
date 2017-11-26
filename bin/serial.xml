@@ -14,7 +14,7 @@
 </info>
 
 <property>
-	<port>/dev/ttyUSB0</port>
+	<port>/dev/ttyS1</port>
 	<baudrate>115200</baudrate>
 </property>
 

@@ -13,9 +13,9 @@ USE_COMPONENT_INTERFACE(wsclient)
 
 void handle_message(const std::string & message)
 {
-	cossb::base::message msg("wsclient", base::msg_type::REQUEST);
-	msg.parse(message);
-	cossb_broker->publish("websocket_read",msg);
+	cossb::message msg("wsclient", base::msg_type::DATA);
+	//msg.parse(message);
+	//cossb_broker->publish("websocket_read",msg);
 	cossb_log->log(log::loglevel::INFO, fmt::format("Websocket Message Received : {}",message.c_str()));
 
 }
@@ -73,7 +73,7 @@ bool wsclient::stop()
 	return true;
 }
 
-void wsclient::request(cossb::base::message* const msg)
+void wsclient::subscribe(cossb::message* const msg)
 {
 	switch(msg->get_frame()->type){
 		case cossb::base::msg_type::REQUEST: {
@@ -105,7 +105,7 @@ void wsclient::request(cossb::base::message* const msg)
 		} break;
 		case cossb::base::msg_type::DATA: break;
 		case cossb::base::msg_type::RESPONSE: break;
-		case cossb::base::msg_type::SIGNAL: break;
+		case cossb::base::msg_type::EVENT: break;
 
 	}
 }

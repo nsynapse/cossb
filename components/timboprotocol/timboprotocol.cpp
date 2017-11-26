@@ -1,11 +1,3 @@
-/*
- * timboprotocol.cpp
- *
- *  Created on: 2017. 11. 26.
- *      Author: byunghunhwang
- */
-
-
 
 #include "timboprotocol.hpp"
 #include <cossb.hpp>
@@ -51,7 +43,7 @@ void timboprotocol::subscribe(cossb::message* const msg)
 		try
 		{
 			vector<unsigned char> data = boost::any_cast<vector<unsigned char>>(*msg->get_data());
-			_serial->write((const char*)data.data(), data.size());
+
 			cossb_log->log(log::loglevel::INFO, fmt::format("Write {} byte(s) to the serial", data.size()));
 		}
 		catch(const boost::bad_any_cast&){

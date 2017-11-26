@@ -26,6 +26,7 @@
 	<required type="component">timboprotocol</required>
 	<required type="component">sqlitedb</required>
 	<required type="component">apptimbo</required>
+	<required type="component">wsclient</required>
 	
 	
 	<!-- do not edit this path -->
