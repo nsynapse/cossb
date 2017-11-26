@@ -1,9 +1,4 @@
-/*
- * wsclient.cpp
- *
- *  Created on: 2016. 4. 20.
- *      Author: hwang
- */
+
 
 #include "wsclient.hpp"
 #include <cossb.hpp>

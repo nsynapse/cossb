@@ -11,6 +11,7 @@
 
 #include <interface/icomponent.hpp>
 #include <base/task.hpp>
+#include <deque>
 
 using namespace cossb;
 
@@ -44,6 +45,9 @@ private:
 	 * @brief	read from serial port
 	 */
 	void read();
+
+private:
+	deque<unsigned char> _buffer;
 
 };
 
