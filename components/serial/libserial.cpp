@@ -67,3 +67,10 @@ int libserial::read(unsigned char* pdata, int size)
 {
 	return ::read(_device, pdata, size);
 }
+
+bool libserial::is_opened()
+{
+	if(_device>0)
+		return true;
+	return false;
+}

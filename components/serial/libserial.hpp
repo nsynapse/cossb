@@ -27,6 +27,8 @@ public:
 	int write(const unsigned char* data, int size);
 	int read(unsigned char* pdata, int size);
 
+	bool is_opened();
+
 private:
 	int _device = -1;
 	struct termios _tio;
