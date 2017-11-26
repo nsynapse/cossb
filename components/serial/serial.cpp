@@ -89,10 +89,10 @@ void serial::read()
 				int readsize = _serial->read(buffer, sizeof(unsigned char)*len);
 
 				if(readsize>0) {
-					cossb_log->log(log::loglevel::INFO, fmt::format("Read {} Byte(s) from serial",readsize));
+					cossb_log->log(log::loglevel::INFO, fmt::format("Received {} Byte(s) from {}",readsize, _port));
 					cossb::message _msg(this, base::msg_type::DATA);
 					vector<unsigned char> data(buffer, buffer+readsize);
-					_msg.set(data);
+					_msg.pack(data);
 					cossb_broker->publish("serial_read", _msg);
 				}
 
