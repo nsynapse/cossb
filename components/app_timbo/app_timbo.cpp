@@ -18,20 +18,7 @@ app_timbo::~app_timbo() {
 
 bool app_timbo::setup()
 {
-	_gpio_trigger_port = get_profile()->get(profile::section::property, "gpio_trigger").asInt(-1);
 
-	_emotion_gpio[5] = 0x00;
-	_emotion_gpio[6] = 0x00;
-	_emotion_gpio[13] = 0x00;
-
-	_emotion["anger"] = 0.0;
-	_emotion["contempt"] = 0.0;
-	_emotion["disgust"] = 0.0;
-	_emotion["fear"] = 0.0;
-	_emotion["happiness"] = 0.0;
-	_emotion["neutral"] = 0.0;
-	_emotion["sadness"] = 0.0;
-	_emotion["surprise"] = 0.0;
 
 	return true;
 }
@@ -73,30 +60,5 @@ void app_timbo::subscribe(cossb::message* const msg)
 	}
 }
 
-void app_timbo::encode(map<string, double>& emotion)
-{
-	if(emotion.empty())
-		return;
-
-	//choose max probability
-	double max_value = 0.0;
-	string max_emotion = "";
-	for(auto const& element:emotion){
-		if(element.second>max_value){
-			max_value = element.second;
-			max_emotion = element.first;
-		}
-	}
-
-	//emotion code
-	if(!max_emotion.compare("anger")) 			{ _emotion_gpio[5]=0x00; _emotion_gpio[6]=0x00; _emotion_gpio[13]=0x01; }
-	else if(!max_emotion.compare("contempt")) 	{ _emotion_gpio[5]=0x00; _emotion_gpio[6]=0x01; _emotion_gpio[13]=0x00; }
-	else if(!max_emotion.compare("disgust")) 	{ _emotion_gpio[5]=0x00; _emotion_gpio[6]=0x01; _emotion_gpio[13]=0x01; }
-	else if(!max_emotion.compare("fear")) 		{ _emotion_gpio[5]=0x01; _emotion_gpio[6]=0x00; _emotion_gpio[13]=0x00; }
-	else if(!max_emotion.compare("happiness")) 	{ _emotion_gpio[5]=0x01; _emotion_gpio[6]=0x00; _emotion_gpio[13]=0x01; }
-	else if(!max_emotion.compare("sadness")) 	{ _emotion_gpio[5]=0x01; _emotion_gpio[6]=0x01; _emotion_gpio[13]=0x00; }
-	else if(!max_emotion.compare("surprise")) 	{ _emotion_gpio[5]=0x01; _emotion_gpio[6]=0x01; _emotion_gpio[13]=0x01; }
-	else 										{ _emotion_gpio[5]=0x00; _emotion_gpio[6]=0x00; _emotion_gpio[13]=0x00; }
-}
 
 
