@@ -38,7 +38,6 @@ bool uart::setup()
 	cossb_log->log(log::loglevel::INFO, fmt::format("Open {}({})",_port, baudrate));
 
 	_read_task = create_task(uart::read);
-	cossb_log->log(log::loglevel::INFO, "Running UART Read Task...");
 
 	return true;
 }
@@ -97,6 +96,12 @@ void uart::read()
 					vector<unsigned char> data(buffer, buffer+readsize);
 					_msg.pack(data);
 					cossb_broker->publish("serial_read", _msg);
+
+					//debug
+					cout << endl;
+					for(auto& c:data)
+						cout << c;
+					cout << endl;
 				}
 
 				delete []buffer;
