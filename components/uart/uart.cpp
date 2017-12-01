@@ -100,7 +100,7 @@ void uart::read()
 					//debug
 					cout << endl;
 					for(auto& c:data)
-						cout << c;
+						cout << std::hex << (int)c;
 					cout << endl;
 				}
 
