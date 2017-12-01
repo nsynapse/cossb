@@ -14,7 +14,7 @@
 </info>
 
 <property>
-	
+	<interval>1000</interval>
 </property>
 
 <service name="app_timbo_command" method="publish" topic="app/timbo/command"></service>
