@@ -37,16 +37,14 @@ bool uart::setup()
 
 	cossb_log->log(log::loglevel::INFO, fmt::format("Open {}({})",_port, baudrate));
 
+	_read_task = create_task(uart::read);
+	cossb_log->log(log::loglevel::INFO, "Running UART Read Task...");
+
 	return true;
 }
 
 bool uart::run()
 {
-	if(!_read_task){
-		_read_task = create_task(uart::read);
-		cossb_log->log(log::loglevel::INFO, "Running UART Read Task...");
-	}
-
 
 
 	return true;
