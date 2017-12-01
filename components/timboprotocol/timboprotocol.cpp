@@ -100,6 +100,7 @@ void timboprotocol::subscribe(cossb::message* const msg)
 		}
 	} break;
 	case cossb::base::msg_type::RESPONSE: break;
+	case cossb::base::msg_type::EVENT: break;
 	}
 }
 
