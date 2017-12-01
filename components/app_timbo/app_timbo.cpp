@@ -24,7 +24,8 @@ bool app_timbo::setup()
 bool app_timbo::run()
 {
 	cossb::message msg(this, cossb::base::msg_type::REQUEST);
-	msg.pack(0x02);
+	unsigned char cmd = 0x02;
+	msg.pack(cmd);
 	cossb_broker->publish("app_timbo_command", msg);
 	cossb_log->log(log::loglevel::INFO, "App Timbo : Request RECORD");
 

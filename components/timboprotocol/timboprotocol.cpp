@@ -85,7 +85,7 @@ void timboprotocol::subscribe(cossb::message* const msg)
 				if(_buffer[2+length]==END){
 					vector<unsigned char> packet;
 					packet.assign(_buffer.begin(), _buffer.begin()+_buffer[1]+3);
-					for(int i=0;i<packet.size();i++)
+					for(int i=0;i<(int)packet.size();i++)
 						_buffer.pop_front(); //remove assigned packet bytes length
 
 					//publish the aligned data
