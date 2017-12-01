@@ -252,6 +252,12 @@ app_timbo.comp: $(OUTDIR)app_timbo.o \
 $(OUTDIR)app_timbo.o: $(COMPONENT_FILES)app_timbo/app_timbo.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
+timboprotocol.comp: $(OUTDIR)timboprotocol.o \
+				$(OUTDIR)message_any.o
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+$(OUTDIR)timboprotocol.o: $(COMPONENT_FILES)timboprotocol/timboprotocol.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
 	
 $(OUTDIR)message_any.o: $(INCLUDE_FILES)base/message_any.cpp 
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
