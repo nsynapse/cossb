@@ -9,6 +9,10 @@ USE_COMPONENT_INTERFACE(timboprotocol)
 
 #define HEADER	0x55
 #define END		0xAA
+#define RECORD	0x02
+#define PLAY		0x03
+#define STOP		0x04
+#define PING		0x24
 
 timboprotocol::timboprotocol()
 :cossb::interface::icomponent(COMPONENT(timboprotocol)){
@@ -41,7 +45,20 @@ bool timboprotocol::stop()
 void timboprotocol::subscribe(cossb::message* const msg)
 {
 	switch(msg->get_frame()->type) {
-	case cossb::base::msg_type::REQUEST: break;
+	case cossb::base::msg_type::REQUEST:
+		try {
+			unsigned char data = boost::any_cast<unsigned char>(*msg->get_data());
+			switch(data){
+			case RECORD: _record(); break;
+			case PLAY: _play(); break;
+			case STOP: _stop(); break;
+			case PING: _ping(); break;
+			}
+
+		} catch(const boost::bad_any_cast&){
+
+		}
+		break;
 	case cossb::base::msg_type::DATA: {
 
 		//timbo protocol read service (data will be coming from UART component)
@@ -84,4 +101,36 @@ void timboprotocol::subscribe(cossb::message* const msg)
 	} break;
 	case cossb::base::msg_type::RESPONSE: break;
 	}
+}
+
+void timboprotocol::_record() {
+	unsigned char data[] = {0x55,0x03,0x0F,0x02,0x00,0xAA};
+	vector<unsigned char> packet(data, data+sizeof(data));
+	cossb::message msg(this, cossb::base::msg_type::DATA);
+	msg.pack(packet);
+	cossb_broker->publish("timbo_protocol_write", msg);
+}
+
+void timboprotocol::_play() {
+	unsigned char data[] = {0x55,0x03,0x0F,0x03,0x00,0xAA};
+	vector<unsigned char> packet(data, data+sizeof(data));
+	cossb::message msg(this, cossb::base::msg_type::DATA);
+	msg.pack(packet);
+	cossb_broker->publish("timbo_protocol_write", msg);
+}
+
+void timboprotocol::_stop() {
+	unsigned char data[] = {0x55,0x03,0x0F,0x04,0x00,0xAA};
+	vector<unsigned char> packet(data, data+sizeof(data));
+	cossb::message msg(this, cossb::base::msg_type::DATA);
+	msg.pack(packet);
+	cossb_broker->publish("timbo_protocol_write", msg);
+}
+
+void timboprotocol::_ping() {
+	unsigned char data[] = {0x55,0x03,0x0F,0x24,0x00,0xAA};
+	vector<unsigned char> packet(data, data+sizeof(data));
+	cossb::message msg(this, cossb::base::msg_type::DATA);
+	msg.pack(packet);
+	cossb_broker->publish("timbo_protocol_write", msg);
 }

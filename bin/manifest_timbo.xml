@@ -22,11 +22,10 @@
 	<!-- required component cannot be stopped by user -->
 	<!-- required library for advanced user or our support -->
 
-	<required type="component">serial</required>
+	<required type="component">uart</required>
 	<required type="component">timboprotocol</required>
-	<required type="component">sqlitedb</required>
 	<required type="component">apptimbo</required>
-	<required type="component">wsclient</required>
+	<required type="component">nanopi</required>
 	
 	
 	<!-- do not edit this path -->

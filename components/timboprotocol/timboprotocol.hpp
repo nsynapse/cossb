@@ -49,6 +49,15 @@ private:
 	void read();
 
 private:
+	/*
+	 * @brief	protocol matching function
+	 */
+	void _record();
+	void _stop();
+	void _play();
+	void _ping();
+
+private:
 	deque<unsigned char> _buffer;
 
 };

@@ -246,6 +246,12 @@ $(OUTDIR)uart.o: $(COMPONENT_FILES)uart/uart.cpp
 $(OUTDIR)libserial.o: $(COMPONENT_FILES)uart/libserial.cpp 
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
+app_timbo.comp: $(OUTDIR)app_timbo.o \
+				$(OUTDIR)message_any.o
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
+$(OUTDIR)app_timbo.o: $(COMPONENT_FILES)app_timbo/app_timbo.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
 	
 $(OUTDIR)message_any.o: $(INCLUDE_FILES)base/message_any.cpp 
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
@@ -300,7 +306,7 @@ $(OUTDIR)tinyxml2.o: $(INCLUDE_FILES)ext/tinyxml2.cpp
 
 # make cossb
 all: cossb serial.comp tcpserver.comp example_tcpserver.comp example_uart.comp example_messageout.comp example_messageprint.comp
-timbo : cossb uart.comp timboprotocol.comp
+timbo : cossb uart.comp timboprotocol.comp app_timbo.comp
 picat : cossb cv_capture.comp msapi_emotion.comp
 base: cossb
 components: serial.comp tcpserver.comp uart_protocol.comp wsclient.comp cat_protocol.comp
