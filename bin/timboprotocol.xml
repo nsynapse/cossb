@@ -17,4 +17,4 @@
 </property>
 
 <service name="timbo_protocol_write" method="publish" topic="service/timbo/write"></service>
-<service name="timbo_protocol_read" method="subscribe" topic="service/uart/read"></service>
+<service name="timbo_protocol_read" method="subscribe" topic="service/uart/write"></service>
