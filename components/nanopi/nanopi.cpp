@@ -25,8 +25,8 @@ bool nanopi::setup()
 	for(auto outport:get_profile()->gets(profile::section::property, "output")){
 		int port = outport.asInt(-1);
 		if(port>0){
-			_gpio_out_port.push_back(port);
-			pinMode (port, OUTPUT);
+			_gpio_port_map[port] = true;
+			pinMode(port, OUTPUT);
 		}
 	}
 
@@ -34,8 +34,8 @@ bool nanopi::setup()
 	for(auto inport:get_profile()->gets(profile::section::property, "input")){
 		int port = inport.asInt(-1);
 		if(port>0){
-			_gpio_in_port.push_back(port);
-			pinMode (port, IN);
+			_gpio_port_map[port] = false;
+			pinMode(port, IN);
 		}
 	}
 
@@ -62,7 +62,7 @@ void nanopi::subscribe(cossb::message* const msg)
 		case cossb::base::msg_type::REQUEST: break;
 		case cossb::base::msg_type::DATA: {
 
-			//subscribe emotion data
+			//subscribe gpio write
 			try {
 				map<int, unsigned char> data = boost::any_cast<map<int, unsigned char>>(*msg->get_data()); //{key, value} pair
 
@@ -97,7 +97,6 @@ void nanopi::read()
 {
 	while(1) {
 		try {
-
 			digitalRead()
 			if(_uart) {
 				const unsigned int len = 1024;

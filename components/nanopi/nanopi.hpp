@@ -39,8 +39,7 @@ private:
 	void read();
 
 private:
-	map<int, unsigned char> _gpio_out_port;
-	map<int, unsigned char> _gpio_in_port;
+	map<int, bool> _gpio_port_map; //true output, false input
 	cossb::base::task _gpio_task;
 };
 
