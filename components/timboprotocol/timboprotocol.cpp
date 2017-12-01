@@ -7,6 +7,9 @@ using namespace std;
 
 USE_COMPONENT_INTERFACE(timboprotocol)
 
+#define HEADER	0x55
+#define END		0xAA
+
 timboprotocol::timboprotocol()
 :cossb::interface::icomponent(COMPONENT(timboprotocol)){
 	// TODO Auto-generated constructor stub
@@ -40,33 +43,39 @@ void timboprotocol::subscribe(cossb::message* const msg)
 	switch(msg->get_frame()->type) {
 	case cossb::base::msg_type::REQUEST: break;
 	case cossb::base::msg_type::DATA: {
+
+		//timbo protocol read service (data will be coming from UART component)
 		try
 		{
 			vector<unsigned char> data = boost::any_cast<vector<unsigned char>>(*msg->get_data());
 
-			//push back into the buffer
-			for(auto& d:data)
-				_buffer.push_back(d);
+			//insert data into the end of buffer
+			_buffer.insert(_buffer.end(), data.begin(), data.end());
 
-			while(_buffer.size()>0){
-				//align data buffer
-				for(int i=0;i<_buffer.size();i++){
-					if(_buffer.front()!=0x55) _buffer.pop_front();
-					else
-						break;
-				}
-
-				//extract data from the aligned data frame
-				vector<unsigned char> extracted;
-				if(_buffer.size()>=(int)_buffer[1]+3){
-					extracted.assign(_buffer.begin(), _buffer.begin()+_buffer[1]+3);
-				}
-
-				//pop the data
-				for(int i=0;i<extracted.size();i++)
+			//remove invalid data (first byte must be 0x55)
+			while(!_buffer.empty()){
+				if(_buffer.front()!=HEADER)
 					_buffer.pop_front();
+				else
+					break;
+			}
 
-				cossb_log->log(log::loglevel::INFO, fmt::format("aligned {} byte(s) from data", extracted.size()));
+			//extract single packet
+			while(_buffer.size()>=6){
+				int length = _buffer[1];
+				//valid packet
+				if(_buffer[2+length]==END){
+					vector<unsigned char> packet;
+					packet.assign(_buffer.begin(), _buffer.begin()+_buffer[1]+3);
+					for(int i=0;i<packet.size();i++)
+						_buffer.pop_front(); //remove assigned packet bytes length
+
+					//publish the aligned data
+					cossb::message msg(this, cossb::base::msg_type::DATA);
+					msg.pack(packet);
+					cossb_broker->publish("timbo_protocol_write", msg);
+					cossb_log->log(log::loglevel::INFO, fmt::format("Published {}bytes data", packet.size()));
+				}
 			}
 		}
 		catch(const boost::bad_any_cast&){
@@ -75,6 +84,4 @@ void timboprotocol::subscribe(cossb::message* const msg)
 	} break;
 	case cossb::base::msg_type::RESPONSE: break;
 	}
-}
-
 }

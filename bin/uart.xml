@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <info>
 	<uuid>00000000000000000000</uuid>
-	<name>sqllog</name>
-	<description>database logger</description>
+	<name>art</name>
+	<description>Serial component</description>
 	<company>Nsynapse Inc.</company>
 	<developer>Byunghun Hwang</developer>
 	<email>bhhwang@nsynapse.com</email>
@@ -14,7 +14,9 @@
 </info>
 
 <property>
+	<port>/dev/ttyS1</port>
+	<baudrate>115200</baudrate>
 </property>
 
-<service name="timbo_protocol_write" method="publish" topic="service/timbo/write"></service>
-<service name="timbo_protocol_read" method="subscribe" topic="service/uart/read"></service>
+<service name="uart_read" method="publish" topic="service/uart/read"></service>
+<service name="uart_write" method="subscribe" topic="service/uart/write"></service>

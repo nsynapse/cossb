@@ -1,26 +1,24 @@
-/*
- * timboprotocol.hpp
- *
- *  Created on: 2017. 11. 26.
- *      Author: byunghunhwang
+/**
+ * @file		uart.hpp
+ * @brief	UART Component
+ * @author	Byunghun Hwang<bhhwang@nsynapse.com>
+ * @date 	2016. 2. 2
+ * @details	common UART Component
  */
 
-// this component works for timbo protocol alignment
-
-#ifndef COMPONENTS_TIMBOPROTOCOL_TIMBOPROTOCOL_HPP_
-#define COMPONENTS_TIMBOPROTOCOL_TIMBOPROTOCOL_HPP_
-
+#ifndef _COSSB_COMPONENT_UART_HPP_
+#define _COSSB_COMPONENT_UART_HPP_
 
 #include <interface/icomponent.hpp>
 #include <base/task.hpp>
-#include <deque>
+#include "libserial.hpp"
 
 using namespace cossb;
 
-class timboprotocol : public interface::icomponent {
+class uart : public interface::icomponent {
 public:
-	timboprotocol();
-	virtual ~timboprotocol();
+	uart();
+	virtual ~uart();
 
 	/**
 	 * @brief	setup interface function
@@ -49,11 +47,11 @@ private:
 	void read();
 
 private:
-	deque<unsigned char> _buffer;
-
+	libserial* _uart = nullptr;
+	string _port;
+	cossb::base::task _read_task;
 };
 
 COMPONENT_EXPORT
 
-
-#endif /* COMPONENTS_TIMBOPROTOCOL_TIMBOPROTOCOL_HPP_ */
+#endif /* _COSSB_COMPONENT_UART_HPP_ */

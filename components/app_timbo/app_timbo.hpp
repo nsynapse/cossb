@@ -37,6 +37,9 @@ public:
 
 private:
 
+	void load_motion(const char* filename);
+
+	void run_motion();
 
 };
 
