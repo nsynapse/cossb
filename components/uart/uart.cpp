@@ -98,9 +98,8 @@ void uart::read()
 					cossb_broker->publish("serial_read", _msg);
 
 					//debug
-					cout << endl;
 					for(auto& c:data)
-						cout << std::hex << (int)c;
+						cout << (int)c << " ";
 					cout << endl;
 				}
 
