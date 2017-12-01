@@ -110,6 +110,7 @@ void timboprotocol::_record() {
 	cossb::message msg(this, cossb::base::msg_type::DATA);
 	msg.pack(packet);
 	cossb_broker->publish("timbo_protocol_write", msg);
+	cossb_log->log(log::loglevel::INFO, "Record");
 }
 
 void timboprotocol::_play() {
@@ -118,6 +119,7 @@ void timboprotocol::_play() {
 	cossb::message msg(this, cossb::base::msg_type::DATA);
 	msg.pack(packet);
 	cossb_broker->publish("timbo_protocol_write", msg);
+	cossb_log->log(log::loglevel::INFO, "Play");
 }
 
 void timboprotocol::_stop() {
@@ -126,6 +128,7 @@ void timboprotocol::_stop() {
 	cossb::message msg(this, cossb::base::msg_type::DATA);
 	msg.pack(packet);
 	cossb_broker->publish("timbo_protocol_write", msg);
+	cossb_log->log(log::loglevel::INFO, "Stop");
 }
 
 void timboprotocol::_ping() {
@@ -134,4 +137,5 @@ void timboprotocol::_ping() {
 	cossb::message msg(this, cossb::base::msg_type::DATA);
 	msg.pack(packet);
 	cossb_broker->publish("timbo_protocol_write", msg);
+	cossb_log->log(log::loglevel::INFO, "Ping");
 }

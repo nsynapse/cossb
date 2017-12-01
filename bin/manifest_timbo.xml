@@ -24,7 +24,7 @@
 
 	<required type="component">uart</required>
 	<required type="component">timboprotocol</required>
-	<required type="component">apptimbo</required>
+	<required type="component">app_timbo</required>
 	<required type="component">nanopi</required>
 	
 	
