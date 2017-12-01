@@ -48,6 +48,7 @@ void timboprotocol::subscribe(cossb::message* const msg)
 	case cossb::base::msg_type::REQUEST:
 		try {
 			unsigned char data = boost::any_cast<unsigned char>(*msg->get_data());
+			cossb_log->log(log::loglevel::INFO, fmt::format("Command : {}", (int)data));
 			switch(data){
 			case RECORD: _record(); break;
 			case PLAY: _play(); break;
@@ -56,7 +57,7 @@ void timboprotocol::subscribe(cossb::message* const msg)
 			}
 
 		} catch(const boost::bad_any_cast&){
-
+			cossb_log->log(log::loglevel::ERROR, "Invalid type casting");
 		}
 		break;
 	case cossb::base::msg_type::DATA: {
