@@ -239,9 +239,9 @@ $(OUTDIR)app_picat.o: $(COMPONENT_FILES)app_picat/app_picat.cpp
 
 #UART Comoponent (may equal to serial component)	
 uart.comp: $(OUTDIR)uart.o \
-				$(OUTDIR)libserial.o
+			$(OUTDIR)libserial.o
 	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
-$(OUTDIR)serial.o: $(COMPONENT_FILES)uart/uart.cpp
+$(OUTDIR)uart.o: $(COMPONENT_FILES)uart/uart.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 $(OUTDIR)libserial.o: $(COMPONENT_FILES)uart/libserial.cpp 
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
