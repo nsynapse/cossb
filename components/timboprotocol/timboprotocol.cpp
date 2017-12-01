@@ -48,7 +48,6 @@ void timboprotocol::subscribe(cossb::message* const msg)
 	case cossb::base::msg_type::REQUEST:
 		try {
 			unsigned char data = boost::any_cast<unsigned char>(*msg->get_data());
-			cossb_log->log(log::loglevel::INFO, fmt::format("Command : {}", (int)data));
 			switch(data){
 			case RECORD: _record(); break;
 			case PLAY: _play(); break;

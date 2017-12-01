@@ -42,8 +42,12 @@ bool uart::setup()
 
 bool uart::run()
 {
-	if(!_read_task)
+	if(!_read_task){
 		_read_task = create_task(uart::read);
+		cossb_log->log(log::loglevel::INFO, "Running UART Read Task...");
+	}
+
+
 
 	return true;
 }
