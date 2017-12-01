@@ -291,7 +291,7 @@ $(OUTDIR)tinyxml2.o: $(INCLUDE_FILES)ext/tinyxml2.cpp
 
 # make cossb
 all: cossb serial.comp tcpserver.comp example_tcpserver.comp example_uart.comp example_messageout.comp example_messageprint.comp
-timbo : cossb serial.comp timboprotocol.comp
+timbo : cossb uart.comp timboprotocol.comp
 picat : cossb cv_capture.comp msapi_emotion.comp
 base: cossb
 components: serial.comp tcpserver.comp uart_protocol.comp wsclient.comp cat_protocol.comp
