@@ -57,7 +57,7 @@ void timboprotocol::subscribe(cossb::message* const msg)
 			}
 
 		} catch(const boost::bad_any_cast&){
-			cossb_log->log(log::loglevel::ERROR, "Invalid type casting");
+			cossb_log->log(log::loglevel::ERROR, "Request : Invalid type casting");
 		}
 		break;
 	case cossb::base::msg_type::DATA: {
@@ -97,7 +97,7 @@ void timboprotocol::subscribe(cossb::message* const msg)
 			}
 		}
 		catch(const boost::bad_any_cast&){
-			cossb_log->log(log::loglevel::ERROR, "Invalid type casting");
+			cossb_log->log(log::loglevel::ERROR, "Data : Invalid type casting");
 		}
 	} break;
 	case cossb::base::msg_type::RESPONSE: break;
