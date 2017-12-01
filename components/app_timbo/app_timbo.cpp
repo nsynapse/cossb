@@ -26,8 +26,9 @@ bool app_timbo::run()
 	cossb::message msg(this, cossb::base::msg_type::REQUEST);
 	msg.pack(0x02);
 	cossb_broker->publish("app_timbo_command", msg);
+	cossb_log->log(log::loglevel::INFO, "App Timbo : Request RECORD");
 
-	return false;
+	return true;
 }
 
 bool app_timbo::stop()
