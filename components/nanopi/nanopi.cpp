@@ -2,6 +2,7 @@
 #include "nanopi.hpp"
 #include <cossb.hpp>
 #include <wiringPi.h>
+#include <algorithm>
 
 using namespace std;
 
@@ -35,9 +36,14 @@ bool nanopi::setup()
 		int port = inport.asInt(-1);
 		if(port>0){
 			_gpio_port_map[port] = false;
+			_gpio_port_read[port] = LOW;
 			pinMode(port, IN);
 		}
 	}
+
+	//read port to set default
+	for(auto& port: _gpio_port_read)
+		_gpio_port_read[port.first] = digitalRead(port.first);
 
 	//create task for gpio read
 	_gpio_task = create_task(nanopi::read);
@@ -52,7 +58,7 @@ bool nanopi::run()
 
 bool nanopi::stop()
 {
-
+	destroy_task(_gpio_task);
 	return true;
 }
 
@@ -74,8 +80,8 @@ void nanopi::subscribe(cossb::message* const msg)
 				//2. compare port set, then write data if it is outport
 				for(auto& key:keys){
 					cossb_log->log(log::loglevel::INFO, fmt::format("GPIO write key : {}", key));
-					if(_portmap.find(key)!=_portmap.end()){
-						if(_portmap[key]){ //output port
+					if(_gpio_port_map.find(key)!=_gpio_port_map.end()){
+						if(_gpio_port_map[key]){ //output port
 							if(data[key]==0x00)
 								digitalWrite(key, LOW);
 							else
@@ -95,25 +101,32 @@ void nanopi::subscribe(cossb::message* const msg)
 
 void nanopi::read()
 {
+	vector<int> input_port;
+	for(auto& port:_gpio_port_map)
+		if(!port.second)
+			input_port.push_back(port.first);
+
 	while(1) {
 		try {
-			digitalRead()
-			if(_uart) {
-				const unsigned int len = 1024;
-				unsigned char* buffer = new unsigned char[len];
-				int readsize = _uart->read(buffer, sizeof(unsigned char)*len);
+			map<int, int> read_gpio;
+			for(auto& port:input_port)
+				read_gpio[port] = digitalRead(port);
 
-				if(readsize>0) {
-					cossb_log->log(log::loglevel::INFO, fmt::format("Received {} Byte(s) from {}",readsize, _port));
-					cossb::message _msg(this, base::msg_type::DATA);
-					vector<unsigned char> data(buffer, buffer+readsize);
-					_msg.pack(data);
-					cossb_broker->publish("serial_read", _msg);
-				}
-
-				delete []buffer;
-				boost::this_thread::sleep(boost::posix_time::milliseconds(10));
+			//if changed, publish the message
+			bool changed = false;
+			for(auto& port:read_gpio){
+				if(read_gpio[port.first]!= _gpio_port_read[port.first])
+					changed = true;
 			}
+
+			if(changed){
+				_gpio_port_read = read_gpio;
+				cossb::message msg(this, cossb::base::msg_type::DATA);
+				msg.pack(read_gpio);
+				cossb_broker->publish("nanopi_gpio_read", msg);
+			}
+
+			boost::this_thread::sleep(boost::posix_time::milliseconds(300));
 		}
 		catch(thread_interrupted&) {
 			break;

@@ -40,6 +40,7 @@ private:
 
 private:
 	map<int, bool> _gpio_port_map; //true output, false input
+	map<int, int> _gpio_port_read;
 	cossb::base::task _gpio_task;
 };
 
