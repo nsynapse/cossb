@@ -258,6 +258,12 @@ timboprotocol.comp: $(OUTDIR)timboprotocol.o \
 $(OUTDIR)timboprotocol.o: $(COMPONENT_FILES)timboprotocol/timboprotocol.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
+nanopi.comp: $(OUTDIR)nanopi.o \
+				$(OUTDIR)message_any.o
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS) -lwiringPi -lpthread
+$(OUTDIR)nanopi.o: $(COMPONENT_FILES)nanopi/nanopi.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
 	
 $(OUTDIR)message_any.o: $(INCLUDE_FILES)base/message_any.cpp 
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
