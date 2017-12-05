@@ -37,7 +37,7 @@ bool nanopi::setup()
 		if(port>0){
 			_gpio_port_map[port] = false;
 			_gpio_port_read[port] = LOW;
-			pinMode(port, IN);
+			pinMode(port, INPUT);
 		}
 	}
 
