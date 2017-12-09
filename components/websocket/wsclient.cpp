@@ -8,10 +8,7 @@ USE_COMPONENT_INTERFACE(wsclient)
 
 void handle_message(const std::string & message)
 {
-	cossb::message msg("wsclient", base::msg_type::DATA);
-	//msg.parse(message);
-	//cossb_broker->publish("websocket_read",msg);
-	cossb_log->log(log::loglevel::INFO, fmt::format("Websocket Message Received : {}",message.c_str()));
+	cossb_log->log(log::loglevel::INFO, "message");
 
 }
 
@@ -22,13 +19,7 @@ wsclient::wsclient()
 }
 
 wsclient::~wsclient() {
-	for(auto it=_client_map.begin(); it!=_client_map.end(); ++it){
-		if(it->second) {
-			it->second->close();
-			delete it->second;
-		}
-	}
-	_client_map.clear();
+
 }
 
 bool wsclient::setup()
@@ -63,6 +54,14 @@ bool wsclient::run()
 
 bool wsclient::stop()
 {
+	for(auto it=_client_map.begin(); it!=_client_map.end(); ++it){
+		if(it->second) {
+			it->second->close();
+			delete it->second;
+		}
+	}
+	_client_map.clear();
+
 	destroy_task(_socket_task);
 
 	return true;
@@ -71,31 +70,13 @@ bool wsclient::stop()
 void wsclient::subscribe(cossb::message* const msg)
 {
 	switch(msg->get_frame()->type){
-		case cossb::base::msg_type::REQUEST: {
-			cossb_log->log(log::loglevel::WARN, fmt::format("Send to websocket server : {}",msg->raw()));
+		case cossb::base::msg_type::REQUEST:{
 
-			if(msg->exist("uri")){
-				if((*msg)["uri"].is_string()){
-					string uri = (*msg)["uri"];
-
-					//if destination uri exists
-					if(_client_map.find(uri)!=_client_map.end()){
-						easywsclient::WebSocket::pointer endpoint = _client_map.find(uri)->second;
-						if(endpoint->getReadyState()!=easywsclient::WebSocket::CLOSED){
-							endpoint->send(msg->raw());
-							cossb_log->log(log::loglevel::INFO, msg->raw());
-						}
-						else
-							cossb_log->log(log::loglevel::WARN, fmt::format("Cannot connect to the server {}.",uri));
-					}
-					else
-						cossb_log->log(log::loglevel::WARN, fmt::format("{} does not exist in profile.",uri));
-				}
-			}
-			else
-			{
-				cossb_log->log(log::loglevel::INFO, "There is no URI to send message");
-			}
+			string pack = boost::any_cast<string>(*msg->get_data());
+			/*easywsclient::WebSocket::pointer endpoint = _client_map.find(uri)->second;
+			if(endpoint->getReadyState()!=easywsclient::WebSocket::CLOSED){
+				endpoint->send(pack);
+			}*/
 
 		} break;
 		case cossb::base::msg_type::DATA: break;
