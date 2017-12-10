@@ -264,6 +264,12 @@ nanopi.comp: $(OUTDIR)nanopi.o \
 $(OUTDIR)nanopi.o: $(COMPONENT_FILES)nanopi/nanopi.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
+nanopi_timbo.comp: $(OUTDIR)nanopi_timbo.o \
+				$(OUTDIR)message_any.o
+	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS) -lwiringPi -lpthread
+$(OUTDIR)nanopi_timbo.o: $(COMPONENT_FILES)nanopi_timbo/nanopi_timbo.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+	
 	
 $(OUTDIR)message_any.o: $(INCLUDE_FILES)base/message_any.cpp 
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
