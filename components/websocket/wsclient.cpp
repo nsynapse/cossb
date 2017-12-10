@@ -28,7 +28,7 @@ bool wsclient::setup()
 		string u = uri.asString("ws://localhost::9002");
 
 		_client = easywsclient::WebSocket::from_url(u.c_str());
-		if(client->getReadyState()==easywsclient::WebSocket::OPEN){
+		if(_client->getReadyState()==easywsclient::WebSocket::OPEN){
 			cossb_log->log(log::loglevel::INFO, fmt::format("Connected to the {} websocket server",u));
 		}
 	}
