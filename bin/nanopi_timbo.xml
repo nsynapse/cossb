@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <info>
 	<uuid>00000000000000000000</uuid>
-	<name>websocket_client</name>
-	<description>Websocket Client Component</description>
+	<name>nanopi</name>
+	<description>Nano Pi Component</description>
 	<company>Nsynapse Inc.</company>
 	<developer>Byunghun Hwang</developer>
 	<email>bhhwang@nsynapse.com</email>
@@ -14,8 +14,8 @@
 </info>
 
 <property>
-	<endpoint>ws://127.0.0.1:9002/command</endpoint>
+	
 </property>
 
-<service name="websocket_read" method="publish" topic="service/websocket/read"></service>
-<service name="websocket_write" method="subscribe" topic="service/websocket/write"></service>
+<service name="nanopi_gpio_read" method="publish" topic="service/nanopi/gpio/read"></service>
+<service name="nanopi_gpio_write" method="subscribe" topic="service/nanopi/gpio/write"></service>
