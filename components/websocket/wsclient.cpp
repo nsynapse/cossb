@@ -8,7 +8,7 @@ USE_COMPONENT_INTERFACE(wsclient)
 
 void handle_message(const std::string & message)
 {
-	cossb_log->log(log::loglevel::INFO, "message");
+	cossb_log->log(log::loglevel::INFO, fmt::format("Message : {}", message));
 
 }
 
@@ -92,8 +92,9 @@ void wsclient::read()
 		try {
 			for(auto it=_client_map.begin(); it!=_client_map.end(); ++it) {
 				if(it->second){
-					if(it->second->getReadyState()!=easywsclient::WebSocket::CLOSED){
-						std::lock_guard<std::mutex> lock(_lock);
+					if(it->second->getReadyState()!=easywsclient::WebSocket::CLOSED)
+					{
+						//std::lock_guard<std::mutex> lock(_lock);
 						it->second->poll();
 						it->second->dispatch(handle_message);
 
