@@ -46,9 +46,10 @@ public:
 
 private:
 	base::task _socket_task;
-	map<string, easywsclient::WebSocket::pointer> _client_map;
+	//map<string, easywsclient::WebSocket::pointer> _client_map;
+	easywsclient::WebSocket::pointer _client;
 	std::mutex _lock;
-	map<string, bool> _reconnect;
+	//map<string, bool> _reconnect;
 
 private:
 	void read();
