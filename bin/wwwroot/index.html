@@ -15,12 +15,11 @@
     	
     	sock.onopen = function(){
     		console.log("open");
-    		//$('#connection').html("<div class='callout callout-success' style='margin-bottom: 0!important;'><h4><i class='fa fa-info'></i> Success:</h4> Successfully connected to the server "+socket_uri+".</div></div>");
+    		console.log("open connection");
     		
     	}
     	sock.onclose = function(e){
-    		console.log("close");
-    		//$('#connection').html("<div class='callout callout-danger' style='margin-bottom: 0!important;'><h4><i class='fa fa-ban'></i> Fail:</h4>Alert!"+socket_uri+" connection is failed.</div></div>");
+    		console.log("closed connection");
     	}
     	sock.onmessage = function(e){
     		var jsondata = jQuery.parseJSON(e.data);
