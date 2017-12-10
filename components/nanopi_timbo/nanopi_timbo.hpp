@@ -5,18 +5,9 @@
  *      Author: hwangvm
  */
 
-#ifndef COMPONENTS_NANOPI_TIMBO_NANOPI_TIMBO_HPP_
-#define COMPONENTS_NANOPI_TIMBO_NANOPI_TIMBO_HPP_
+#ifndef _COSSB_COMPONENT_NANOPI_TIMBO_HPP_
+#define _COSSB_COMPONENT_NANOPI_TIMBO_HPP_
 
-
-
-
-
-#endif /* COMPONENTS_NANOPI_TIMBO_NANOPI_TIMBO_HPP_ */
-
-
-#ifndef _COSSB_COMPONENT_NANOPI_HPP_
-#define _COSSB_COMPONENT_NANOPI_HPP_
 
 #include <interface/icomponent.hpp>
 #include <base/task.hpp>
@@ -26,10 +17,10 @@
 using namespace std;
 
 
-class nanopi : public interface::icomponent  {
+class nanopi_timbo : public interface::icomponent  {
 public:
-	nanopi();
-	virtual ~nanopi();
+	nanopi_timbo();
+	virtual ~nanopi_timbo();
 
 	/**
 	 * @brief	setup interface function
@@ -64,4 +55,4 @@ private:
 
 COMPONENT_EXPORT
 
-#endif /* _COSSB_COMPONENT_NANOPI_HPP_ */
+#endif /* _COSSB_COMPONENT_NANOPI_TIMBO_HPP_ */

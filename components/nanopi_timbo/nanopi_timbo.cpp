@@ -1,5 +1,5 @@
 
-#include "nanopi.hpp"
+#include "nanopi_timbo.hpp"
 #include <cossb.hpp>
 #include <wiringPi.h>
 #include <algorithm>
@@ -22,19 +22,19 @@ const unsigned int gpio_sw[] = {SW1, SW2, SW3, SW4};
 
 using namespace std;
 
-USE_COMPONENT_INTERFACE(nanopi)
+USE_COMPONENT_INTERFACE(nanopi_timbo)
 
-nanopi::nanopi()
-:cossb::interface::icomponent(COMPONENT(nanopi)){
+nanopi_timbo::nanopi_timbo()
+:cossb::interface::icomponent(COMPONENT(nanopi_timbo)){
 	// TODO Auto-generated constructor stub
 
 }
 
-nanopi::~nanopi() {
+nanopi_timbo::~nanopi_timbo() {
 
 }
 
-bool nanopi::setup()
+bool nanopi_timbo::setup()
 {
 	wiringPiSetup ();
 
@@ -54,18 +54,18 @@ bool nanopi::setup()
 	return true;
 }
 
-bool nanopi::run()
+bool nanopi_timbo::run()
 {
 	return true;
 }
 
-bool nanopi::stop()
+bool nanopi_timbo::stop()
 {
 	//destroy_task(_gpio_task);
 	return true;
 }
 
-void nanopi::subscribe(cossb::message* const msg)
+void nanopi_timbo::subscribe(cossb::message* const msg)
 {
 	switch(msg->get_frame()->type) {
 		case cossb::base::msg_type::REQUEST: break;
@@ -102,7 +102,7 @@ void nanopi::subscribe(cossb::message* const msg)
 		}
 }
 
-void nanopi::read()
+void nanopi_timbo::read()
 {
 	/*vector<int> input_port;
 	for(auto& port:_gpio_port_map)
