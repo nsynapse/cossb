@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
 				*send_stream << message_str;
 				//server.send is an asynchronous function
 				server.send(a_connection, send_stream);
-				cout << "Broadcast data to " << connection.get() << endl;
+				cout << "Broadcast data to " << a_connection.get() << endl;
 			}
 		}
 	};
@@ -67,7 +67,7 @@ int main(int argc, char* argv[])
 					cout << a_connection.get()->path << " / " << a_connection << endl;
 					//server.send is an asynchronous function
 					server.send(a_connection, send_stream);
-					cout << "command Broadcast data to " << connection.get() << endl;
+					cout << "command Broadcast data to " << a_connection.get() << endl;
 				}
 			}
 		};
