@@ -10,39 +10,37 @@
 <body draggable="true">
   <script type="text/javascript">
     $(document).ready(function(){
-    	//var socket_uri = "ws://localhost:9002/guidebook";
-    	var socket_command_uri = "ws://localhost:9002/command";
-    	//var sock = new WebSocket(socket_uri)
-    	var sock_command = new WebSocket(socket_command_uri)
+    	var socket_uri = "ws://localhost:9002/guidebook";
+    	var sock = new WebSocket(socket_uri)
     	
     	sock.onopen = function(){
-    		$('#connection').html("<div class='callout callout-success' style='margin-bottom: 0!important;'><h4><i class='fa fa-info'></i> Success:</h4> Successfully connected to the server "+socket_uri+".</div></div>");
+    		console.log("open");
+    		//$('#connection').html("<div class='callout callout-success' style='margin-bottom: 0!important;'><h4><i class='fa fa-info'></i> Success:</h4> Successfully connected to the server "+socket_uri+".</div></div>");
     		
     	}
     	sock.onclose = function(e){
-    		$('#connection').html("<div class='callout callout-danger' style='margin-bottom: 0!important;'><h4><i class='fa fa-ban'></i> Fail:</h4>Alert!"+socket_uri+" connection is failed.</div></div>");
+    		console.log("close");
+    		//$('#connection').html("<div class='callout callout-danger' style='margin-bottom: 0!important;'><h4><i class='fa fa-ban'></i> Fail:</h4>Alert!"+socket_uri+" connection is failed.</div></div>");
     	}
     	sock.onmessage = function(e){
     		var jsondata = jQuery.parseJSON(e.data);
-    		
-    		if(jsondata.id>0)
-    			sensors[jsondata.id].refresh(jsondata.value);
+    		console.log("on message");
     	}
-    	sock_command.onopen = function() { console.log("open");}
-    	sock_command.onclose = function() { console.log("close");}
-    	sock_command.onmessage = function() { console.log("message");}
+    	sock.onopen = function() { console.log("open");}
+    	sock.onclose = function() { console.log("close");}
+    	sock.onmessage = function() { console.log("message");}
     	
     	$("#id_btn_setting").click(function(){
     		data['component'] = "app_timbo";
     		data['command'] = "idsetting";
-    		sock_command.send(JSON.stringify(data));
+    		sock.send(JSON.stringify(data));
         });
     	
     	$("#id_btn_trajectory").click(function(){
     		var data = {}
     		data['component'] = "app_timbo";
     		data['command'] = "trajectory";
-    		sock_command.send(JSON.stringify(data));
+    		sock.send(JSON.stringify(data));
         });
     
     });
