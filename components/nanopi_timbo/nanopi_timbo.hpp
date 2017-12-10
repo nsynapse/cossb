@@ -21,6 +21,7 @@
 #include <interface/icomponent.hpp>
 #include <base/task.hpp>
 #include <map>
+#include <string>
 
 using namespace std;
 
@@ -52,6 +53,8 @@ public:
 
 private:
 	void read();
+
+	//send trajectory
 
 private:
 	//map<int, bool> _gpio_port_map; //true output, false input

@@ -22,10 +22,11 @@
 	<!-- required component cannot be stopped by user -->
 	<!-- required library for advanced user or our support -->
 
-	<required type="component">uart</required>
-	<required type="component">timboprotocol</required>
-	<required type="component">app_timbo</required>
-	<required type="component">nanopi</required>
+	<!--<required type="component">uart</required>-->
+	<!--<required type="component">timboprotocol</required>-->
+	<!--<required type="component">app_timbo</required>-->
+	<!--<required type="component">nanopi_timbo</required>-->
+	<required type="component">wsclient</required>
 	
 	
 	<!-- do not edit this path -->
