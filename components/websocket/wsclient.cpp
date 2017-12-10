@@ -24,22 +24,22 @@ wsclient::~wsclient() {
 
 bool wsclient::setup()
 {
-	for(auto uri:get_profile()->gets(profile::section::property, "endpoint")){
-		string u = uri.asString("ws://localhost::9002");
+	string uri = get_profile()->get(profile::section::property, "endpoint").asString("ws://localhost.9002");
 
-		_client = easywsclient::WebSocket::from_url(u.c_str());
+	if(!_client){
+		_client = easywsclient::WebSocket::from_url(uri.c_str());
 		if(_client->getReadyState()==easywsclient::WebSocket::OPEN){
-			cossb_log->log(log::loglevel::INFO, fmt::format("Connected to the {} websocket server",u));
+			cossb_log->log(log::loglevel::INFO, fmt::format("Connected to the {} websocket server",uri));
+			if(!_socket_task)
+				_socket_task = create_task(wsclient::read);
+			return true;
 		}
 	}
-
-	return true;
+	return false;
 }
 
 bool wsclient::run()
 {
-	if(!_socket_task)
-		_socket_task = create_task(wsclient::read);
 
 	return true;
 }
