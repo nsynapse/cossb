@@ -14,7 +14,8 @@
 </info>
 
 <property>
-	
+	<port>/dev/ttyS1</port>
+	<baudrate>115200</baudrate>
 </property>
 
 <service name="nanopi_gpio_read" method="publish" topic="service/nanopi/gpio/read"></service>

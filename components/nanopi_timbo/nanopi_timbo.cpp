@@ -28,14 +28,36 @@ nanopi_timbo::nanopi_timbo()
 :cossb::interface::icomponent(COMPONENT(nanopi_timbo)){
 	// TODO Auto-generated constructor stub
 
+
 }
 
 nanopi_timbo::~nanopi_timbo() {
-
+	if(_uart)
+		delete _uart;
 }
 
 bool nanopi_timbo::setup()
 {
+	_port = get_profile()->get(profile::section::property, "port").asString("/dev/ttyS0");
+	unsigned int baudrate = get_profile()->get(profile::section::property, "baudrate").asInt(115200);
+
+	if(!_uart)
+		_uart = new libserial;
+
+	if(!_uart->open(_port.c_str(), baudrate)) {
+		if(_uart) {
+			delete _uart;
+			_uart = nullptr;
+		}
+		cossb_log->log(log::loglevel::ERROR, fmt::format("Cannot open {}({})",_port, baudrate));
+		return false;
+	}
+
+	cossb_log->log(log::loglevel::INFO, fmt::format("Open {}({})",_port, baudrate));
+
+	_uart_task = create_task(nanopi_timbo::uart_read);
+
+
 	wiringPiSetup ();
 
 	for(int i=0;i<sizeof(gpio_out);i++)
@@ -49,7 +71,7 @@ bool nanopi_timbo::setup()
 
 
 	//create task for gpio read
-	//_gpio_task = create_task(nanopi::read);
+	_gpio_task = create_task(nanopi::gpio_read);
 
 	return true;
 }
@@ -61,7 +83,8 @@ bool nanopi_timbo::run()
 
 bool nanopi_timbo::stop()
 {
-	//destroy_task(_gpio_task);
+	destroy_task(_gpio_task);
+	destroy_task(_uart_task);
 	return true;
 }
 
@@ -70,6 +93,16 @@ void nanopi_timbo::subscribe(cossb::message* const msg)
 	switch(msg->get_frame()->type) {
 		case cossb::base::msg_type::REQUEST: break;
 		case cossb::base::msg_type::DATA: {
+			//uart data
+			try
+			{
+				vector<unsigned char> data = boost::any_cast<vector<unsigned char>>(*msg->get_data());
+				_uart->write((const char*)data.data(), data.size());
+				cossb_log->log(log::loglevel::INFO, fmt::format("Write {} byte(s) to the serial", data.size()));
+			}
+			catch(const boost::bad_any_cast&){
+				cossb_log->log(log::loglevel::ERROR, "Invalid type casting");
+			}
 
 			//subscribe gpio write
 			try {
@@ -101,8 +134,38 @@ void nanopi_timbo::subscribe(cossb::message* const msg)
 		case cossb::base::msg_type::EVENT:  break;
 		}
 }
+void nanopi_timbo::uart_read(){
+	while(1) {
+		try {
+			if(_uart) {
+				const unsigned int len = 1024;
+				unsigned char* buffer = new unsigned char[len];
+				int readsize = _uart->read(buffer, sizeof(unsigned char)*len);
 
-void nanopi_timbo::read()
+				if(readsize>0) {
+					cossb_log->log(log::loglevel::INFO, fmt::format("Received {} Byte(s) from {}",readsize, _port));
+					cossb::message _msg(this, base::msg_type::DATA);
+					vector<unsigned char> data(buffer, buffer+readsize);
+					_msg.pack(data);
+					cossb_broker->publish("serial_read", _msg);
+
+					//debug
+					for(auto& c:data)
+						cout << (int)c << " ";
+					cout << endl;
+				}
+
+				delete []buffer;
+				boost::this_thread::sleep(boost::posix_time::milliseconds(10));
+			}
+		}
+		catch(thread_interrupted&) {
+			break;
+		}
+	}
+}
+
+void nanopi_timbo::gpio_read()
 {
 	/*vector<int> input_port;
 	for(auto& port:_gpio_port_map)
