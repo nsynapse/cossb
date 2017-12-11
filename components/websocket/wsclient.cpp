@@ -80,7 +80,6 @@ void wsclient::read()
 			if(_client->getReadyState()!=easywsclient::WebSocket::CLOSED){
 				_client->poll();
 				_client->dispatch(handle_message);
-				cossb_log->log(log::loglevel::INFO, "dispatch");
 			}
 
 			boost::this_thread::sleep(boost::posix_time::milliseconds(10));
