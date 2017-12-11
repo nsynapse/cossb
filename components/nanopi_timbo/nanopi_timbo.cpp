@@ -71,7 +71,7 @@ bool nanopi_timbo::setup()
 
 
 	//create task for gpio read
-	_gpio_task = create_task(nanopi::gpio_read);
+	_gpio_task = create_task(nanopi_timbo::gpio_read);
 
 	return true;
 }
