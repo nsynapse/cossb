@@ -265,9 +265,12 @@ $(OUTDIR)nanopi.o: $(COMPONENT_FILES)nanopi/nanopi.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
 nanopi_timbo.comp: $(OUTDIR)nanopi_timbo.o \
-				$(OUTDIR)message_any.o
+				$(OUTDIR)timbouart.o \
+				$(OUTDIR)message_any.o 
 	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS) -lwiringPi -lpthread
 $(OUTDIR)nanopi_timbo.o: $(COMPONENT_FILES)nanopi_timbo/nanopi_timbo.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+$(OUTDIR)timbouart.o: $(COMPONENT_FILES)nanopi_timbo/libserial.cpp 
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 	
 	
