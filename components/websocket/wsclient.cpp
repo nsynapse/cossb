@@ -46,10 +46,10 @@ bool wsclient::run()
 
 bool wsclient::stop()
 {
+	destroy_task(_socket_task);
+
 	_client->close();
 	delete _client;
-
-	destroy_task(_socket_task);
 
 	return true;
 }
@@ -81,6 +81,8 @@ void wsclient::read()
 				_client->poll();
 				_client->dispatch(handle_message);
 			}
+
+			if(boost::this_thread::interruption_requested()) break;
 
 			boost::this_thread::sleep(boost::posix_time::milliseconds(10));
 		}
