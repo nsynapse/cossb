@@ -12,6 +12,7 @@ using namespace std;
 #define SET		0xf0
 #define TRAJ	0x0d
 
+
 USE_COMPONENT_INTERFACE(app_timbo)
 
 app_timbo::app_timbo()
@@ -74,9 +75,9 @@ void app_timbo::subscribe(cossb::message* const msg)
 			if(_json_data.find("command")!=_json_data.end()){
 				string command = _json_data["command"];
 				if(!command.compare("trajectory_play")){
+					this->run_motion(1);
 					cossb_log->log(log::loglevel::INFO, fmt::format("Ok : {}", data));
 				}
-				cossb_log->log(log::loglevel::INFO, fmt::format("Parse Ok : {}", data));
 			}
 		}catch(const boost::bad_any_cast&){}
 	}
@@ -131,4 +132,15 @@ void app_timbo::key_send_trajectory(int value){
 	cossb_broker->publish("app_timbo_command", _msg);
 }
 
+void app_timbo::load_motion(const char* filename){
+
+}
+
+void app_timbo::run_motion(int contents)
+{
+	unsigned char frame[] = {HEAD, 0x07, 0x00, TRAJ, 0x00, 0x00, 0x00, END};
+	cossb::message _msg(this, base::msg_type::DATA);
+	vector<unsigned char> data(frame, frame+sizeof(frame));
+	cossb_broker->publish("trajectory_play", _msg);
+}
 

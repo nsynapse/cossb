@@ -45,8 +45,7 @@ private:
 	void key_send_trajectory(int value); 	//press key for trajectory send
 
 	void load_motion(const char* filename);
-
-	void run_motion();
+	void run_motion(int contents);
 
 };
 

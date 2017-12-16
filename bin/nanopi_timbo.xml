@@ -20,3 +20,5 @@
 
 <service name="nanopi_gpio_read" method="publish" topic="service/nanopi/gpio/read"></service>
 <service name="nanopi_gpio_write" method="subscribe" topic="service/nanopi/gpio/write"></service>
+<service name="nanopi_uart_write" method="subscribe" topic="service/nanopi/uart/write"></service>
+<service name="nanopi_uart_read" method="publish" topic="service/nanopi/uart/read"></service>
