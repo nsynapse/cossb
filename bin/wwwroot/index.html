@@ -46,6 +46,7 @@
     	sock.onmessage = function() { console.log("message");}
     	
     	$("#id_btn_setting").click(function(){
+    		data["component"] = "app_timbo";
     		data['service'] = "app_timbo_setting";
     		data['command'] = "setting";
     		sock.send(JSON.stringify(data));
@@ -53,6 +54,7 @@
     	
     	$("#id_btn_trajectory").click(function(){
     		var data = {}
+    		data["component"] = "app_timbo";
     		data['service'] = "app_timbo_trajectory_play";
     		data['command'] = "play";
     		sock.send(JSON.stringify(data));
