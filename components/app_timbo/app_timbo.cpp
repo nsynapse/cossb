@@ -76,6 +76,7 @@ void app_timbo::subscribe(cossb::message* const msg)
 				if(!command.compare("trajectory_play")){
 					cossb_log->log(log::loglevel::INFO, fmt::format("Ok : {}", data));
 				}
+				cossb_log->log(log::loglevel::INFO, fmt::format("Parse Ok : {}", data));
 			}
 		}catch(const boost::bad_any_cast&){}
 	}
