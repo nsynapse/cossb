@@ -3,6 +3,7 @@
 #include <cossb.hpp>
 #include <string>
 #include <algorithm>
+#include <ext/json.hpp>
 
 using namespace std;
 
@@ -69,7 +70,13 @@ void app_timbo::subscribe(cossb::message* const msg)
 		//trajectory
 		try {
 			string data = boost::any_cast<string>(*msg->get_data());
-			cossb_log->log(log::loglevel::INFO, fmt::format("App timbo requested : {}", data));
+			nlohmann::json _json_data = nlohmann::json::parse(data);
+			if(_json_data.find("command")!=_json_data.end()){
+				string command = _json_data["command"];
+				if(!command.compare("trajectory_play")){
+					cossb_log->log(log::loglevel::INFO, fmt::format("Ok : {}", data));
+				}
+			}
 		}catch(const boost::bad_any_cast&){}
 	}
 		break;
