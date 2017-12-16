@@ -11,11 +11,10 @@ void handle_message(const std::string & message)
 {
 	nlohmann::json _json_data = nlohmann::json::parse(message);
 
-	if(_json_data.find("service")!=_json_data.end() && _json_data.find("component")!=_json_data.end()){
+	if(_json_data.find("service")!=_json_data.end()){
 		string wsdata = _json_data.dump();
 		string service = _json_data["service"];
-		string component = _json_data["component"];
-		cossb::message msg(component.c_str(), base::msg_type::REQUEST);
+		cossb::message msg("wsclient", base::msg_type::REQUEST);
 		msg.pack(wsdata);
 		cossb_broker->publish(service.c_str(), msg);
 		cossb_log->log(log::loglevel::INFO, fmt::format("Web socket message : {}", wsdata));
