@@ -51,6 +51,8 @@ private:
 	std::mutex _lock;
 	//map<string, bool> _reconnect;
 
+
+
 private:
 	void read();
 

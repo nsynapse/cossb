@@ -19,3 +19,4 @@
 </property>
 
 <service name="app_timbo_command" method="publish" topic="app/timbo/command"></service>
+<service name="app_timbo_trajectory_play" method="subscribe" topic="app/timbo/trajectory/play"></service>

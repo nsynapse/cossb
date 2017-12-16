@@ -3,12 +3,22 @@
 #include "wsclient.hpp"
 #include <cossb.hpp>
 #include <algorithm>
+#include <ext/json.hpp>
 
 USE_COMPONENT_INTERFACE(wsclient)
 
 void handle_message(const std::string & message)
 {
-	cossb_log->log(log::loglevel::INFO, fmt::format("Message : {}", message));
+	nlohmann::json _json_data = nlohmann::json::parse(message);
+
+	if(_json_data.find("service")!=_json_data.end()){
+		string wsdata = _json_data.dump();
+		string service = _json_data["service"];
+		cossb::message msg(this, base::msg_type::DATA);
+		msg.pack(wsdata);
+		cossb_broker->publish(service.c_str(), msg);
+		cossb_log->log(log::loglevel::INFO, fmt::format("Web socket message : {}", wsdata));
+	}
 
 }
 
@@ -60,10 +70,7 @@ void wsclient::subscribe(cossb::message* const msg)
 		case cossb::base::msg_type::REQUEST:{
 
 			string pack = boost::any_cast<string>(*msg->get_data());
-			/*easywsclient::WebSocket::pointer endpoint = _client_map.find(uri)->second;
-			if(endpoint->getReadyState()!=easywsclient::WebSocket::CLOSED){
-				endpoint->send(pack);
-			}*/
+
 
 		} break;
 		case cossb::base::msg_type::DATA: break;
@@ -82,9 +89,8 @@ void wsclient::read()
 				_client->dispatch(handle_message);
 			}
 
+			boost::this_thread::sleep(boost::posix_time::milliseconds(100));
 			if(boost::this_thread::interruption_requested()) break;
-
-			boost::this_thread::sleep(boost::posix_time::milliseconds(10));
 		}
 		catch(thread_interrupted&) {
 			break;
