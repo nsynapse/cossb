@@ -53,12 +53,13 @@ bool app_timbo::setup()
 
 bool app_timbo::run()
 {
-
+	cossb_log->log(log::loglevel::INFO, "test");
 	return true;
 }
 
 bool app_timbo::stop()
 {
+
 	return true;
 }
 
@@ -109,7 +110,7 @@ void app_timbo::key_id_setting(int value){
 	memcpy(frame+3, _group_id, sizeof(_group_id));
 
 	//print
-	for(int i=0;i<sizeof(frame);i++)
+	for(int i=0;i<(int)sizeof(frame);i++)
 		cout << (int)frame[i];
 	cout << endl;
 
@@ -132,9 +133,6 @@ void app_timbo::key_send_trajectory(int value){
 	cossb_broker->publish("app_timbo_command", _msg);
 }
 
-void app_timbo::load_motion(const char* filename){
-
-}
 
 void app_timbo::run_motion(int contents)
 {

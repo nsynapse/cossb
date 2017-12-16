@@ -43,8 +43,6 @@ private:
 	void key_id_setting(int value);	//press key for id setting
 	void key_id_select(int value);	//press key for id select
 	void key_send_trajectory(int value); 	//press key for trajectory send
-
-	void load_motion(const char* filename);
 	void run_motion(int contents);
 
 };
