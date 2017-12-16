@@ -76,7 +76,7 @@ void app_timbo::subscribe(cossb::message* const msg)
 				string command = _json_data["command"];
 				if(!command.compare("trajectory_play")){
 					this->run_motion(1);
-					cossb_log->log(log::loglevel::INFO, fmt::format("Ok : {}", data));
+					cossb_log->log(log::loglevel::INFO, fmt::format("Subscribe : {}", data));
 				}
 			}
 		}catch(const boost::bad_any_cast&){}
@@ -139,8 +139,10 @@ void app_timbo::load_motion(const char* filename){
 void app_timbo::run_motion(int contents)
 {
 	unsigned char frame[] = {HEAD, 0x07, 0x00, TRAJ, 0x00, 0x00, 0x00, END};
-	cossb::message _msg(this, base::msg_type::DATA);
+	cossb::message msg(this, base::msg_type::DATA);
 	vector<unsigned char> data(frame, frame+sizeof(frame));
-	cossb_broker->publish("trajectory_play", _msg);
+	msg.pack(data);
+	cossb_broker->publish("trajectory_play", msg);
+	cossb_log->log(log::loglevel::INFO, fmt::format("Publish to UART : {} bytes", data.size()));
 }
 
