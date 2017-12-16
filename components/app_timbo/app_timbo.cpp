@@ -64,8 +64,17 @@ void app_timbo::subscribe(cossb::message* const msg)
 {
 
 	switch(msg->get_frame()->type) {
-	case cossb::base::msg_type::REQUEST: break;
+	case cossb::base::msg_type::REQUEST:
+	{
+		//trajectory
+		try {
+			string data = boost::any_cast<string>(*msg->get_data());
+			cossb_log->log(log::loglevel::INFO, fmt::format("App timbo requested : {}", data));
+		}catch(const boost::bad_any_cast&){}
+	}
+		break;
 	case cossb::base::msg_type::DATA: {
+
 		try
 		{
 			//key press

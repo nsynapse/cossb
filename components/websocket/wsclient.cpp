@@ -15,7 +15,7 @@ void handle_message(const std::string & message)
 		string wsdata = _json_data.dump();
 		string service = _json_data["service"];
 		string component = _json_data["component"];
-		cossb::message msg(component.c_str(), base::msg_type::DATA);
+		cossb::message msg(component.c_str(), base::msg_type::REQUEST);
 		msg.pack(wsdata);
 		cossb_broker->publish(service.c_str(), msg);
 		cossb_log->log(log::loglevel::INFO, fmt::format("Web socket message : {}", wsdata));
