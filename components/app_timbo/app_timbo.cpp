@@ -145,7 +145,7 @@ void app_timbo::run_motion(int contents)
 	for(int i=0;i<100;i++)
 	{
 		//trajectory (sample)
-		unsigned short value = (unsigned short)i*10;
+		unsigned short value = (unsigned short)(i*10);
 		unsigned char trj[] = {HEAD, 0x04, 0x0f, TRAJ, (value>>8), (value&0x00ff), END};
 		cossb::message vmsg(this, base::msg_type::DATA);
 		vector<unsigned char> data2(trj, trj+sizeof(trj));

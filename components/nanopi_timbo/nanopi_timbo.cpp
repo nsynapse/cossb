@@ -2,6 +2,7 @@
 #include "nanopi_timbo.hpp"
 #include <cossb.hpp>
 #include <wiringPi.h>
+#include <wiringSerial.h>
 #include <algorithm>
 
 #define LED1	21
@@ -32,8 +33,7 @@ nanopi_timbo::nanopi_timbo()
 }
 
 nanopi_timbo::~nanopi_timbo() {
-	if(_uart)
-		delete _uart;
+
 }
 
 bool nanopi_timbo::setup()
@@ -41,14 +41,8 @@ bool nanopi_timbo::setup()
 	_port = get_profile()->get(profile::section::property, "port").asString("/dev/ttyS0");
 	unsigned int baudrate = get_profile()->get(profile::section::property, "baudrate").asInt(115200);
 
-	if(!_uart)
-		_uart = new libserial;
-
-	if(!_uart->open(_port.c_str(), baudrate)) {
-		if(_uart) {
-			delete _uart;
-			_uart = nullptr;
-		}
+	if((fd = serialOpen(_port.c_str(), baudrate)) < 0)
+	{
 		cossb_log->log(log::loglevel::ERROR, fmt::format("Cannot open {}({})",_port, baudrate));
 		return false;
 	}
@@ -58,7 +52,9 @@ bool nanopi_timbo::setup()
 	_uart_task = create_task(nanopi_timbo::uart_read);
 
 
-	wiringPiSetup ();
+	if(wiringPiSetup()==-1){
+		cossb_log->log(log::loglevel::ERROR, "Unable to start Pi");
+	}
 
 	for(int i=0;i<sizeof(gpio_out);i++)
 		pinMode(gpio_out[i], OUTPUT);
@@ -83,6 +79,7 @@ bool nanopi_timbo::run()
 
 bool nanopi_timbo::stop()
 {
+	serialClose(fd);
 	destroy_task(_gpio_task);
 	destroy_task(_uart_task);
 	return true;
@@ -97,7 +94,9 @@ void nanopi_timbo::subscribe(cossb::message* const msg)
 			try
 			{
 				vector<unsigned char> data = boost::any_cast<vector<unsigned char>>(*msg->get_data());
-				_uart->write((const char*)data.data(), data.size());
+				for(auto& c:data)
+					serialPuts(fd, data.data());
+				//_uart->write((const char*)data.data(), data.size());
 				cossb_log->log(log::loglevel::INFO, fmt::format("Write {} byte(s) to the serial", data.size()));
 			}
 			catch(const boost::bad_any_cast&){
