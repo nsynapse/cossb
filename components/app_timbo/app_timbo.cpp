@@ -142,16 +142,17 @@ void app_timbo::run_motion(int contents)
 	hmsg.pack(data1);
 	cossb_broker->publish("trajectory_play", hmsg);
 
-	for(int i=0;i<10;i++)
+	for(int i=0;i<100;i++)
 	{
 		//trajectory (sample)
-		unsigned short value = i*20;
+		unsigned short value = (unsigned short)i*10;
 		unsigned char trj[] = {HEAD, 0x04, 0x0f, TRAJ, (value>>8), (value&0x00ff), END};
 		cossb::message vmsg(this, base::msg_type::DATA);
 		vector<unsigned char> data2(trj, trj+sizeof(trj));
 		vmsg.pack(data2);
 		cossb_broker->publish("trajectory_play", vmsg);
 		cossb_log->log(log::loglevel::INFO, fmt::format("Publish to Nanopi : {} bytes", data2.size()));
+		boost::this_thread::sleep(boost::posix_time::milliseconds(20));
 	}
 
 	//end
