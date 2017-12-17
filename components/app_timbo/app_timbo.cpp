@@ -10,7 +10,7 @@ using namespace std;
 #define HEAD	0x55
 #define END		0xaa
 #define SET		0xf0
-#define TRAJ	0x0d
+#define TRAJ		0x0d
 
 
 USE_COMPONENT_INTERFACE(app_timbo)
@@ -53,7 +53,6 @@ bool app_timbo::setup()
 
 bool app_timbo::run()
 {
-	cossb_log->log(log::loglevel::INFO, "test");
 	return true;
 }
 
@@ -136,11 +135,31 @@ void app_timbo::key_send_trajectory(int value){
 
 void app_timbo::run_motion(int contents)
 {
-	unsigned char frame[] = {HEAD, 0x07, 0x00, TRAJ, 0x00, 0x00, 0x00, END};
-	cossb::message msg(this, base::msg_type::DATA);
-	vector<unsigned char> data(frame, frame+sizeof(frame));
-	msg.pack(data);
-	cossb_broker->publish("trajectory_play", msg);
-	cossb_log->log(log::loglevel::INFO, fmt::format("Publish to UART : {} bytes", data.size()));
+	//start
+	cossb::message hmsg(this, base::msg_type::DATA);
+	unsigned char header[] = {HEAD, 0x03, 0x0f, 0x2e, 0x00, END};
+	vector<unsigned char> data(header, header+sizeof(header));
+	hmsg.pack(data);
+	cossb_broker->publish("trajectory_play", hmsg);
+
+	for(int i=0;i<10;i++)
+	{
+		//trajectory (sample)
+		unsigned short value = i*20;
+		unsigned char trj[] = {HEAD, 0x04, 0x0f, TRAJ, (value>>8), (value&0x00ff), END};
+		cossb::message vmsg(this, base::msg_type::DATA);
+		vector<unsigned char> data(trj, trj+sizeof(trj));
+		vmsg.pack(data);
+		cossb_broker->publish("trajectory_play", vmsg);
+		cossb_log->log(log::loglevel::INFO, fmt::format("Publish to Nanopi : {} bytes", data.size()));
+	}
+
+	//end
+	cossb::message tmsg(this, base::msg_type::DATA);
+	unsigned char tail[] = {HEAD, 0x03, 0x0f, 0x04, 0x00, END};
+	vector<unsigned char> data(tail, tail+sizeof(tail));
+	tmsg.pack(data);
+	cossb_broker->publish("trajectory_play", tmsg);
+
 }
 
