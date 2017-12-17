@@ -20,4 +20,4 @@
 
 <service name="app_timbo_command" method="publish" topic="app/timbo/command"></service>
 <service name="websocket_message" method="subscribe" topic="service/websocket/read"></service>
-<service name="trajectory_play" method="publish" topic="service/nanopi/uart/write"></service>
+<service name="timbo_write" method="publish" topic="service/nanopi/uart/write"></service>

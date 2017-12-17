@@ -138,7 +138,7 @@ void app_timbo::key_send_trajectory(int value){
 	unsigned char frame[] = {HEAD, 0x07, 0x0f, TRAJ, 0x00, 0x00, 0x00, END};
 	cossb::message _msg(this, base::msg_type::DATA);
 	vector<unsigned char> data(frame, frame+sizeof(frame));
-	cossb_broker->publish("app_timbo_command", _msg);
+	cossb_broker->publish("timbo_write", _msg);
 }
 
 
@@ -149,7 +149,7 @@ void app_timbo::run_motion(int contents)
 	unsigned char header[] = {HEAD, 0x03, 0x0f, 0x2e, 0x00, END};
 	vector<unsigned char> data1(header, header+sizeof(header));
 	hmsg.pack(data1);
-	cossb_broker->publish("trajectory_play", hmsg);
+	cossb_broker->publish("timbo_write", hmsg);
 
 	for(int i=0;i<100;i++)
 	{
@@ -159,7 +159,7 @@ void app_timbo::run_motion(int contents)
 		cossb::message vmsg(this, base::msg_type::DATA);
 		vector<unsigned char> data2(trj, trj+sizeof(trj));
 		vmsg.pack(data2);
-		cossb_broker->publish("trajectory_play", vmsg);
+		cossb_broker->publish("timbo_write", vmsg);
 		cossb_log->log(log::loglevel::INFO, fmt::format("Publish to Nanopi : {} bytes", data2.size()));
 		boost::this_thread::sleep(boost::posix_time::milliseconds(20));
 	}
@@ -169,7 +169,7 @@ void app_timbo::run_motion(int contents)
 	unsigned char tail[] = {HEAD, 0x03, 0x0f, 0x04, 0x00, END};
 	vector<unsigned char> data3(tail, tail+sizeof(tail));
 	tmsg.pack(data3);
-	cossb_broker->publish("trajectory_play", tmsg);
+	cossb_broker->publish("timbo_write", tmsg);
 
 }
 
@@ -178,7 +178,7 @@ void app_timbo::timbo_record(){
 	cossb::message _msg(this, base::msg_type::DATA);
 	vector<unsigned char> data(frame, frame+sizeof(frame));
 	_msg.pack(data);
-	cossb_broker->publish("app_timbo_command", _msg);
+	cossb_broker->publish("timbo_write", _msg);
 	cossb_log->log(log::loglevel::INFO, fmt::format("Publish to Nanopi : {} bytes", data.size()));
 }
 void app_timbo::timbo_play(){
@@ -186,7 +186,7 @@ void app_timbo::timbo_play(){
 	cossb::message _msg(this, base::msg_type::DATA);
 	vector<unsigned char> data(frame, frame+sizeof(frame));
 	_msg.pack(data);
-	cossb_broker->publish("app_timbo_command", _msg);
+	cossb_broker->publish("timbo_write", _msg);
 	cossb_log->log(log::loglevel::INFO, fmt::format("Publish to Nanopi : {} bytes", data.size()));
 }
 void app_timbo::timbo_stop(){
@@ -194,7 +194,7 @@ void app_timbo::timbo_stop(){
 	cossb::message _msg(this, base::msg_type::DATA);
 	vector<unsigned char> data(frame, frame+sizeof(frame));
 	_msg.pack(data);
-	cossb_broker->publish("app_timbo_command", _msg);
+	cossb_broker->publish("timbo_write", _msg);
 	cossb_log->log(log::loglevel::INFO, fmt::format("Publish to Nanopi : {} bytes", data.size()));
 }
 void app_timbo::timbo_ping(){
@@ -202,7 +202,7 @@ void app_timbo::timbo_ping(){
 	cossb::message _msg(this, base::msg_type::DATA);
 	vector<unsigned char> data(frame, frame+sizeof(frame));
 	_msg.pack(data);
-	cossb_broker->publish("app_timbo_command", _msg);
+	cossb_broker->publish("timbo_write", _msg);
 	cossb_log->log(log::loglevel::INFO, fmt::format("Publish to Nanopi : {} bytes", data.size()));
 }
 
