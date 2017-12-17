@@ -95,7 +95,7 @@ void nanopi_timbo::subscribe(cossb::message* const msg)
 			{
 				vector<unsigned char> data = boost::any_cast<vector<unsigned char>>(*msg->get_data());
 				for(auto& c:data)
-					serialPuts(fd, data.data());
+					serialPutchar(fd, c);
 				//_uart->write((const char*)data.data(), data.size());
 				cossb_log->log(log::loglevel::INFO, fmt::format("Write {} byte(s) to the serial", data.size()));
 			}
