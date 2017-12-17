@@ -138,8 +138,8 @@ void app_timbo::run_motion(int contents)
 	//start
 	cossb::message hmsg(this, base::msg_type::DATA);
 	unsigned char header[] = {HEAD, 0x03, 0x0f, 0x2e, 0x00, END};
-	vector<unsigned char> data(header, header+sizeof(header));
-	hmsg.pack(data);
+	vector<unsigned char> data1(header, header+sizeof(header));
+	hmsg.pack(data1);
 	cossb_broker->publish("trajectory_play", hmsg);
 
 	for(int i=0;i<10;i++)
@@ -148,17 +148,17 @@ void app_timbo::run_motion(int contents)
 		unsigned short value = i*20;
 		unsigned char trj[] = {HEAD, 0x04, 0x0f, TRAJ, (value>>8), (value&0x00ff), END};
 		cossb::message vmsg(this, base::msg_type::DATA);
-		vector<unsigned char> data(trj, trj+sizeof(trj));
-		vmsg.pack(data);
+		vector<unsigned char> data2(trj, trj+sizeof(trj));
+		vmsg.pack(data2);
 		cossb_broker->publish("trajectory_play", vmsg);
-		cossb_log->log(log::loglevel::INFO, fmt::format("Publish to Nanopi : {} bytes", data.size()));
+		cossb_log->log(log::loglevel::INFO, fmt::format("Publish to Nanopi : {} bytes", data2.size()));
 	}
 
 	//end
 	cossb::message tmsg(this, base::msg_type::DATA);
 	unsigned char tail[] = {HEAD, 0x03, 0x0f, 0x04, 0x00, END};
-	vector<unsigned char> data(tail, tail+sizeof(tail));
-	tmsg.pack(data);
+	vector<unsigned char> data3(tail, tail+sizeof(tail));
+	tmsg.pack(data3);
 	cossb_broker->publish("trajectory_play", tmsg);
 
 }
