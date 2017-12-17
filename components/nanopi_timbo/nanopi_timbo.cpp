@@ -136,7 +136,7 @@ void nanopi_timbo::subscribe(cossb::message* const msg)
 void nanopi_timbo::uart_read(){
 	while(1) {
 		try {
-			if(_uart) {
+			/*if(_uart) {
 				const unsigned int len = 1024;
 				unsigned char* buffer = new unsigned char[len];
 				int readsize = _uart->read(buffer, sizeof(unsigned char)*len);
@@ -156,7 +156,7 @@ void nanopi_timbo::uart_read(){
 
 				delete []buffer;
 				boost::this_thread::sleep(boost::posix_time::milliseconds(10));
-			}
+			}*/
 		}
 		catch(thread_interrupted&) {
 			break;
