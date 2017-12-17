@@ -183,25 +183,25 @@ void app_timbo::run_motion(int contents)
 
 }
 
-void app_timbo::record(){
+void app_timbo::timbo_record(){
 	unsigned char frame[] = {HEAD, 0x03, 0x0f, RECORD, 0x00, END};
 	cossb::message _msg(this, base::msg_type::DATA);
 	vector<unsigned char> data(frame, frame+sizeof(frame));
 	cossb_broker->publish("app_timbo_command", _msg);
 }
-void app_timbo::play(){
+void app_timbo::timbo_play(){
 	unsigned char frame[] = {HEAD, 0x03, 0x0f, PLAY, 0x00, END};
 	cossb::message _msg(this, base::msg_type::DATA);
 	vector<unsigned char> data(frame, frame+sizeof(frame));
 	cossb_broker->publish("app_timbo_command", _msg);
 }
-void app_timbo::stop(){
+void app_timbo::timbo_stop(){
 	unsigned char frame[] = {HEAD, 0x03, 0x0f, STOP, 0x00, END};
 	cossb::message _msg(this, base::msg_type::DATA);
 	vector<unsigned char> data(frame, frame+sizeof(frame));
 	cossb_broker->publish("app_timbo_command", _msg);
 }
-void app_timbo::ping(){
+void app_timbo::timbo_ping(){
 	unsigned char frame[] = {HEAD, 0x03, 0x0f, PING, 0x00, END};
 	cossb::message _msg(this, base::msg_type::DATA);
 	vector<unsigned char> data(frame, frame+sizeof(frame));
