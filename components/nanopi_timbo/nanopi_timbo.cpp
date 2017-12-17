@@ -2,7 +2,6 @@
 #include "nanopi_timbo.hpp"
 #include <cossb.hpp>
 #include <wiringPi.h>
-#include <wiringSerial.h>
 #include <algorithm>
 
 #define LED1	21
@@ -33,7 +32,8 @@ nanopi_timbo::nanopi_timbo()
 }
 
 nanopi_timbo::~nanopi_timbo() {
-
+	if(_uart)
+		delete _uart;
 }
 
 bool nanopi_timbo::setup()
@@ -41,8 +41,14 @@ bool nanopi_timbo::setup()
 	_port = get_profile()->get(profile::section::property, "port").asString("/dev/ttyS0");
 	unsigned int baudrate = get_profile()->get(profile::section::property, "baudrate").asInt(115200);
 
-	if((fd = serialOpen(_port.c_str(), baudrate)) < 0)
-	{
+	if(!_uart)
+		_uart = new libserial;
+
+	if(!_uart->open(_port.c_str(), baudrate)) {
+		if(_uart) {
+			delete _uart;
+			_uart = nullptr;
+		}
 		cossb_log->log(log::loglevel::ERROR, fmt::format("Cannot open {}({})",_port, baudrate));
 		return false;
 	}
@@ -52,17 +58,15 @@ bool nanopi_timbo::setup()
 	_uart_task = create_task(nanopi_timbo::uart_read);
 
 
-	if(wiringPiSetup()==-1){
-		cossb_log->log(log::loglevel::ERROR, "Unable to start Pi");
-	}
+	wiringPiSetup ();
 
-	/*for(int i=0;i<(int)sizeof(gpio_out);i++)
+	/*for(int i=0;i<sizeof(gpio_out);i++)
 		pinMode(gpio_out[i], OUTPUT);
 
-	for(int i=0;i<(int)sizeof(gpio_in);i++)
+	for(int i=0;i<sizeof(gpio_in);i++)
 		pinMode(gpio_in[i], INPUT);
 
-	for(int i=0;i<(int)sizeof(gpio_sw);i++)
+	for(int i=0;i<sizeof(gpio_sw);i++)
 		pinMode(gpio_sw[i], INPUT);*/
 
 
@@ -79,7 +83,6 @@ bool nanopi_timbo::run()
 
 bool nanopi_timbo::stop()
 {
-	serialClose(fd);
 	destroy_task(_gpio_task);
 	destroy_task(_uart_task);
 	return true;
@@ -94,9 +97,7 @@ void nanopi_timbo::subscribe(cossb::message* const msg)
 			try
 			{
 				vector<unsigned char> data = boost::any_cast<vector<unsigned char>>(*msg->get_data());
-				for(auto& c:data)
-					serialPutchar(fd, c);
-				//_uart->write((const char*)data.data(), data.size());
+				_uart->write((const char*)data.data(), data.size());
 				cossb_log->log(log::loglevel::INFO, fmt::format("Write {} byte(s) to the serial", data.size()));
 			}
 			catch(const boost::bad_any_cast&){
@@ -136,7 +137,7 @@ void nanopi_timbo::subscribe(cossb::message* const msg)
 void nanopi_timbo::uart_read(){
 	while(1) {
 		try {
-			/*if(_uart) {
+			if(_uart) {
 				const unsigned int len = 1024;
 				unsigned char* buffer = new unsigned char[len];
 				int readsize = _uart->read(buffer, sizeof(unsigned char)*len);
@@ -156,7 +157,7 @@ void nanopi_timbo::uart_read(){
 
 				delete []buffer;
 				boost::this_thread::sleep(boost::posix_time::milliseconds(10));
-			}*/
+			}
 		}
 		catch(thread_interrupted&) {
 			break;

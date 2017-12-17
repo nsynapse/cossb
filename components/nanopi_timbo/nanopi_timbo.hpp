@@ -13,6 +13,7 @@
 #include <base/task.hpp>
 #include <map>
 #include <string>
+#include "libserial.hpp"
 
 using namespace std;
 
@@ -52,9 +53,9 @@ private:
 	//map<int, bool> _gpio_port_map; //true output, false input
 	//map<int, int> _gpio_port_read;
 	cossb::base::task _gpio_task;
+	libserial* _uart = nullptr;
 	string _port;
 	cossb::base::task _uart_task; //uart read task
-	int fd = -1;
 };
 
 COMPONENT_EXPORT
