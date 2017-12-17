@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
   <link rel="stylesheet" href="https://v40.pingendo.com/assets/bootstrap/bootstrap-4.0.0-beta.1.css" type="text/css"> </head>
 
-<body draggable="true">
+<body>
   <div class="py-5">
     <div class="container">
       <div class="row">
@@ -18,15 +18,24 @@
           </div>
         </div>
       </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="btn-group">
+            <a class="btn btn-outline-danger" id="id_btn_record" href="#">Record</a>
+            <a class="btn btn-outline-danger" id="id_btn_play" href="#">Play</a>
+            <a href="#" class="btn btn-outline-danger" id="id_btn_stop">Stop</a>
+            <a href="#" class="btn btn-outline-danger" id="id_btn_ping">Ping</a>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
-  
   <script type="text/javascript">
     $(document).ready(function(){
-    	var socket_uri = "ws://192.168.0.14:9002/guidebook";
+    	var socket_uri = "ws://192.168.0.69:9002/guidebook";
     	var sock = new WebSocket(socket_uri)
     	
     	sock.onopen = function(){
@@ -57,9 +66,40 @@
     		data['command'] = "trajectory_play";
     		sock.send(JSON.stringify(data));
         });
+      
+      $("#id_btn_record").click(function(){
+    		var data = {}
+    		data['service'] = "websocket_read";
+    		data['command'] = "record";
+    		sock.send(JSON.stringify(data));
+        });
+      
+      $("#id_btn_play").click(function(){
+    		var data = {}
+    		data['service'] = "websocket_read";
+    		data['command'] = "play";
+    		sock.send(JSON.stringify(data));
+        });
+      
+      $("#id_btn_stop").click(function(){
+    		var data = {}
+    		data['service'] = "websocket_read";
+    		data['command'] = "stop";
+    		sock.send(JSON.stringify(data));
+        });
+      
+      $("#id_btn_ping").click(function(){
+    		var data = {}
+    		data['service'] = "websocket_read";
+    		data['command'] = "ping";
+    		sock.send(JSON.stringify(data));
+        });
     
     });
   </script>
+  <pingendo onclick="window.open('https://pingendo.com/', '_blank')" style="cursor:pointer;position: fixed;bottom: 10px;right:10px;padding:2px;background-color: #00b0eb;border-radius: 8px; width:100px;display:flex;flex-direction:row;align-items:center;justify-content:center;font-size:12px;color:white">made with&nbsp;&nbsp;
+    <img src="https://pingendo.com/site-assets/Pingendo_logo_big.png" class="d-block" alt="Pingendo logo" height="16">
+  </pingendo>
 </body>
 
 </html>

@@ -44,6 +44,10 @@ private:
 	void key_id_select(int value);	//press key for id select
 	void key_send_trajectory(int value); 	//press key for trajectory send
 	void run_motion(int contents);
+	void record();
+	void play();
+	void stop();
+	void ping();
 
 };
 

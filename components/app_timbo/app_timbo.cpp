@@ -11,6 +11,10 @@ using namespace std;
 #define END		0xaa
 #define SET		0xf0
 #define TRAJ		0x0d
+#define RECORD	0x02
+#define PLAY		0x03
+#define STOP		0x04
+#define PING		0x24
 
 
 USE_COMPONENT_INTERFACE(app_timbo)
@@ -74,9 +78,25 @@ void app_timbo::subscribe(cossb::message* const msg)
 			nlohmann::json _json_data = nlohmann::json::parse(data);
 			if(_json_data.find("command")!=_json_data.end()){
 				string command = _json_data["command"];
+				//trajectory play
 				if(!command.compare("trajectory_play")){
 					this->run_motion(1);
 					cossb_log->log(log::loglevel::INFO, fmt::format("Subscribe : {}", data));
+				}
+				//record
+				else if(!command.compare("record")){
+
+				}
+				//play
+				else if(!command.compare("play")){
+				}
+				//stop
+				else if(!command.compare("stop")){
+
+				}
+				//ping
+				else if(!command.compare("ping")){
+
 				}
 			}
 		}catch(const boost::bad_any_cast&){}
@@ -125,8 +145,7 @@ void app_timbo::key_id_select(int value){
 }
 
 void app_timbo::key_send_trajectory(int value){
-	unsigned char frame[] = {HEAD, 0x07, 0x00, TRAJ, 0x00, 0x00, 0x00, END};
-
+	unsigned char frame[] = {HEAD, 0x07, 0x0f, TRAJ, 0x00, 0x00, 0x00, END};
 	cossb::message _msg(this, base::msg_type::DATA);
 	vector<unsigned char> data(frame, frame+sizeof(frame));
 	cossb_broker->publish("app_timbo_command", _msg);
@@ -162,5 +181,30 @@ void app_timbo::run_motion(int contents)
 	tmsg.pack(data3);
 	cossb_broker->publish("trajectory_play", tmsg);
 
+}
+
+void app_timbo::record(){
+	unsigned char frame[] = {HEAD, 0x03, 0x0f, RECORD, 0x00, END};
+	cossb::message _msg(this, base::msg_type::DATA);
+	vector<unsigned char> data(frame, frame+sizeof(frame));
+	cossb_broker->publish("app_timbo_command", _msg);
+}
+void app_timbo::play(){
+	unsigned char frame[] = {HEAD, 0x03, 0x0f, PLAY, 0x00, END};
+	cossb::message _msg(this, base::msg_type::DATA);
+	vector<unsigned char> data(frame, frame+sizeof(frame));
+	cossb_broker->publish("app_timbo_command", _msg);
+}
+void app_timbo::stop(){
+	unsigned char frame[] = {HEAD, 0x03, 0x0f, STOP, 0x00, END};
+	cossb::message _msg(this, base::msg_type::DATA);
+	vector<unsigned char> data(frame, frame+sizeof(frame));
+	cossb_broker->publish("app_timbo_command", _msg);
+}
+void app_timbo::ping(){
+	unsigned char frame[] = {HEAD, 0x03, 0x0f, PING, 0x00, END};
+	cossb::message _msg(this, base::msg_type::DATA);
+	vector<unsigned char> data(frame, frame+sizeof(frame));
+	cossb_broker->publish("app_timbo_command", _msg);
 }
 
