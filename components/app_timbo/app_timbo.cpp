@@ -79,25 +79,15 @@ void app_timbo::subscribe(cossb::message* const msg)
 			if(_json_data.find("command")!=_json_data.end()){
 				string command = _json_data["command"];
 				//trajectory play
-				if(!command.compare("trajectory_play")){
-					this->run_motion(1);
-					cossb_log->log(log::loglevel::INFO, fmt::format("Subscribe : {}", data));
-				}
+				if(!command.compare("trajectory_play")){this->run_motion(1);}
 				//record
-				else if(!command.compare("record")){
-
-				}
+				else if(!command.compare("record")){this->timbo_record();}
 				//play
-				else if(!command.compare("play")){
-				}
+				else if(!command.compare("play")){this->timbo_play();}
 				//stop
-				else if(!command.compare("stop")){
-
-				}
+				else if(!command.compare("stop")){this->timbo_stop();}
 				//ping
-				else if(!command.compare("ping")){
-
-				}
+				else if(!command.compare("ping")){this->timbo_ping();}
 			}
 		}catch(const boost::bad_any_cast&){}
 	}
