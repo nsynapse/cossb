@@ -56,18 +56,18 @@ bool nanopi_timbo::setup()
 		cossb_log->log(log::loglevel::ERROR, "Unable to start Pi");
 	}
 
-	for(int i=0;i<(int)sizeof(gpio_out);i++)
+	/*for(int i=0;i<(int)sizeof(gpio_out);i++)
 		pinMode(gpio_out[i], OUTPUT);
 
 	for(int i=0;i<(int)sizeof(gpio_in);i++)
 		pinMode(gpio_in[i], INPUT);
 
 	for(int i=0;i<(int)sizeof(gpio_sw);i++)
-		pinMode(gpio_sw[i], INPUT);
+		pinMode(gpio_sw[i], INPUT);*/
 
 
 	//create task for gpio read
-	_gpio_task = create_task(nanopi_timbo::gpio_read);
+	//_gpio_task = create_task(nanopi_timbo::gpio_read);
 
 	return true;
 }
