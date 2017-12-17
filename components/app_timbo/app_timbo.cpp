@@ -187,24 +187,32 @@ void app_timbo::timbo_record(){
 	unsigned char frame[] = {HEAD, 0x03, 0x0f, RECORD, 0x00, END};
 	cossb::message _msg(this, base::msg_type::DATA);
 	vector<unsigned char> data(frame, frame+sizeof(frame));
+	_msg.pack(data);
 	cossb_broker->publish("app_timbo_command", _msg);
+	cossb_log->log(log::loglevel::INFO, fmt::format("Publish to Nanopi : {} bytes", data.size()));
 }
 void app_timbo::timbo_play(){
 	unsigned char frame[] = {HEAD, 0x03, 0x0f, PLAY, 0x00, END};
 	cossb::message _msg(this, base::msg_type::DATA);
 	vector<unsigned char> data(frame, frame+sizeof(frame));
+	_msg.pack(data);
 	cossb_broker->publish("app_timbo_command", _msg);
+	cossb_log->log(log::loglevel::INFO, fmt::format("Publish to Nanopi : {} bytes", data.size()));
 }
 void app_timbo::timbo_stop(){
 	unsigned char frame[] = {HEAD, 0x03, 0x0f, STOP, 0x00, END};
 	cossb::message _msg(this, base::msg_type::DATA);
 	vector<unsigned char> data(frame, frame+sizeof(frame));
+	_msg.pack(data);
 	cossb_broker->publish("app_timbo_command", _msg);
+	cossb_log->log(log::loglevel::INFO, fmt::format("Publish to Nanopi : {} bytes", data.size()));
 }
 void app_timbo::timbo_ping(){
 	unsigned char frame[] = {HEAD, 0x03, 0x0f, PING, 0x00, END};
 	cossb::message _msg(this, base::msg_type::DATA);
 	vector<unsigned char> data(frame, frame+sizeof(frame));
+	_msg.pack(data);
 	cossb_broker->publish("app_timbo_command", _msg);
+	cossb_log->log(log::loglevel::INFO, fmt::format("Publish to Nanopi : {} bytes", data.size()));
 }
 
