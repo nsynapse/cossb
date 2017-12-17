@@ -4,17 +4,18 @@
 #include <wiringPi.h>
 #include <algorithm>
 
-#define LED1	21
-#define LED2	22
-#define LED3	23
-#define LED4	24
-#define BTN1	11	//ID Selection
-#define BTN2	12	//ID Setting
-#define BTN3	13	//Trajectory
-#define SW1		15	//Guidebook page1
-#define SW2		16	//Guidebook page2
-#define SW3		18	//Guidebook page3
-#define SW4		19	//Guidebook page4
+//wiring pi index
+#define LED1		13
+#define LED2		6
+#define LED3		14
+#define LED4		10
+#define BTN1		0	//ID Selection
+#define BTN2		1	//ID Setting
+#define BTN3		2	//Trajectory
+#define SW1		3	//Guidebook page1
+#define SW2		4	//Guidebook page2
+#define SW3		5	//Guidebook page3
+#define SW4		12	//Guidebook page4
 
 const unsigned int gpio_out[] = {LED1, LED2, LED3, LED3 };
 const unsigned int gpio_in[] = {BTN1, BTN2, BTN3 };
@@ -60,18 +61,18 @@ bool nanopi_timbo::setup()
 
 	wiringPiSetup ();
 
-	/*for(int i=0;i<sizeof(gpio_out);i++)
+	for(int i=0;i<sizeof(gpio_out);i++)
 		pinMode(gpio_out[i], OUTPUT);
 
 	for(int i=0;i<sizeof(gpio_in);i++)
 		pinMode(gpio_in[i], INPUT);
 
 	for(int i=0;i<sizeof(gpio_sw);i++)
-		pinMode(gpio_sw[i], INPUT);*/
+		pinMode(gpio_sw[i], INPUT);
 
 
 	//create task for gpio read
-	//_gpio_task = create_task(nanopi_timbo::gpio_read);
+	_gpio_task = create_task(nanopi_timbo::gpio_read);
 
 	return true;
 }
