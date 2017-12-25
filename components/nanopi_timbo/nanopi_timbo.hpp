@@ -13,6 +13,8 @@
 #include <base/task.hpp>
 #include <map>
 #include <string>
+#include <fstream>
+#include <deque>
 #include "libserial.hpp"
 
 using namespace std;
@@ -48,15 +50,17 @@ private:
 	void uart_read();
 	void gpio_read();
 
-	//send trajectory
+	void trajectory_dump(int page, int module);
 
 private:
-	//map<int, bool> _gpio_port_map; //true output, false input
-	//map<int, int> _gpio_port_read;
 	cossb::base::task _gpio_task;
 	libserial* _uart = nullptr;
 	string _port;
+	bool _dumping = false;
+	ofstream _dump_file;
 	cossb::base::task _uart_task; //uart read task
+
+	deque<unsigned char> _dump_buffer;
 };
 
 COMPONENT_EXPORT

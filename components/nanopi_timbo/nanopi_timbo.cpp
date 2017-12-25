@@ -6,6 +6,7 @@
 #include <base/log.hpp>
 #include <base/broker.hpp>
 #include <tuple>
+#include <file/trj.hpp>
 
 using namespace std;
 
@@ -104,6 +105,10 @@ void nanopi_timbo::subscribe(cossb::message* const msg)
 				int page, module;
 				vector<unsigned char> packet;
 				std::tie(page, module, packet) = data;
+				_dumping = true;
+				_dump_buffer.clear();
+				_dump_file.open(fmt::format("./contents/page{}_{}.trj", page, module), std::ofstream::in|std::ofstream::app);
+				_uart->write((const char*)packet.data(), packet.size()); //send command packet
 
 				cossb_log->log(log::loglevel::INFO, fmt::format("page : {}, module : {}, size : {}", page, module, packet.size()));
 
@@ -163,11 +168,24 @@ void nanopi_timbo::uart_read(){
 
 				if(readsize>0) {
 					cossb_log->log(log::loglevel::INFO, fmt::format("Received {} Byte(s) from {}",readsize, _port));
-					cossb::message _msg(this, base::msg_type::DATA);
-					vector<unsigned char> data(buffer, buffer+readsize);
-					_msg.pack(data);
-					cossb_broker->publish("serial_read", _msg);
 
+					if(_dumping){
+						for(int i=0;i<readsize;i++)
+							_dump_buffer.push_back(buffer[i]);
+
+						if(_dump_file.is_open()){
+							for(int i=0;i<readsize;i++){
+								_dump_file << buffer[0];
+							}
+						}
+
+					}
+					else{
+						cossb::message _msg(this, base::msg_type::DATA);
+						vector<unsigned char> data(buffer, buffer+readsize);
+						_msg.pack(data);
+						cossb_broker->publish("serial_read", _msg);
+					}
 					//debug
 					for(auto& c:data)
 						cout << (int)c << " ";
@@ -182,6 +200,13 @@ void nanopi_timbo::uart_read(){
 			break;
 		}
 	}
+}
+
+void nanopi_timbo::trajectory_dump(int page, int module){
+	file::trj* file = new file::trj();
+	file->read(fmt::format("page{}_{}.trj", page, module).c_str());
+
+	delete file;
 }
 
 void nanopi_timbo::gpio_read()

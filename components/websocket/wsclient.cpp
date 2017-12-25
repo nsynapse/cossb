@@ -95,6 +95,7 @@ void wsclient::read()
 			//if(boost::this_thread::interruption_requested()) break;
 		}
 		catch(thread_interrupted&) {
+			_client->close();
 			break;
 		}
 	}
