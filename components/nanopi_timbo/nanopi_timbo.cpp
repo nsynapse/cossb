@@ -184,8 +184,10 @@ void nanopi_timbo::uart_read(){
 								if(_dump_buffer.size()==(len+1)*5){
 									for(int i=0;i<5;i++) _dump_buffer.pop_front();
 									if(_dump_file.is_open()){
-										for(int i=0;i<_dump_buffer.size();i++)
-											_dump_file << _dump_buffer.pop_front();
+										for(int i=0;i<_dump_buffer.size();i++){
+											_dump_file << _dump_buffer.front();
+											_dump_buffer.pop_front();
+										}
 										_dump_file.close();
 										cossb_log->log(log::loglevel::INFO, "Saved trajectory file");
 										_dumping = false;
