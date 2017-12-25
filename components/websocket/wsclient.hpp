@@ -8,7 +8,8 @@
 #ifndef _COSSB_COMPONENT_WEBSOCKET_CLIENT_HPP_
 #define _COSSB_COMPONENT_WEBSOCKET_CLIENT_HPP_
 
-#include <base/interface.hpp>
+#include <interface/icomponent.hpp>
+#include <base/task.hpp>
 #include "easywsclient.hpp"
 #include "easywsclient.cpp"
 #include <vector>

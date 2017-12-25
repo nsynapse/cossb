@@ -4,6 +4,8 @@
 #include <cossb.hpp>
 #include <algorithm>
 #include <ext/json.hpp>
+#include <base/log.hpp>
+#include <base/broker.hpp>
 
 USE_COMPONENT_INTERFACE(wsclient)
 
@@ -90,7 +92,7 @@ void wsclient::read()
 			}
 
 			boost::this_thread::sleep(boost::posix_time::milliseconds(100));
-			if(boost::this_thread::interruption_requested()) break;
+			//if(boost::this_thread::interruption_requested()) break;
 		}
 		catch(thread_interrupted&) {
 			break;
