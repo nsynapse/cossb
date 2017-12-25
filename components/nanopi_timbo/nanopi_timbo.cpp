@@ -63,13 +63,13 @@ bool nanopi_timbo::setup()
 
 	wiringPiSetup ();
 
-	for(int i=0;i<sizeof(gpio_out);i++)
+	for(int i=0;i<(int)sizeof(gpio_out);i++)
 		pinMode(gpio_out[i], OUTPUT);
 
-	for(int i=0;i<sizeof(gpio_in);i++)
+	for(int i=0;i<(int)sizeof(gpio_in);i++)
 		pinMode(gpio_in[i], INPUT);
 
-	for(int i=0;i<sizeof(gpio_sw);i++)
+	for(int i=0;i<(int)sizeof(gpio_sw);i++)
 		pinMode(gpio_sw[i], INPUT);
 
 
@@ -96,6 +96,7 @@ void nanopi_timbo::subscribe(cossb::message* const msg)
 {
 	switch(msg->get_frame()->type) {
 		case cossb::base::msg_type::REQUEST: {
+
 			try {
 				typedef std::tuple<int, int, vector<unsigned char>> req;
 				req data = boost::any_cast<req>(*msg->get_data());
