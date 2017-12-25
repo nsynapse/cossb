@@ -75,7 +75,7 @@ void app_timbo::timbo_ping(){
 void app_timbo::timbo_trajectory_play(int page, int module){
 	unsigned char frame[] = {HEAD, 0x03, 0x0f, PLAY, 0x00, END};
 	vector<unsigned char> packet(frame, frame+sizeof(frame)/sizeof(frame[0]));
-	std::tuple<int, int, vector<string>> data = std::make_tuple(page, module, packet);
+	std::tuple<int, int, vector<unsigned char>> data = std::make_tuple(page, module, packet);
 
 	cossb::message _msg(this, base::msg_type::REQUEST);
 	_msg.pack(data);
@@ -86,7 +86,7 @@ void app_timbo::timbo_trajectory_play(int page, int module){
 void app_timbo::timbo_trajectory_dump(int page, int module) {
 	unsigned char frame[] = {HEAD, 0x03, DUMP, 0x00, END};
 	vector<unsigned char> packet(frame, frame+sizeof(frame)/sizeof(frame[0]));
-	std::tuple<int, int, vector<string>> data = std::make_tuple(page, module, packet);
+	std::tuple<int, int, vector<unsigned char>> data = std::make_tuple(page, module, packet);
 
 	cossb::message _msg(this, base::msg_type::REQUEST);
 	_msg.pack(data);
