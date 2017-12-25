@@ -248,7 +248,7 @@ $(OUTDIR)libuart.o: $(COMPONENT_FILES)uart/libserial.cpp
 	
 app_timbo.comp: $(OUTDIR)app_timbo.o \
 				$(OUTDIR)message_any.o \
-				$(OUTDIR)app_timbo_func.o \
+				$(OUTDIR)app_timbo_func.o
 	$(CXX) $(LDFLAGS) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
 $(OUTDIR)app_timbo.o: $(COMPONENT_FILES)app_timbo/app_timbo.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
