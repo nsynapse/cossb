@@ -49,6 +49,8 @@ private:
 	void timbo_stop();
 	void timbo_ping();
 
+	void timbo_trajectory_dump(int page);
+
 };
 
 COMPONENT_EXPORT
