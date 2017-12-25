@@ -203,10 +203,6 @@ void nanopi_timbo::uart_read(){
 						_msg.pack(data);
 						cossb_broker->publish("serial_read", _msg);
 					}
-					//debug
-					for(auto& c:data)
-						cout << (int)c << " ";
-					cout << endl;
 				}
 
 				delete []buffer;
