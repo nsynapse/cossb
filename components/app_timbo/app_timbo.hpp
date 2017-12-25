@@ -43,13 +43,16 @@ private:
 	void key_id_setting(int value);	//press key for id setting
 	void key_id_select(int value);	//press key for id select
 	void key_send_trajectory(int value); 	//press key for trajectory send
-	void run_motion(int contents);
+
+	//single command
 	void timbo_record();
 	void timbo_play();
 	void timbo_stop();
 	void timbo_ping();
 
-	void timbo_trajectory_dump(int page);
+	//trajectory control
+	void timbo_trajectory_dump(int page, int module);
+	void timbo_trajectory_play(int page, int module);
 
 };
 

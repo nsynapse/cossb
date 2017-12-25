@@ -20,6 +20,7 @@ using namespace std;
 
 class nanopi_timbo : public interface::icomponent  {
 public:
+
 	nanopi_timbo();
 	virtual ~nanopi_timbo();
 

@@ -3,6 +3,8 @@
 #include <cossb.hpp>
 #include <wiringPi.h>
 #include <algorithm>
+#include <base/log.hpp>
+#include <base/broker.hpp>
 
 //wiring pi index
 #define LED1		13
@@ -56,9 +58,6 @@ bool nanopi_timbo::setup()
 
 	cossb_log->log(log::loglevel::INFO, fmt::format("Open {}({})",_port, baudrate));
 
-	_uart_task = create_task(nanopi_timbo::uart_read);
-
-
 	wiringPiSetup ();
 
 	for(int i=0;i<sizeof(gpio_out);i++)
@@ -71,7 +70,8 @@ bool nanopi_timbo::setup()
 		pinMode(gpio_sw[i], INPUT);
 
 
-	//create task for gpio read
+	//perform tasks
+	_uart_task = create_task(nanopi_timbo::uart_read);
 	_gpio_task = create_task(nanopi_timbo::gpio_read);
 
 	return true;
@@ -92,7 +92,13 @@ bool nanopi_timbo::stop()
 void nanopi_timbo::subscribe(cossb::message* const msg)
 {
 	switch(msg->get_frame()->type) {
-		case cossb::base::msg_type::REQUEST: break;
+		case cossb::base::msg_type::REQUEST: {
+			try {
+				vector<unsigned char> data = boost::any_cast<vector<unsigned char>>(*msg->get_data());
+			} catch(const boost::bad_any_cast&){
+				//cossb_log->log(log::loglevel::ERROR, "Invalid type casting");
+			}
+		}break;
 		case cossb::base::msg_type::DATA: {
 			//uart data
 			try
@@ -102,7 +108,7 @@ void nanopi_timbo::subscribe(cossb::message* const msg)
 				cossb_log->log(log::loglevel::INFO, fmt::format("Write {} byte(s) to the serial", data.size()));
 			}
 			catch(const boost::bad_any_cast&){
-				cossb_log->log(log::loglevel::ERROR, "Invalid type casting");
+				//cossb_log->log(log::loglevel::ERROR, "Invalid type casting");
 			}
 
 			//subscribe gpio write
