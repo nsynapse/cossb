@@ -34,7 +34,7 @@ wsclient::~wsclient() {
 
 bool wsclient::setup()
 {
-	string uri = get_profile()->get(profile::section::property, "endpoint").asString("ws://localhost.9002");
+	string uri = get_profile()->get(profile::section::property, "endpoint").asString("ws://localhost:9002");
 
 	if(!_client){
 		_client = easywsclient::WebSocket::from_url(uri.c_str());

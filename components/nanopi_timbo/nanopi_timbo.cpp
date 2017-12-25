@@ -5,6 +5,9 @@
 #include <algorithm>
 #include <base/log.hpp>
 #include <base/broker.hpp>
+#include <tuple>
+
+using namespace std;
 
 //wiring pi index
 #define LED1		13
@@ -94,7 +97,15 @@ void nanopi_timbo::subscribe(cossb::message* const msg)
 	switch(msg->get_frame()->type) {
 		case cossb::base::msg_type::REQUEST: {
 			try {
-				vector<unsigned char> data = boost::any_cast<vector<unsigned char>>(*msg->get_data());
+				typedef std::tuple<int, int, vector<unsigned char>> req;
+				req data = boost::any_cast<req>(*msg->get_data());
+
+				int page, module;
+				vector<unsigned char> packet;
+				std::tie(page, module, packet) = data;
+
+				cossb_log->log(log::loglevel::INFO, fmt::format("page : {}, module : {}, size : {}", page, module, packet.size()));
+
 			} catch(const boost::bad_any_cast&){
 				//cossb_log->log(log::loglevel::ERROR, "Invalid type casting");
 			}
