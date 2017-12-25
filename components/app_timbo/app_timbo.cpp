@@ -76,16 +76,19 @@ void app_timbo::subscribe(cossb::message* const msg)
 			if(_json_data.find("command")!=_json_data.end())
 			{
 				string command = _json_data["command"].get<std::string>();
+
+				//play trajectory
 				if(!command.compare("trajectory_play")){
 					int page = _json_data["page"].get<int>();
 					int module = _json_data["module"].get<int>();
 					this->timbo_trajectory_play(page, module);
-				}	//run trajectory
+				}
+				//dump trajectory
 				else if(!command.compare("trajectory_dump")){
 					int page = _json_data["page"].get<int>();
 					int module = _json_data["module"].get<int>();
 					this->timbo_trajectory_dump(page, module);
-				} //dump trajectory
+				}
 				else if(!command.compare("record")){this->timbo_record();} //record command
 				else if(!command.compare("play")){this->timbo_play();}	//play command
 				else if(!command.compare("stop")){this->timbo_stop();}	//stop command
@@ -94,6 +97,7 @@ void app_timbo::subscribe(cossb::message* const msg)
 		}catch(const boost::bad_any_cast&){}
 	}
 		break;
+
 	case cossb::base::msg_type::DATA: {
 
 		try
@@ -119,7 +123,7 @@ void app_timbo::subscribe(cossb::message* const msg)
 
 
 
-void app_timbo::run_motion(int contents)
+/*void app_timbo::run_motion(int contents)
 {
 	//start
 	cossb::message hmsg(this, base::msg_type::DATA);
@@ -148,7 +152,7 @@ void app_timbo::run_motion(int contents)
 	tmsg.pack(data3);
 	cossb_broker->publish("timbo_write", tmsg);
 
-}
+}*/
 
 
 
