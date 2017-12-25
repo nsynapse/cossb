@@ -6,7 +6,6 @@
 #include <base/log.hpp>
 #include <base/broker.hpp>
 #include <tuple>
-#include <file/trj.hpp>
 
 using namespace std;
 
@@ -219,10 +218,7 @@ void nanopi_timbo::uart_read(){
 }
 
 void nanopi_timbo::trajectory_dump(int page, int module){
-	file::trj* file = new file::trj();
-	file->read(fmt::format("page{}_{}.trj", page, module).c_str());
 
-	delete file;
 }
 
 void nanopi_timbo::gpio_read()
