@@ -114,6 +114,7 @@ void nanopi_timbo::subscribe(cossb::message* const msg)
 				_uart->write((const char*)packet.data(), packet.size()); //send command packet
 
 				cossb_log->log(log::loglevel::INFO, fmt::format("Trajectory Dump page : {}, module : {}", page, module));
+				cossb_log->log(log::loglevel::INFO, "Now Dumping...");
 
 			} catch(const boost::bad_any_cast&){
 				//cossb_log->log(log::loglevel::ERROR, "Invalid type casting");
@@ -180,12 +181,15 @@ void nanopi_timbo::uart_read(){
 						if(_dump_buffer.size()>=5){
 							if(_dump_buffer[0]==0x55 && _dump_buffer[1]==0x36){
 								unsigned short len = ((_dump_buffer[2] << 8) &0xFF00) | (_dump_buffer[3] & 0xFF);
+								cossb_log->log(log::loglevel::INFO, fmt::format("Saving {}/{} trajectory..", _dump_buffer.size()/5-1, len));
 								if(_dump_buffer.size()==(len+1)*5){
 									for(int i=0;i<5;i++) _dump_buffer.pop_front();
 									if(_dump_file.is_open()){
 										for(int i=0;i<_dump_buffer.size();i++)
 											_dump_file << _dump_buffer.pop_front();
 										_dump_file.close();
+										cossb_log->log(log::loglevel::INFO, "Saved trajectory file");
+										_dumping = false;
 									}
 								}
 							}
