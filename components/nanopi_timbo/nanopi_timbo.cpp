@@ -102,6 +102,9 @@ void nanopi_timbo::subscribe(cossb::message* const msg)
 				typedef std::tuple<int, int, vector<unsigned char>> req;
 				req data = boost::any_cast<req>(*msg->get_data());
 
+				if(_dump_file.is_open())
+					_dump_file.close();
+
 				int page, module;
 				vector<unsigned char> packet;
 				std::tie(page, module, packet) = data;
@@ -110,7 +113,7 @@ void nanopi_timbo::subscribe(cossb::message* const msg)
 				_dump_file.open(fmt::format("./contents/page{}_{}.trj", page, module), std::ofstream::in|std::ofstream::app);
 				_uart->write((const char*)packet.data(), packet.size()); //send command packet
 
-				cossb_log->log(log::loglevel::INFO, fmt::format("page : {}, module : {}, size : {}", page, module, packet.size()));
+				cossb_log->log(log::loglevel::INFO, fmt::format("Trajectory Dump page : {}, module : {}", page, module));
 
 			} catch(const boost::bad_any_cast&){
 				//cossb_log->log(log::loglevel::ERROR, "Invalid type casting");
@@ -173,9 +176,18 @@ void nanopi_timbo::uart_read(){
 						for(int i=0;i<readsize;i++)
 							_dump_buffer.push_back(buffer[i]);
 
-						if(_dump_file.is_open()){
-							for(int i=0;i<readsize;i++){
-								_dump_file << buffer[0];
+						//size check
+						if(_dump_buffer.size()>=5){
+							if(_dump_buffer[0]==0x55 && _dump_buffer[1]==0x36){
+								unsigned short len = ((_dump_buffer[2] << 8) &0xFF00) | (_dump_buffer[3] & 0xFF);
+								if(_dump_buffer.size()==(len+1)*5){
+									for(int i=0;i<5;i++) _dump_buffer.pop_front();
+									if(_dump_file.is_open()){
+										for(int i=0;i<_dump_buffer.size();i++)
+											_dump_file << _dump_buffer.pop_front();
+										_dump_file.close();
+									}
+								}
 							}
 						}
 
