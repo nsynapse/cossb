@@ -49,7 +49,16 @@ void app_timbo::timbo_record(){
 	vector<unsigned char> data(frame, frame+sizeof(frame));
 	_msg.pack(data);
 	cossb_broker->publish("timbo_write", _msg);
-	cossb_log->log(log::loglevel::INFO, fmt::format("Publish to Nanopi : {} bytes", data.size()));
+	cossb_log->log(log::loglevel::INFO, fmt::format("Record : Publish to Nanopi : {} bytes", data.size()));
+}
+
+void app_timbo::timbo_play(){
+	unsigned char frame[] = {HEAD, 0x03, 0x0f, PLAY, 0x00, END};
+	cossb::message _msg(this, base::msg_type::DATA);
+	vector<unsigned char> data(frame, frame+sizeof(frame));
+	_msg.pack(data);
+	cossb_broker->publish("timbo_write", _msg);
+	cossb_log->log(log::loglevel::INFO, fmt::format("Play : Publish to Nanopi : {} bytes", data.size()));
 }
 
 
@@ -59,7 +68,7 @@ void app_timbo::timbo_stop(){
 	vector<unsigned char> data(frame, frame+sizeof(frame));
 	_msg.pack(data);
 	cossb_broker->publish("timbo_write", _msg);
-	cossb_log->log(log::loglevel::INFO, fmt::format("Publish to Nanopi : {} bytes", data.size()));
+	cossb_log->log(log::loglevel::INFO, fmt::format("Stop : Publish to Nanopi : {} bytes", data.size()));
 }
 
 void app_timbo::timbo_ping(){
@@ -68,7 +77,7 @@ void app_timbo::timbo_ping(){
 	vector<unsigned char> data(frame, frame+sizeof(frame));
 	_msg.pack(data);
 	cossb_broker->publish("timbo_write", _msg);
-	cossb_log->log(log::loglevel::INFO, fmt::format("Publish to Nanopi : {} bytes", data.size()));
+	cossb_log->log(log::loglevel::INFO, fmt::format("Ping : Publish to Nanopi : {} bytes", data.size()));
 }
 
 void app_timbo::timbo_trajectory_play(int page, int module){
@@ -79,7 +88,7 @@ void app_timbo::timbo_trajectory_play(int page, int module){
 	cossb::message _msg(this, base::msg_type::REQUEST);
 	_msg.pack(data);
 	cossb_broker->publish("timbo_write", _msg);
-	cossb_log->log(log::loglevel::INFO, fmt::format("Publish to Nanopi for trajectory play"));
+	cossb_log->log(log::loglevel::INFO, fmt::format("Trajectory Play : Publish to Nanopi : {} bytes", packet.size()));
 }
 
 void app_timbo::timbo_trajectory_dump(int page, int module) {
@@ -90,5 +99,5 @@ void app_timbo::timbo_trajectory_dump(int page, int module) {
 	cossb::message _msg(this, base::msg_type::REQUEST);
 	_msg.pack(data);
 	cossb_broker->publish("timbo_write", _msg);
-	cossb_log->log(log::loglevel::INFO, fmt::format("Publish to Nanopi for trajectory dump"));
+	cossb_log->log(log::loglevel::INFO, fmt::format("Trajectory Dump : Publish to Nanopi : {} bytes", packet.size()));
 }
