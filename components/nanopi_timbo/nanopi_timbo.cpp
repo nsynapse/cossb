@@ -110,7 +110,7 @@ void nanopi_timbo::subscribe(cossb::message* const msg)
 				_dumping = true;
 				_dump_buffer.clear();
 				_dump_file.open(fmt::format("./contents/page{}_{}.trj", page, module), std::ofstream::in|std::ofstream::app);
-				_uart->write((const char*)packet.data(), packet.size()); //send command packet
+				_uart->write(packet.data(), packet.size()); //send command packet
 
 				cossb_log->log(log::loglevel::INFO, fmt::format("Trajectory Dump page : {}, module : {}", page, module));
 				cossb_log->log(log::loglevel::INFO, "Now Dumping...");
