@@ -99,7 +99,9 @@ void app_timbo::timbo_trajectory_play(int page, int module){
 	vector<unsigned char> buffer;
 	if(file.is_open()){
 		while(file.good()){
-			buffer.push_back((unsigned char)file.get());
+			unsigned char c =(unsigned char)file.get();
+			buffer.push_back(c);
+			cossb_log->log(log::loglevel::INFO, fmt::format("data : {} ",(int)c));
 		}
 		cossb_log->log(log::loglevel::INFO, fmt::format("Read Trajectory file : {} bytes", buffer.size()));
 	}
