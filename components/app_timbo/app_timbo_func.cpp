@@ -132,6 +132,7 @@ void app_timbo::timbo_trajectory_play(int page, int module){
 	vector<unsigned char> data3(tail, tail+sizeof(tail));
 	tmsg.pack(data3);
 	cossb_broker->publish("timbo_write", tmsg);
+	cossb_log->log(log::loglevel::INFO, "Trajectory Playing...Done.");
 
 }
 
