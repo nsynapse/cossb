@@ -103,7 +103,7 @@ void app_timbo::timbo_trajectory_play(int page, int module){
 		cossb_log->log(log::loglevel::INFO, fmt::format("size : {} ",size));
 
 		file.seekg(0, ios::beg);
-		unsigned char data = new unsigned char[size];
+		unsigned char* data = new unsigned char[size];
 		file.read((char*)data, size);
 		vector<unsigned char> vdata(data, data+size);
 		delete []data;
