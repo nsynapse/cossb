@@ -170,26 +170,27 @@ void nanopi_timbo::uart_read(){
 				int readsize = _uart->read(buffer, sizeof(unsigned char)*len);
 
 				if(readsize>0) {
-					cossb_log->log(log::loglevel::INFO, fmt::format("Received {} Byte(s) from {}",readsize, _port));
+					//cossb_log->log(log::loglevel::INFO, fmt::format("Received {} Byte(s) from {}",readsize, _port));
 
 					if(_dumping){
+						//push back into the buffer
 						for(int i=0;i<readsize;i++)
 							_dump_buffer.push_back(buffer[i]);
 
 						//size check
 						if(_dump_buffer.size()>=5){
 							if(_dump_buffer[0]==0x55 && _dump_buffer[1]==0x36){
-								unsigned short len = ((_dump_buffer[2] << 8) &0xFF00) | (_dump_buffer[3] & 0xFF);
-								cossb_log->log(log::loglevel::INFO, fmt::format("Saving {}/{} trajectory..", _dump_buffer.size()/5-1, len));
+								unsigned short len = (_dump_buffer[2] << 8 | _dump_buffer[3]);
+								cossb_log->log(log::loglevel::INFO, fmt::format("Receiving trajectory.. {}%", _dump_buffer.size()/(len+1)*100));
 								if(_dump_buffer.size()==(len+1)*5){
-									for(int i=0;i<5;i++) _dump_buffer.pop_front();
-									if(_dump_file.is_open()){
+									for(int i=0;i<5;i++) _dump_buffer.pop_front(); //remove header packet
+									if(_dump_file.is_open()){	//save into file
 										for(int i=0;i<_dump_buffer.size();i++){
 											_dump_file << _dump_buffer.front();
 											_dump_buffer.pop_front();
 										}
 										_dump_file.close();
-										cossb_log->log(log::loglevel::INFO, "Saved trajectory file");
+										cossb_log->log(log::loglevel::INFO, "Successfully saved.");
 										_dumping = false;
 									}
 								}
