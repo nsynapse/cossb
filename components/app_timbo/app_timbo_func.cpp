@@ -98,11 +98,19 @@ void app_timbo::timbo_trajectory_play(int page, int module){
 	file.open(fmt::format("./contents/page{}_{}.trj", page, module), ios::in|ios::binary);
 	vector<unsigned char> buffer;
 	if(file.is_open()){
-		while(file.good()){
-			unsigned char c =(unsigned char)file.get();
-			buffer.push_back(c);
+		file.seekg(0, ios::end);	//set the pointer to the end of file
+		int size = file.tellg();
+		cossb_log->log(log::loglevel::INFO, fmt::format("size : {} ",size));
+
+		file.seekg(0, ios::beg);
+		unsigned char data = new unsigned char[size];
+		file.read((char*)data, size);
+		vector<unsigned char> vdata(data, data+size);
+		delete []data;
+
+		for(auto& c:vdata)
 			cossb_log->log(log::loglevel::INFO, fmt::format("data : {} ",(int)c));
-		}
+
 		cossb_log->log(log::loglevel::INFO, fmt::format("Read Trajectory file : {} bytes", buffer.size()));
 	}
 	file.close();
