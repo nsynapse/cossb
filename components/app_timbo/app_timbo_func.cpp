@@ -7,6 +7,7 @@
 #include <base/broker.hpp>
 #include <fstream>
 #include <vector>
+#include <base/task.hpp>
 
 using namespace std;
 
@@ -86,17 +87,10 @@ void app_timbo::timbo_ping(){
 }
 
 void app_timbo::timbo_trajectory_play(int page, int module){
-	//send start
-	unsigned char header[] = {HEAD, 0x03, 0x0f, 0x2e, 0x00, END};
-	vector<unsigned char> data1(header, header+sizeof(header)/sizeof(header[0]));
-	cossb::message hmsg(this, base::msg_type::DATA);
-	hmsg.pack(data1);
-	cossb_broker->publish("timbo_write", hmsg);
 
-	//file read
+	//1. read trajectory file
 	ifstream file;
 	vector<unsigned char> trajectory;
-
 	file.open(fmt::format("./contents/page{}_{}.trj", page, module), ios::in|ios::binary);
 	//read trajectory file
 	if(file.is_open()){
@@ -107,31 +101,37 @@ void app_timbo::timbo_trajectory_play(int page, int module){
 		file.read((char*)data, size);
 		trajectory.insert(trajectory.end(), &data[0], &data[size]);
 		delete []data;
-		cossb_log->log(log::loglevel::INFO, fmt::format("Loaded Trajectory file : page{}_{}({}bytes) ",page, module, trajectory.size()));
+		cossb_log->log(log::loglevel::INFO, fmt::format("Loaded Trajectory file : page{}_{}.trj ({}bytes) ",page, module, trajectory.size()));
 	}
 	file.close();
 
-	//end
+	cossb_log->log(log::loglevel::INFO, "Trajectory Playing...");
+	//2. send start
+	unsigned char header[] = {HEAD, 0x03, 0x0f, 0x2e, 0x00, END};
+	vector<unsigned char> data1(header, header+sizeof(header)/sizeof(header[0]));
+	cossb::message hmsg(this, base::msg_type::DATA);
+	hmsg.pack(data1);
+	cossb_broker->publish("timbo_write", hmsg);
+
+	//3. send trajectory
+	const int offset = 5;
+	for(int i=0;i<trajectory.size()/offset;i++){
+		unsigned char trj[] = {HEAD, 0x04, 0x0f, TRAJ, trajectory[i+2], trajectory[i+3], END};
+		cossb::message vmsg(this, base::msg_type::DATA);
+		vector<unsigned char> data2(trj, trj+sizeof(trj));
+		vmsg.pack(data2);
+		cossb_broker->publish("timbo_write", vmsg);
+		//cossb_log->log(log::loglevel::INFO, fmt::format("Publish to Nanopi : {} bytes", data2.size()));
+		boost::this_thread::sleep(boost::posix_time::milliseconds(20));
+	}
+
+
+	//4. end
 	cossb::message tmsg(this, base::msg_type::DATA);
 	unsigned char tail[] = {HEAD, 0x03, 0x0f, 0x04, 0x00, END};
 	vector<unsigned char> data3(tail, tail+sizeof(tail));
 	tmsg.pack(data3);
 	cossb_broker->publish("timbo_write", tmsg);
-
-
-	/*for(int i=0;i<100;i++)
-	{
-		//trajectory (sample)
-		unsigned short value = (unsigned short)(i*10);
-		unsigned char trj[] = {HEAD, 0x04, 0x0f, TRAJ, (value>>8), (value&0x00ff), END};
-		cossb::message vmsg(this, base::msg_type::DATA);
-		vector<unsigned char> data2(trj, trj+sizeof(trj));
-		vmsg.pack(data2);
-		cossb_broker->publish("timbo_write", vmsg);
-		cossb_log->log(log::loglevel::INFO, fmt::format("Publish to Nanopi : {} bytes", data2.size()));
-		boost::this_thread::sleep(boost::posix_time::milliseconds(20));
-	}*/
-
 
 }
 
