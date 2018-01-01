@@ -35,7 +35,6 @@ void app_timbo::key_id_setting(int value){
 	vector<unsigned char> data(frame, frame+sizeof(frame));
 	cossb_broker->publish("app_timbo_command", _msg);
 
-
 }
 
 void app_timbo::key_id_select(int value){
@@ -107,7 +106,7 @@ void app_timbo::timbo_trajectory_play(int page, int module){
 
 	cossb_log->log(log::loglevel::INFO, "Trajectory Playing...");
 	//2. send start
-	unsigned char header[] = {HEAD, 0x03, 0x0f, 0x2e, 0x00, END};
+	unsigned char header[] = {HEAD, 0x03, 0x0f, 0x2e, 0x00, END}; //record start
 	vector<unsigned char> data1(header, header+sizeof(header)/sizeof(header[0]));
 	cossb::message hmsg(this, base::msg_type::DATA);
 	hmsg.pack(data1);
@@ -115,16 +114,15 @@ void app_timbo::timbo_trajectory_play(int page, int module){
 
 	//3. send trajectory
 	const int offset = 5;
-	for(int i=0;i<trajectory.size()/offset;i++){
+	for(int i=0;i<trajectory.size();i+=offset){
 		unsigned char trj[] = {HEAD, 0x04, 0x0f, TRAJ, trajectory[i+2], trajectory[i+3], END};
 		cossb::message vmsg(this, base::msg_type::DATA);
 		vector<unsigned char> data2(trj, trj+sizeof(trj));
 		vmsg.pack(data2);
 		cossb_broker->publish("timbo_write", vmsg);
-		//cossb_log->log(log::loglevel::INFO, fmt::format("Publish to Nanopi : {} bytes", data2.size()));
+		cossb_log->log(log::loglevel::INFO, fmt::format("Send Trajectory : {}, {}", trajectory[i+2], trajectory[i+3]));
 		boost::this_thread::sleep(boost::posix_time::milliseconds(20));
 	}
-
 
 	//4. end
 	cossb::message tmsg(this, base::msg_type::DATA);
