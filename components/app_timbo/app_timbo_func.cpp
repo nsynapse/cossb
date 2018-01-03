@@ -105,6 +105,13 @@ void app_timbo::timbo_trajectory_play(int page, int module){
 	file.close();
 
 	cossb_log->log(log::loglevel::INFO, "Trajectory Playing...");
+
+	unsigned char start[] = {HEAD, 0x03, 0x0f, 0xc, 0x00, END}; //record start
+	vector<unsigned char> sdata(start, start+sizeof(start)/sizeof(start[0]));
+	cossb::message smsg(this, base::msg_type::DATA);
+	smsg.pack(sdata);
+	cossb_broker->publish("timbo_write", smsg);
+
 	//2. send start
 	unsigned char header[] = {HEAD, 0x03, 0x0f, 0x2e, 0x00, END}; //record start
 	vector<unsigned char> data1(header, header+sizeof(header)/sizeof(header[0]));
