@@ -1,107 +1,75 @@
-
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
-    <link rel="stylesheet" href="https://v40.pingendo.com/assets/bootstrap/bootstrap-4.0.0-beta.1.css" type="text/css">
-    <link href="./css/cover.css" rel="stylesheet">
-    <style>
-body, html {
-  height: 100%;
-  margin: 0;
-  font: 400 15px/1.8 "Lato", sans-serif;
-  color: #777;
-}
+<html>
 
-.bgimg-1, .bgimg-2, .bgimg-3 {
-  position: relative;
-  opacity: 0.65;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>Timbo Ebook</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+  <!-- Custom styles for this template -->
+  <link href="./css/style.css" rel="stylesheet">
+  <style type="text/css">
+    body {
+      background: url('./img/ebook1.png') no-repeat center center fixed;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      background-size: cover;
+      -o-background-size: cover;
+    }
 
-}
-.bgimg-1 {
-  background-image: url("./img/ebook1.png");
-  height: 100%;
-}
+    .nav.navbar-nav {
+      clear: left;
+      float: left;
+      margin: 0;
+      padding: 0;
+      position: relative;
+      left: 50%;
+      text-align: center;
+    }
 
-.caption {
-  position: absolute;
-  left: 0;
-  top: 50%;
-  width: 100%;
-  text-align: center;
-  color: #000;
-}
+    .nav.navbar-nav>li {
+      position: relative;
+      right: 50%;
+      padding-left: 15px;
+      padding-right: 15px;
+    }
 
-.caption span.border {
-  background-color: #111;
-  color: #fff;
-  padding: 18px;
-  font-size: 25px;
-  letter-spacing: 10px;
-}
+    .nav.navbar-nav li {
+      text-align: left
+    }
+  </style>
+</head>
 
-h3 {
-  letter-spacing: 5px;
-  text-transform: uppercase;
-  font: 20px "Lato", sans-serif;
-  color: #111;
-}
-</style>
-    
-
-    <title>Timbo Block Ebook</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="../../dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="cover.css" rel="stylesheet">
-  </head>
-
-  <body>
-  <div class="bgimg-1"></div>
-
-    <div class="site-wrapper">
-
-      <div class="site-wrapper-inner">
-
-        <div class="cover-container">
-
-          <div class="inner cover">
-          
-
-          <div class="mastfoot">
-            <div class="inner">
-              <p class="lead">
-              <a href="#" class="btn btn-lg btn-secondary">ID Setting</a>
-              <a href="#" class="btn btn-lg btn-secondary">ID Selection</a>
-              <a href="#" class="btn btn-lg btn-secondary">Play</a>
-            </p>
-            </div>
-          </div>
-
-        </div>
-
+<body>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar bg fixed-bottom">
+    <div class="container">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+      <div id="nav-collapse" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li class="">
+            <a href="#" class="btn azm-social azm-size-64 azm-circle azm-long-shadow azm-linux"><i class="fa fa-cog"></i></a>
+          </li>
+          <li>
+            <a href="#" class="btn azm-social azm-size-64 azm-circle azm-long-shadow azm-linux"><i class="fa fa-check"></i></a>
+          </li>
+          <li>
+            <a href="#" class="btn azm-social azm-size-64 azm-circle azm-long-shadow azm-linux"><i class="fa fa-play"></i></a>
+          </li>
+        </ul>
       </div>
-      </div>
-
     </div>
+  </nav>
+  <!-- Page Content -->
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <pingendo onclick="window.open('https://pingendo.com/', '_blank')" style="cursor:pointer;position: fixed;bottom: 10px;right:10px;padding:4px;background-color: #00b0eb;border-radius: 8px; width:110px;display:flex;flex-direction:row;align-items:center;justify-content:center;font-size:14px;color:white">made with&nbsp;&nbsp;
+    <img src="https://pingendo.com/site-assets/Pingendo_logo_big.png" class="d-block" alt="Pingendo logo" height="16">
+  </pingendo>
+</body>
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
-    <script src="../../dist/js/bootstrap.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
-  </body>
 </html>
