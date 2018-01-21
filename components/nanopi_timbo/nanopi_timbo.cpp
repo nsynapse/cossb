@@ -40,16 +40,26 @@ nanopi_timbo::nanopi_timbo()
 nanopi_timbo::~nanopi_timbo() {
 	if(_uart)
 		delete _uart;
+	if(_luart)
+		delete _luart;
 }
 
 bool nanopi_timbo::setup()
 {
+	//1. read from profile
 	_port = get_profile()->get(profile::section::property, "port").asString("/dev/ttyS0");
 	unsigned int baudrate = get_profile()->get(profile::section::property, "baudrate").asInt(115200);
 
+	_lport = get_profile()->get(profile::section::property, "lport").asString("/dev/ttyS0");
+	unsigned int lbaudrate = get_profile()->get(profile::section::property, "lbaudrate").asInt(115200);
+
+	//2. create serial instances
 	if(!_uart)
 		_uart = new libserial;
+	if(!_luart)
+		_luart = new libserial;
 
+	//3. serial port open
 	if(!_uart->open(_port.c_str(), baudrate)) {
 		if(_uart) {
 			delete _uart;
@@ -58,8 +68,17 @@ bool nanopi_timbo::setup()
 		cossb_log->log(log::loglevel::ERROR, fmt::format("Cannot open {}({})",_port, baudrate));
 		return false;
 	}
-
 	cossb_log->log(log::loglevel::INFO, fmt::format("Open {}({})",_port, baudrate));
+
+	if(!_luart->open(_lport.c_str(), lbaudrate)) {
+		if(_luart) {
+			delete _luart;
+			_luart = nullptr;
+		}
+		cossb_log->log(log::loglevel::ERROR, fmt::format("Cannot open {}({})",_lport, lbaudrate));
+		return false;
+	}
+	cossb_log->log(log::loglevel::INFO, fmt::format("Open {}({})",_lport, lbaudrate));
 
 	wiringPiSetup ();
 
@@ -75,6 +94,7 @@ bool nanopi_timbo::setup()
 
 	//perform tasks
 	_uart_task = create_task(nanopi_timbo::uart_read);
+	_luart_task = create_task(nanopi_timbo::luart_read);
 	_gpio_task = create_task(nanopi_timbo::gpio_read);
 
 	return true;
@@ -115,9 +135,7 @@ void nanopi_timbo::subscribe(cossb::message* const msg)
 				cossb_log->log(log::loglevel::INFO, fmt::format("Trajectory Dump page : {}, module : {}", page, module));
 				cossb_log->log(log::loglevel::INFO, "Now Dumping...");
 
-			} catch(const boost::bad_any_cast&){
-				//cossb_log->log(log::loglevel::ERROR, "Invalid type casting");
-			}
+			} catch(const boost::bad_any_cast&){ }
 		}break;
 		case cossb::base::msg_type::DATA: {
 			//uart data
@@ -161,6 +179,8 @@ void nanopi_timbo::subscribe(cossb::message* const msg)
 		case cossb::base::msg_type::EVENT:  break;
 		}
 }
+
+
 void nanopi_timbo::uart_read(){
 	while(1) {
 		try {
@@ -170,7 +190,7 @@ void nanopi_timbo::uart_read(){
 				int readsize = _uart->read(buffer, sizeof(unsigned char)*len);
 
 				if(readsize>0) {
-					//cossb_log->log(log::loglevel::INFO, fmt::format("Received {} Byte(s) from {}",readsize, _port));
+					cossb_log->log(log::loglevel::INFO, fmt::format("Received {} Byte(s) from {}",readsize, _port));
 
 					if(_dumping){
 						//push back into the buffer
@@ -204,6 +224,28 @@ void nanopi_timbo::uart_read(){
 						_msg.pack(data);
 						cossb_broker->publish("serial_read", _msg);
 					}
+				}
+
+				delete []buffer;
+				boost::this_thread::sleep(boost::posix_time::milliseconds(10));
+			}
+		}
+		catch(thread_interrupted&) {
+			break;
+		}
+	}
+}
+
+void nanopi_timbo::luart_read(){
+	while(1) {
+		try {
+			if(_luart) {
+				const unsigned int len = 1024;
+				unsigned char* buffer = new unsigned char[len];
+				int readsize = _luart->read(buffer, sizeof(unsigned char)*len);
+
+				if(readsize>0) {
+					cossb_log->log(log::loglevel::INFO, fmt::format("Received {} Byte(s) from {}",readsize, _lport));
 				}
 
 				delete []buffer;

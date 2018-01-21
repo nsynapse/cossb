@@ -48,6 +48,7 @@ public:
 
 private:
 	void uart_read();
+	void luart_read();
 	void gpio_read();
 
 	void trajectory_dump(int page, int module);
@@ -55,10 +56,13 @@ private:
 private:
 	cossb::base::task _gpio_task;
 	libserial* _uart = nullptr;
+	libserial* _luart = nullptr;
 	string _port;
+	string _lport;
 	bool _dumping = false;
 	ofstream _dump_file;
 	cossb::base::task _uart_task; //uart read task
+	cossb::base::task _luart_task;
 
 	deque<unsigned char> _dump_buffer;
 };
