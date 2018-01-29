@@ -314,7 +314,7 @@ void nanopi_timbo::gpio_read()
 
 		//periodic
 		boost::this_thread::sleep(boost::posix_time::milliseconds(500)); //read period = 500ms
-		if(boost::thread::interruption_requested())
+		if(boost::this_thread::interruption_requested())
 			break;
 	}
 }
