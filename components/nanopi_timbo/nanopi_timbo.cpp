@@ -244,13 +244,13 @@ void nanopi_timbo::wireless_uart_read(){
 void nanopi_timbo::wired_uart_read(){
 	while(1) {
 		try {
-			if(_luart) {
+			if(_w_uart) {
 				const unsigned int len = 1024;
 				unsigned char* buffer = new unsigned char[len];
-				int readsize = _luart->read(buffer, sizeof(unsigned char)*len);
+				int readsize = _w_uart->read(buffer, sizeof(unsigned char)*len);
 
 				if(readsize>0) {
-					cossb_log->log(log::loglevel::INFO, fmt::format("Received {} Byte(s) from {}",readsize, _lport));
+					cossb_log->log(log::loglevel::INFO, fmt::format("Received {} Byte(s) from {}",readsize, _w_port));
 				}
 
 				delete []buffer;
