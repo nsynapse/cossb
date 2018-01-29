@@ -118,7 +118,7 @@ void app_timbo::timbo_trajectory_play(int page, int module){
 
 	//3. send trajectory
 	const int offset = 20;
-	for(int i=0;i<trajectory.size();i+=offset) {
+	for(int i=0;i<(int)trajectory.size();i+=offset) {
 		unsigned char trj[] = {HEAD, 0x05, 0x0f, TRAJ, trajectory[i+2], trajectory[i+3], 0x00, END};
 		cossb::message vmsg(this, base::msg_type::DATA);
 		vector<unsigned char> data2(trj, trj+sizeof(trj));
