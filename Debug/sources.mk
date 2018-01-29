@@ -1,0 +1,90 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+C_UPPER_SRCS := 
+CXX_SRCS := 
+C++_SRCS := 
+OBJ_SRCS := 
+CC_SRCS := 
+ASM_SRCS := 
+CPP_SRCS := 
+C_SRCS := 
+O_SRCS := 
+S_UPPER_SRCS := 
+CC_DEPS := 
+C++_DEPS := 
+EXECUTABLES := 
+C_UPPER_DEPS := 
+CXX_DEPS := 
+OBJS := 
+CPP_DEPS := 
+C_DEPS := 
+
+# Every subdirectory with source files must be described here
+SUBDIRS := \
+bin \
+components/app_picat \
+components/app_timbo \
+components/camcapture \
+components/cat_protocol \
+components/compcontroller \
+components/edison_gpio \
+components/edison_i2c \
+components/edison_uart \
+components/emotion_adapter \
+components/filelog \
+components/imageviewer \
+components/msapi_face \
+components/nanopi \
+components/nanopi_timbo \
+components/rpi_gpio \
+components/rpi_i2c \
+components/rpi_spi \
+components/rpi_uart \
+components/serial \
+components/sqlitedb \
+components/tcpserver \
+components/timboprotocol \
+components/uart \
+components/uart_protocol \
+components/websocket \
+examples/01_Helloworld \
+examples/02_tcpserver \
+examples/03_uart \
+examples/04_messageout \
+examples/05_messageprint \
+examples/06_edison_gpio \
+examples/07_edison_i2c \
+examples/08_edison_uart \
+examples/09_websocket_client \
+examples/10_cat_monitoring \
+examples/11_example_cat_db_log \
+examples/12_filelog \
+include/3rdparty \
+include/3rdparty/fmt \
+include/base \
+include/ext \
+include/file \
+include/net \
+include/util \
+src \
+test \
+util/lwan/build/CMakeFiles/3.9.4/CompilerIdC \
+util/lwan/build/CMakeFiles \
+util/lwan/build \
+util/lwan/build/src/bin/lwan/CMakeFiles/lwan.dir \
+util/lwan/build/src/bin/testrunner/CMakeFiles/testrunner.dir \
+util/lwan/build/src/bin/tools/CMakeFiles/bin2hex.dir \
+util/lwan/build/src/bin/tools/CMakeFiles/mimegen.dir/__/__/lib \
+util/lwan/build/src/bin/tools/CMakeFiles/mimegen.dir \
+util/lwan/build/src/lib/CMakeFiles/lwan-shared.dir/__/__ \
+util/lwan/build/src/lib/CMakeFiles/lwan-static.dir \
+util/lwan/src/bin/lwan \
+util/lwan/src/bin/testrunner \
+util/lwan/src/bin/tools \
+util/lwan/src/lib \
+util/lwan/src/samples/freegeoip \
+util/lwan/src/samples/techempower \
+util/websocket \
+

@@ -14,13 +14,14 @@
 </info>
 
 <property>
-	<port>/dev/ttyS1</port>
-	<baudrate>115200</baudrate>
-	<lport>/dev/ttyS2</lport>
-	<lbaudrate>115200</lbaudrate>
+	<wl_port>/dev/ttyS1</wl_port>
+	<wl_baudrate>115200</wl_baudrate>
+	<w_port>/dev/ttyS2</w_port>
+	<w_baudrate>115200</w_baudrate>
 </property>
 
 <service name="nanopi_gpio_read" method="publish" topic="service/gpio/read"></service>
 <service name="nanopi_gpio_write" method="subscribe" topic="service/gpio/write"></service>
 <service name="nanopi_uart_write" method="subscribe" topic="service/uart/write"></service>
 <service name="nanopi_uart_read" method="publish" topic="service/uart/read"></service>
+<service name="nanopi_websocket_read" method="publish" topic="service/websocket/read"></service>

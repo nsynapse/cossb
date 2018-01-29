@@ -15,9 +15,9 @@
 
 <property>
 	<interval>1000</interval>
-	<groupID>ffffffffff</groupID>
 </property>
 
 <service name="app_timbo_command" method="publish" topic="app/timbo/command"></service>
-<service name="websocket_message" method="subscribe" topic="service/websocket/read"></service>
+<service name="websocket_read_msg" method="subscribe" topic="service/websocket/read"></service>
+<service name="websocket_write_msg" method="publish" topic="service/websocket/write"></service>
 <service name="timbo_write" method="publish" topic="service/uart/write"></service>

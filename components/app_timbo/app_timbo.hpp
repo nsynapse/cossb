@@ -54,6 +54,9 @@ private:
 	void timbo_trajectory_dump(int page, int module);
 	void timbo_trajectory_play(int page, int module);
 
+	//ebook control
+	void ebook_sound_play();		//each page contains one sound file, play via websocket
+
 };
 
 COMPONENT_EXPORT

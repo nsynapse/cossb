@@ -47,23 +47,42 @@ public:
 	void subscribe(cossb::message* const msg);
 
 private:
-	void uart_read();
-	void luart_read();
+	// UART read function for wireless
+	void wireless_uart_read();
+
+	//UART read function for wired
+	void wired_uart_read();
+
+	//GPIO control function for read
 	void gpio_read();
 
-	void trajectory_dump(int page, int module);
-
 private:
+	//gpio control task
 	cossb::base::task _gpio_task;
-	libserial* _uart = nullptr;
-	libserial* _luart = nullptr;
-	string _port;
-	string _lport;
+
+	//async serial read callback function
+	cossb::base::task _wl_uart_read_task;
+	cossb::base::task _w_uart_read_task;
+
+	//serial communication instance for wireless
+	libserial* _wl_uart = nullptr;
+
+	//serial communication instance for wired
+	libserial* _w_uart = nullptr;
+
+	//serial port name(wireless)
+	string _wl_port;
+
+	//serial port name(wired)
+	string _w_port;
+
+	//previous gpio map
+	map<int, int> _prev_gpio_map;
+	int _led_index = 0;
+
+
 	bool _dumping = false;
 	ofstream _dump_file;
-	cossb::base::task _uart_task; //uart read task
-	cossb::base::task _luart_task;
-
 	deque<unsigned char> _dump_buffer;
 };
 

@@ -11,14 +11,14 @@
 
 using namespace std;
 
-#define HEAD	0x55
+#define HEAD		0x55
 #define END		0xaa
 #define SET		0xf0
-#define TRAJ	0x0d
+#define TRAJ		0x0d
 #define RECORD	0x02
-#define PLAY	0x03
-#define STOP	0x04
-#define PING	0x24
+#define PLAY		0x03
+#define STOP		0x04
+#define PING		0x24
 #define TRAJECTORY_DUMP	0x37
 #define TRAJECTORY_PLAY	0x2e
 

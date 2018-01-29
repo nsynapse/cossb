@@ -46,16 +46,14 @@ public:
 	void subscribe(cossb::message* const msg);
 
 private:
-	base::task _socket_task;
-	//map<string, easywsclient::WebSocket::pointer> _client_map;
+	//tasl for read from websocket
+	base::task _socket_read_task;
 	easywsclient::WebSocket::pointer _client = nullptr;
-	std::mutex _lock;
-	//map<string, bool> _reconnect;
-
-
+	std::mutex _mutex;
 
 private:
-	void read();
+	//web socket read function
+	void _ws_read();
 
 };
 

@@ -13,6 +13,7 @@
 #include <queue>
 #include <boost/any.hpp>
 #include <interface/imessage.hpp>
+#include <boost/any.hpp>
 
 using namespace std;
 

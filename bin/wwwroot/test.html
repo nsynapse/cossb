@@ -49,11 +49,10 @@
     	}
     	sock.onmessage = function(e){
     		var jsondata = jQuery.parseJSON(e.data);
-    		console.log("on message");
+    		if(jsondata.command=="sound_play")
+    			console.log("sound_play");
+ 
     	}
-    	sock.onopen = function() { console.log("open");}
-    	sock.onclose = function() { console.log("close");}
-    	sock.onmessage = function() { console.log("message");}
     	
     	$("#id_btn_setting").click(function(){
     		data['service'] = "websocket_read";
