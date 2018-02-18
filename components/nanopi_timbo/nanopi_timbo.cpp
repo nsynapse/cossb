@@ -298,6 +298,7 @@ void nanopi_timbo::gpio_read()
 		}
 		//id changed
 		else if(!_prev_gpio_map[BTN1] && gpio_map[BTN1]){
+			_led_index--;
 			if(_led_index>=sizeof(gpio_led)/sizeof(unsigned int))
 				_led_index = 0;
 
