@@ -24,30 +24,11 @@ app_timbo::~app_timbo() {
 
 bool app_timbo::setup()
 {
-	net::macAddress _mac = net::getMacAddress("wlan0");
+	string _if = get_profile()->get(profile::section::property, "if").asString("eth0");
+	net::macAddress _mac = net::getMacAddress(_if.c_str());
+	memcpy(_group_id, _mac.address, sizeof(_group_id));
 
-	cout << (int)_mac.address[0] << "," << (int)_mac.address[1] << "," << (int)_mac.address[2] << "," << (int)_mac.address[3] << endl;
-	string gid = get_profile()->get(profile::section::property, "groupID").asString("ffffffffff");
-	std::transform(gid.begin(), gid.end(), gid.begin(), ::tolower); //change lowercase
-	if(gid.size()!=10){
-		cossb_log->log(log::loglevel::ERROR, fmt::format("Invalid Group ID : {}", gid));
-		return false;
-	}
-
-	//hex string to hex
-	for(int i=0;i<5;i++){
-		unsigned char l = gid.at(i);
-		unsigned char h = gid.at(i+1);
-
-		if(l>=48 && l<=57)
-			_group_id[i] = 0xf0&((l-48)<<4);
-		else
-			_group_id[i] = 0xf0&((l-97)<<4);
-
-		if(h>=48 && h<=57)
-			_group_id[i] |= 0x0f&(h-48);
-		else _group_id[i] |= 0x0f&(h-97);
-	}
+	cossb_log->log(log::loglevel::INFO, fmt::format("Group ID : {}", _mac.address[0]));
 
 	return true;
 }
