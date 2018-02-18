@@ -273,10 +273,13 @@ void nanopi_timbo::gpio_read()
 
 		//1. read button
 		map<int, int> gpio_map;
-		for(auto& port:gpio_btn)
+		for(auto& port:gpio_btn){
 			gpio_map[port] = digitalRead(port);
+			cossb_log->log(log::loglevel::INFO, fmt::format("Button : {}:{}", port, gpio_map[port]));
+		}
 		for(auto& port:gpio_sw)
 			gpio_map[port] = digitalRead(port);
+
 
 		//2. control (id selection : both high)
 		if(_prev_gpio_map[BTN1] && gpio_map[BTN1]){
