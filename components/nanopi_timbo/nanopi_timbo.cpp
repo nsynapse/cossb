@@ -289,7 +289,8 @@ void nanopi_timbo::gpio_read()
 			for(auto& led:gpio_led)
 				digitalWrite(led, HIGH);	//turn off all
 			digitalWrite(gpio_led[_led_index++], LOW); //turn on one
-			if(_led_index>=sizeof(gpio_led))
+
+			if(_led_index>=sizeof(gpio_led)/sizeof(unsigned int))
 				_led_index = 0;
 
 			//publish message
