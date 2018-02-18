@@ -88,8 +88,10 @@ bool nanopi_timbo::setup()
 	//setting up wiringNP to use GPIO
 	wiringPiSetup ();
 
-	for(int i=0;i<(int)sizeof(gpio_led);i++)
+	for(int i=0;i<(int)sizeof(gpio_led);i++){
 		pinMode(gpio_led[i], OUTPUT);
+		digitalWrite(gpio_led[i], HIGH);
+	}
 
 	for(int i=0;i<(int)sizeof(gpio_btn);i++)
 		pinMode(gpio_btn[i], INPUT);
@@ -294,6 +296,8 @@ void nanopi_timbo::gpio_read()
 			cossb::message msg(this, cossb::base::msg_type::REQUEST);
 			msg.pack(gpio_map);
 			cossb_broker->publish("nanopi_gpio_read", msg);
+
+			cossb_log->log(log::loglevel::INFO, fmt::format("ID Changed : {}", _led_index));
 		}
 
 		//3. copy gpio_map to previous
