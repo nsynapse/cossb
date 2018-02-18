@@ -285,14 +285,17 @@ void nanopi_timbo::gpio_read()
 		if(_prev_gpio_map[BTN1] && !gpio_map[BTN1])
 			cossb_log->log(log::loglevel::INFO, "Pushed ID Setting Button");
 
-		if(!_prev_gpio_map[BTN1] && !gpio_map[BTN1]){
+		else if(!_prev_gpio_map[BTN1] && !gpio_map[BTN1]){
 			for(auto& led:gpio_led)
 				digitalWrite(led, HIGH);	//turn off all
 			digitalWrite(gpio_led[_led_index++], LOW); //turn on one
+			cossb_log->log(log::loglevel::INFO, fmt::format("ID Selection : {}", _led_index));
 
-			if(_led_index>=sizeof(gpio_led)/sizeof(unsigned int))
+			if(_led_index>=sizeof(gpio_led)/sizeof(unsigned int)-1)
 				_led_index = 0;
-
+		}
+		//id changed
+		else if(_prev_gpio_map[BTN1] && gpio_map[BTN1]){
 			//publish message
 			cossb::message msg(this, cossb::base::msg_type::REQUEST);
 			msg.pack(gpio_map);
