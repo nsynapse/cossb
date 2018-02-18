@@ -12,13 +12,15 @@
 using namespace std;
 
 //wiring pi gpio index
-#define LED1		13
-#define LED2		6
-#define LED3		14
-#define LED4		10
-#define BTN1		0	//ID Selection
-#define BTN2		1	//ID Setting
-#define BTN3		2	//Trajectory play
+#define LED1		8
+#define LED2		9
+#define LED3		7
+#define LED4		15
+
+#define BTN1		13	//ID Selection
+#define BTN2		14	//ID Setting
+#define BTN3		10	//Trajectory play
+
 #define SW1		3	//Guidebook page1
 #define SW2		4	//Guidebook page2
 #define SW3		5	//Guidebook page3

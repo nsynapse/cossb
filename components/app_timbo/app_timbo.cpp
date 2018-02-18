@@ -7,6 +7,7 @@
 #include <base/log.hpp>
 #include <base/broker.hpp>
 #include <base/task.hpp>
+#include <net/util.hpp>
 
 using namespace std;
 
@@ -23,6 +24,9 @@ app_timbo::~app_timbo() {
 
 bool app_timbo::setup()
 {
+	net::macAddress _mac = net::getMacAddress("wlan0");
+
+	cout << (int)_mac.address[0] << "," << (int)_mac.address[1] << "," << (int)_mac.address[2] << "," << (int)_mac.address[3] << endl;
 	string gid = get_profile()->get(profile::section::property, "groupID").asString("ffffffffff");
 	std::transform(gid.begin(), gid.end(), gid.begin(), ::tolower); //change lowercase
 	if(gid.size()!=10){

@@ -316,6 +316,7 @@ $(OUTDIR)client.o: $(INCLUDE_FILES)net/client.cpp
 	
 $(OUTDIR)localtime.o: $(INCLUDE_FILES)util/localtime.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
+
 	
 $(OUTDIR)ostream.o: $(INCLUDE_FILES)util/ostream.cc
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
