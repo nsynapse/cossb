@@ -289,19 +289,21 @@ void nanopi_timbo::gpio_read()
 			for(auto& led:gpio_led)
 				digitalWrite(led, HIGH);	//turn off all
 			cossb_log->log(log::loglevel::INFO, fmt::format("ID Selection : {}", _led_index));
-			digitalWrite(gpio_led[_led_index++], LOW); //turn on one
-
 			if(_led_index>=sizeof(gpio_led)/sizeof(unsigned int))
 				_led_index = 0;
+
+			digitalWrite(gpio_led[_led_index++], LOW); //turn on one
+
+
 		}
 		//id changed
-		else if(_prev_gpio_map[BTN1] && gpio_map[BTN1]){
+		else if(!_prev_gpio_map[BTN1] && gpio_map[BTN1]){
 			//publish message
 			cossb::message msg(this, cossb::base::msg_type::REQUEST);
 			msg.pack(gpio_map);
 			cossb_broker->publish("nanopi_gpio_read", msg);
 
-			cossb_log->log(log::loglevel::INFO, fmt::format("ID Changed : {}", _led_index));
+			cossb_log->log(log::loglevel::INFO, fmt::format("ID Changed : {}", _led_index-1));
 		}
 
 		//3. copy gpio_map to previous
