@@ -19,14 +19,14 @@ typedef struct _macAddress {
 
 	inline macAddress getMacAddress(const char* ifname){
 		struct ifreq s;
-		macAddress _address;
+		macAddress _mac;
 		int fd = socket(PF_INET, SOCK_DGRAM, IPPROTO_IP);
 		strcpy(s.ifr_name, ifname);
 		if(!ioctl(fd, SIOCGIFHWADDR, &s)){
 			for(int i=0;i<6;i++)
-				_address[i] = (unsigned char)s.ifr_hwaddr.sa_data[i];
+				_mac.address[i] = (unsigned char)s.ifr_hwaddr.sa_data[i];
 		}
-		return _address;
+		return _mac;
 	}
 
 } /* namespace net */
