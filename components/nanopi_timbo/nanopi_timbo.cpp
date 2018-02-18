@@ -279,10 +279,11 @@ void nanopi_timbo::gpio_read()
 			gpio_map[port] = digitalRead(port);
 
 
-		//2. control (id selection : rising edge)
-		if(_prev_gpio_map[BTN1] && !gpio_map[BTN1]){
+		//2. control (id selection : both pushed)
+		if(_prev_gpio_map[BTN1] && !gpio_map[BTN1])
 			cossb_log->log(log::loglevel::INFO, "Pushed ID Setting Button");
 
+		if(!_prev_gpio_map[BTN1] && !gpio_map[BTN1]){
 			for(auto& led:gpio_led)
 				digitalWrite(led, HIGH);	//turn off all
 			digitalWrite(gpio_led[_led_index++], LOW); //turn on one
