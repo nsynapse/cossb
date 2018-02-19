@@ -17,9 +17,9 @@ using namespace std;
 #define LED3		7
 #define LED4		1
 
-#define BTN1		13	//ID Selection
-#define BTN2		14	//ID Setting
-#define BTN3		10	//Trajectory play
+#define BTN_ID_SEL		13	//ID Selection
+#define BTN_ID_SET		14	//ID Setting
+#define BTN_TRJ_PLAY	10	//Trajectory play
 
 #define SW1		3	//Guidebook page1
 #define SW2		4	//Guidebook page2
@@ -27,7 +27,7 @@ using namespace std;
 #define SW4		12	//Guidebook page4
 
 const unsigned int gpio_led[] = {LED1, LED2, LED3, LED3 };
-const unsigned int gpio_btn[] = {BTN1, BTN2, BTN3 };
+const unsigned int gpio_btn[] = {BTN_ID_SEL, BTN_ID_SET, BTN_TRJ_PLAY };
 const unsigned int gpio_sw[] = {SW1, SW2, SW3, SW4};
 
 using namespace std;
@@ -63,7 +63,7 @@ bool nanopi_timbo::setup()
 		_w_uart = new libserial;
 
 	//3. serial port open (for wireless)
-	if(!_wl_uart->open(_w_port.c_str(), w_baudrate)) {
+	if(!_wl_uart->open(_wl_port.c_str(), wl_baudrate)) {
 		if(_wl_uart) {
 			delete _wl_uart;
 			_wl_uart = nullptr;
@@ -282,39 +282,39 @@ void nanopi_timbo::gpio_read()
 
 
 		//2. control (id selection : both pushed)
-		if(_prev_gpio_map[BTN1] && !gpio_map[BTN1])
+		if(_prev_gpio_map[BTN_ID_SEL] && !gpio_map[BTN_ID_SEL])
 			cossb_log->log(log::loglevel::INFO, "Pushed ID Setting Button");
 
-		else if(!_prev_gpio_map[BTN1] && !gpio_map[BTN1]){
+		else if(!_prev_gpio_map[BTN_ID_SEL] && !gpio_map[BTN_ID_SEL]){
 			for(auto& led:gpio_led)
 				digitalWrite(led, HIGH);	//turn off all
-			if(_led_index>=sizeof(gpio_led)/sizeof(unsigned int))
-				_led_index = 0;
+			if(_selected_id>=sizeof(gpio_led)/sizeof(unsigned int))
+				_selected_id = 0;
 
-			digitalWrite(gpio_led[_led_index], LOW); //turn on one
-			cossb_log->log(log::loglevel::INFO, fmt::format("ID Selection : {}", _led_index));
-			_led_index++;
+			digitalWrite(gpio_led[_selected_id], LOW); //turn on one
+			cossb_log->log(log::loglevel::INFO, fmt::format("ID Selection : {}", _selected_id));
+			_selected_id++;
 
 		}
 		//id changed
-		else if(!_prev_gpio_map[BTN1] && gpio_map[BTN1]){
-			_led_index--;
-			if(_led_index>=sizeof(gpio_led)/sizeof(unsigned int))
-				_led_index = 0;
+		else if(!_prev_gpio_map[BTN_ID_SEL] && gpio_map[BTN_ID_SEL]){
+			_selected_id--;
+			if(_selected_id>=sizeof(gpio_led)/sizeof(unsigned int))
+				_selected_id = 0;
 
 			//publish message
 			cossb::message msg(this, cossb::base::msg_type::REQUEST);
 			msg.pack(gpio_map);
 			cossb_broker->publish("nanopi_gpio_read", msg);
 
-			cossb_log->log(log::loglevel::INFO, fmt::format("ID Changed : {}", _led_index));
+			cossb_log->log(log::loglevel::INFO, fmt::format("ID Changed : {}", _selected_id));
 		}
 
 		//3. copy gpio_map to previous
 		_prev_gpio_map = gpio_map;
 
 		//4. id setting (rising edge)
-		if(!_prev_gpio_map[BTN2] && gpio_map[BTN2]){
+		if(!_prev_gpio_map[BTN_ID_SET] && gpio_map[BTN_ID_SET]){
 			//publish message
 			cossb::message msg(this, cossb::base::msg_type::REQUEST);
 			msg.pack(gpio_map);
@@ -322,7 +322,7 @@ void nanopi_timbo::gpio_read()
 		}
 
 		//5. trajectory play (rising edge)
-		if(!_prev_gpio_map[BTN3] && gpio_map[BTN3]){
+		if(!_prev_gpio_map[BTN_TRJ_PLAY] && gpio_map[BTN_TRJ_PLAY]){
 			cossb::message msg(this, cossb::base::msg_type::REQUEST);
 			nlohmann::json _json_msg;
 			_json_msg["command"] = "trajectory_play";

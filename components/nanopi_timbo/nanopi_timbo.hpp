@@ -70,15 +70,13 @@ private:
 	//serial communication instance for wired
 	libserial* _w_uart = nullptr;
 
-	//serial port name(wireless)
+	//serial port name
 	string _wl_port;
-
-	//serial port name(wired)
 	string _w_port;
 
 	//previous gpio map
 	map<int, int> _prev_gpio_map;
-	int _led_index = 0;
+	int _selected_id = 0;
 
 
 	bool _dumping = false;
