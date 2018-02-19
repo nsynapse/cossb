@@ -231,7 +231,7 @@ void nanopi_timbo::wireless_uart_read(){
 						cossb::message _msg(this, base::msg_type::DATA);
 						vector<unsigned char> data(buffer, buffer+readsize);
 						_msg.pack(data);
-						cossb_broker->publish("serial_read", _msg);
+						cossb_broker->publish("nanopi_uart_read", _msg);
 					}
 				}
 
