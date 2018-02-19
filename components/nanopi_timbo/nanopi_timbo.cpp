@@ -281,36 +281,27 @@ void nanopi_timbo::gpio_read()
 			gpio_map[port] = digitalRead(port);
 
 
-		//2. control (id selection : both pushed)
+		//2. control (id selection : falling edge [high to low])
 		if(_prev_gpio_map[BTN_ID_SEL] && !gpio_map[BTN_ID_SEL])
-			cossb_log->log(log::loglevel::INFO, "Pushed ID Setting Button");
+			cossb_log->log(log::loglevel::INFO, "Pushed ID Selection Button");
 
+		//both low (keep pushed)
 		else if(!_prev_gpio_map[BTN_ID_SEL] && !gpio_map[BTN_ID_SEL]){
 			for(auto& led:gpio_led)
 				digitalWrite(led, HIGH);	//turn off all
 			if(_selected_id>=sizeof(gpio_led)/sizeof(unsigned int))
 				_selected_id = 0;
-
 			digitalWrite(gpio_led[_selected_id], LOW); //turn on one
 			cossb_log->log(log::loglevel::INFO, fmt::format("ID Selection : {}", _selected_id));
 			_selected_id++;
 
 		}
-		//id changed
+		//rising edge [low to high]
 		else if(!_prev_gpio_map[BTN_ID_SEL] && gpio_map[BTN_ID_SEL]){
 			_selected_id--;
 			if(_selected_id>=sizeof(gpio_led)/sizeof(unsigned int))
 				_selected_id = 0;
-
-			//publish message
-			cossb::message msg(this, cossb::base::msg_type::REQUEST);
-			msg.pack(gpio_map);
-			cossb_broker->publish("nanopi_gpio_read", msg);
-
-			cossb_log->log(log::loglevel::INFO, fmt::format("ID Changed : {}", _selected_id));
 		}
-
-		//3. copy gpio_map to previous
 		_prev_gpio_map = gpio_map;
 
 		//4. id setting (rising edge)
@@ -318,7 +309,7 @@ void nanopi_timbo::gpio_read()
 			//publish message
 			cossb::message msg(this, cossb::base::msg_type::REQUEST);
 			msg.pack(gpio_map);
-			cossb_broker->publish("nanopi_gpio_read", msg);
+			cossb_broker->publish("nanopi_gpio_id_set", msg);
 		}
 
 		//5. trajectory play (rising edge)

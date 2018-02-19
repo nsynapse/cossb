@@ -20,7 +20,7 @@
 	<w_baudrate>115200</w_baudrate>
 </property>
 
-<service name="nanopi_gpio_read" method="publish" topic="service/gpio/read"></service>
+<service name="nanopi_gpio_id_set" method="publish" topic="service/id/setting"></service>
 <service name="nanopi_gpio_write" method="subscribe" topic="service/gpio/write"></service>
 <service name="nanopi_uart_write" method="subscribe" topic="service/uart/write"></service>
 <service name="nanopi_uart_read" method="publish" topic="service/uart/read"></service>
