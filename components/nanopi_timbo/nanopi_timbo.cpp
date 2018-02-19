@@ -26,7 +26,7 @@ using namespace std;
 #define SW3		5	//Guidebook page3
 #define SW4		12	//Guidebook page4
 
-const unsigned int gpio_led[] = {LED1, LED2, LED3, LED3 };
+const unsigned int gpio_led[] = {LED1, LED2, LED3, LED4 };
 const unsigned int gpio_btn[] = {BTN_ID_SEL, BTN_ID_SET, BTN_TRJ_PLAY };
 const unsigned int gpio_sw[] = {SW1, SW2, SW3, SW4};
 
