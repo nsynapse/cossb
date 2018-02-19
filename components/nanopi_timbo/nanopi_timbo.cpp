@@ -291,7 +291,6 @@ void nanopi_timbo::gpio_read()
 			if(_selected_id>=sizeof(gpio_led)/sizeof(unsigned int))
 				_selected_id = 0;
 			digitalWrite(gpio_led[_selected_id], LOW); //turn on one
-			cossb_log->log(log::loglevel::INFO, fmt::format("ID Selection : {}", _selected_id));
 			_selected_id++;
 
 		}
@@ -300,11 +299,12 @@ void nanopi_timbo::gpio_read()
 			_selected_id--;
 			if(_selected_id>=sizeof(gpio_led)/sizeof(unsigned int))
 				_selected_id = 0;
+			cossb_log->log(log::loglevel::INFO, fmt::format("ID Selection : {}", _selected_id));
 		}
-		_prev_gpio_map = gpio_map;
 
 		//4. id setting (rising edge)
 		if(!_prev_gpio_map[BTN_ID_SET] && gpio_map[BTN_ID_SET]){
+			cossb_log->log(log::loglevel::INFO, fmt::format("ID Setting : {}", _selected_id));
 			//publish message
 			cossb::message msg(this, cossb::base::msg_type::REQUEST);
 			msg.pack(gpio_map);
@@ -313,6 +313,7 @@ void nanopi_timbo::gpio_read()
 
 		//5. trajectory play (rising edge)
 		if(!_prev_gpio_map[BTN_TRJ_PLAY] && gpio_map[BTN_TRJ_PLAY]){
+			cossb_log->log(log::loglevel::INFO, "Trajectory Play");
 			cossb::message msg(this, cossb::base::msg_type::REQUEST);
 			nlohmann::json _json_msg;
 			_json_msg["command"] = "trajectory_play";
@@ -321,6 +322,8 @@ void nanopi_timbo::gpio_read()
 			msg.pack(_json_msg.dump());
 			cossb_broker->publish("nanopi_websocket_read", msg);
 		}
+
+		_prev_gpio_map = gpio_map;
 
 		//periodic
 		boost::this_thread::sleep(boost::posix_time::milliseconds(500)); //read period = 500ms
