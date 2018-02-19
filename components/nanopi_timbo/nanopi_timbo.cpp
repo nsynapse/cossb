@@ -15,7 +15,7 @@ using namespace std;
 #define LED1		8
 #define LED2		9
 #define LED3		7
-#define LED4		15
+#define LED4		1
 
 #define BTN1		13	//ID Selection
 #define BTN2		14	//ID Setting
