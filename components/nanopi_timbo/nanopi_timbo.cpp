@@ -193,7 +193,7 @@ void nanopi_timbo::subscribe(cossb::message* const msg)
 void nanopi_timbo::wireless_uart_read(){
 	while(1) {
 		try {
-			if(_wl_uart) {
+			if(_wl_uart->is_opened()) {
 				const unsigned int len = 1024;
 				unsigned char* buffer = new unsigned char[len];
 				int readsize = _wl_uart->read(buffer, sizeof(unsigned char)*len);
@@ -228,6 +228,7 @@ void nanopi_timbo::wireless_uart_read(){
 
 					}
 					else{
+						//publish the received data
 						cossb::message _msg(this, base::msg_type::DATA);
 						vector<unsigned char> data(buffer, buffer+readsize);
 						_msg.pack(data);
@@ -242,13 +243,16 @@ void nanopi_timbo::wireless_uart_read(){
 		catch(thread_interrupted&) {
 			break;
 		}
+
+		if(boost::this_thread::interruption_requested())
+			break;
 	}
 }
 
 void nanopi_timbo::wired_uart_read(){
 	while(1) {
 		try {
-			if(_w_uart) {
+			if(_w_uart->is_opened()) {
 				const unsigned int len = 1024;
 				unsigned char* buffer = new unsigned char[len];
 				int readsize = _w_uart->read(buffer, sizeof(unsigned char)*len);
@@ -264,6 +268,9 @@ void nanopi_timbo::wired_uart_read(){
 		catch(thread_interrupted&) {
 			break;
 		}
+
+		if(boost::this_thread::interruption_requested())
+			break;
 	}
 }
 
