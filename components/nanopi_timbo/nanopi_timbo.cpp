@@ -284,7 +284,6 @@ void nanopi_timbo::gpio_read()
 		//2. control (id selection : falling edge [high to low])
 		if(_prev_gpio_map[BTN_ID_SEL] && !gpio_map[BTN_ID_SEL])
 			cossb_log->log(log::loglevel::INFO, "Pushed ID Selection Button");
-
 		//both low (keep pushed)
 		else if(!_prev_gpio_map[BTN_ID_SEL] && !gpio_map[BTN_ID_SEL]){
 			for(auto& led:gpio_led)
