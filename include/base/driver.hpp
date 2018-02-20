@@ -93,13 +93,11 @@ private:
 	 * @brief	subscribe process task
 	 */
 	void _subscribe_process();
-	void _run_process();
 
 	/**
 	 * @brief	request task
 	 */
 	base::task	_subscribe_proc_task;
-	base::task _run_proc_task;
 
 private:
 	/**
@@ -116,7 +114,6 @@ private:
 	util::queue_safe<cossb::message> _mailbox;
 
 	boost::condition_variable _subscribe_cv;
-	boost::condition_variable _run_cv;
 	boost::mutex _mutex;
 	int _interval_ms = 0;
 

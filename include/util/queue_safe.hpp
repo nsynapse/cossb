@@ -17,6 +17,7 @@ namespace cossb {
 	namespace util {
 		template<typename _T>
 		class queue_safe {
+		public:
 
 			/*
 			 @brief	push

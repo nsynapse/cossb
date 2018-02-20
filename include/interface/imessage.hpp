@@ -36,12 +36,12 @@ enum class msg_type : char {
 /*
  * @brief	 message type structure
  */
-template<typename T>
+template<typename _T>
 struct msgframe {
 	msg_type type;
 	string topic;
 	string from;		//message source name
-	T data;
+	_T data;
 };
 }
 
@@ -67,24 +67,29 @@ public:
 	 * @brief	 support functions
 	 */
 
-	base::msgframe<_T>* get_frame() { return &msg_frame; }
+	base::msgframe<_T>* get_frame() const { return &msg_frame; }
 
-	_T* get_data() { return &msg_frame.data; }
+	_T* get_data() const { return &msg_frame.data; }
 
 	/*
 	 * @brief	get message topic
 	 */
-	const char* get_topic() { return msg_frame.topic.c_str(); }
+	const char* get_topic() const { return msg_frame.topic.c_str(); }
 
 	/*
 	 * @brief
 	 */
-	const char* get_from() { return msg_frame.from.c_str(); }
+	const char* get_from() const { return msg_frame.from.c_str(); }
 
 	/*
 	 * @brief
 	 */
 	void set(_T& data){  msg_frame.data = data; }
+
+	/*
+	 * @brief
+	 */
+	base::msg_type get_type() const { return msg_frame.type; }
 
 	/*
 	 * @brief	(interface) check if message data is empty

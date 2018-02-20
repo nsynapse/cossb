@@ -24,7 +24,7 @@ typedef boost::shared_ptr<boost::thread> task;
 
 #define task_register(fnptr)	boost::thread(boost::bind(fnptr, this))
 #define create_task(fnptr)	boost::shared_ptr<boost::thread>(new task_register(&fnptr))
-#define destroy_task(instance)	if(instance){ instance->interrupt(); instance->join(); }
+#define destroy_task(instance)	if(instance){ instance->interrupt(); instance->join(); instance.reset(); }
 
 
 } /* namespace base */

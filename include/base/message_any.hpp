@@ -27,9 +27,16 @@ namespace cossb {
 class message : public cossb::interface::imessage<boost::any> {
 
 public:
+	message();
 	message(const char* component_name, base::msg_type type);
 	message(interface::icomponent* component, base::msg_type type);
 	virtual ~message();
+
+	message& operator = (const message& p){
+		this->msg_frame.from =  p.get_from();
+		this->msg_frame.type = p.get_type();
+		return *this;
+	}
 
 	/*
 	 * @brief	message interface functions

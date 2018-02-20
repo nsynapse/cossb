@@ -4,6 +4,12 @@
 
 namespace cossb {
 
+message::message()
+:cossb::interface::imessage<boost::any>("", base::msg_type::DATA)
+{
+
+}
+
 message::message(const char* component_name, base::msg_type type = base::msg_type::DATA)
 :cossb::interface::imessage<boost::any>(component_name, type) {
 	this->msg_frame.type = type;

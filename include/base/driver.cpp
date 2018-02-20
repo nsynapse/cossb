@@ -93,8 +93,8 @@ void component_driver::unload()
 	{
 		destroy_component pfdestroy = (destroy_component)dlsym(_handle, "destroy");
 
-		if(_subscribe_proc_task.get())	destroy_task(_subscribe_proc_task);
-		if(_run_proc_task.get())		destroy_task(_run_proc_task);
+		if(_subscribe_proc_task.get())
+			destroy_task(_subscribe_proc_task);
 
 		if(pfdestroy) {
 			pfdestroy();
@@ -127,12 +127,8 @@ bool component_driver::run()
 	if(_ptr_component){
 		if(!_subscribe_proc_task.get()){
 			_subscribe_proc_task = create_task(component_driver::_subscribe_process);
+			return true;
 		}
-
-		if(!_run_proc_task.get() && _interval_ms>0){
-			_run_proc_task = create_task(component_driver::_run_process);
-		}
-		return true;
 	}
 	return false;
 }
@@ -142,28 +138,10 @@ void component_driver::stop()
 	if(_ptr_component)
 		_ptr_component->stop();
 
+	_subscribe_cv.notify_one();
+
 	if(_subscribe_proc_task.get())
 		destroy_task(_subscribe_proc_task);
-	if(_run_proc_task.get())
-		destroy_task(_run_proc_task);
-}
-
-void component_driver::_run_process()
-{
-	if(_ptr_component){
-		while(1){
-			try {
-				boost::mutex::scoped_lock __lock(_mutex);
-				if(!_run_cv.timed_wait(__lock, boost::posix_time::milliseconds(_interval_ms))){
-					if(_run_proc_task->interruption_requested()) break;
-					_ptr_component->run();
-				}
-			}
-			catch(thread_interrupted&) {
-				break;
-			}
-		}
-	}
 }
 
 void component_driver::_subscribe_process()
@@ -171,15 +149,16 @@ void component_driver::_subscribe_process()
 	if(_ptr_component) {
 		while(1){
 			try {
-				boost::mutex::scoped_lock __lock(_mutex);
-				_subscribe_cv.wait(__lock);
-
-				while(!_mailbox.empty()){
-					_ptr_component->subscribe(&_mailbox.front());
-					_mailbox.pop();
+				if(_interval_ms<0){
+					cossb::message msg;
+					_mailbox.wait_pop(msg);
+					//_ptr_component->subscribe(&msg);
 				}
-
-				if(_subscribe_proc_task->interruption_requested()) break;
+				else{
+					_ptr_component->run();
+					if(_subscribe_proc_task->interruption_requested()) break;
+					boost::this_thread::sleep(boost::posix_time::milliseconds(_interval_ms));
+				}
 			}
 			catch(thread_interrupted&) {
 				break;
