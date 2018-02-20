@@ -152,7 +152,7 @@ void component_driver::_subscribe_process()
 				if(_interval_ms<0){
 					cossb::message msg;
 					_mailbox.wait_pop(msg);
-					//_ptr_component->subscribe(&msg);
+					_ptr_component->subscribe(&msg);
 				}
 				else{
 					_ptr_component->run();
