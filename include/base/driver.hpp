@@ -15,6 +15,7 @@
 #include <base/interface.hpp>
 #include <boost/any.hpp>
 #include <base/message_any.hpp>
+#include <util/queue_safe.hpp>
 
 
 using namespace std;
@@ -111,7 +112,8 @@ private:
 	/**
 	 * @brief	mailbox
 	 */
-	std::queue<cossb::message> _mailbox;
+	//std::queue<cossb::message> _mailbox;
+	util::queue_safe<cossb::message> _mailbox;
 
 	boost::condition_variable _subscribe_cv;
 	boost::condition_variable _run_cv;
