@@ -67,9 +67,9 @@ public:
 	 * @brief	 support functions
 	 */
 
-	base::msgframe<_T>* get_frame() const { return &msg_frame; }
+	base::msgframe<_T>* get_frame() { return &msg_frame; }
 
-	_T* get_data() const { return &msg_frame.data; }
+	_T* get_data() { return &msg_frame.data; }
 
 	/*
 	 * @brief	get message topic
