@@ -319,7 +319,7 @@ void nanopi_timbo::gpio_read()
 			_selected_id--;
 			if(_selected_id>=sizeof(gpio_led)/sizeof(unsigned int))
 				_selected_id = 0;
-			cossb_log->log(log::loglevel::INFO, fmt::format("ID Selection : {}", _selected_id));
+			cossb_log->log(log::loglevel::INFO, fmt::format("ID Selection : {} [{},{}]", _selected_id, _prev_gpio_map[BTN_ID_SEL], gpio_map[BTN_ID_SEL]));
 		}
 
 		//4. id setting (rising edge)
@@ -346,9 +346,9 @@ void nanopi_timbo::gpio_read()
 		_prev_gpio_map = gpio_map;
 
 		//periodic
+		if(boost::this_thread::interruption_requested()) break;
 		boost::this_thread::sleep(boost::posix_time::milliseconds(500)); //read period = 500ms
-		if(boost::this_thread::interruption_requested())
-			break;
+
 	}
 }
 
