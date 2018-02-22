@@ -14,9 +14,9 @@
 </info>
 
 <property>
-	<wl_port>/dev/ttyS1</wl_port>
+	<wl_port>/dev/ttyS2</wl_port>
 	<wl_baudrate>115200</wl_baudrate>
-	<w_port>/dev/ttyS2</w_port>
+	<w_port>/dev/ttyS1</w_port>
 	<w_baudrate>115200</w_baudrate>
 </property>
 
