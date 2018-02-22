@@ -88,16 +88,20 @@ bool nanopi_timbo::setup()
 	//setting up wiringNP to use GPIO
 	wiringPiSetup ();
 
-	for(int i=0;i<(int)sizeof(gpio_led);i++){
+
+	for(auto& port:gpio_led){
 		pinMode(gpio_led[i], OUTPUT);
 		digitalWrite(gpio_led[i], HIGH);
 	}
 
-	for(int i=0;i<(int)sizeof(gpio_btn);i++)
-		pinMode(gpio_btn[i], INPUT);
-
-	for(int i=0;i<(int)sizeof(gpio_sw);i++)
-		pinMode(gpio_sw[i], INPUT);
+	for(auto& port:gpio_btn){
+		pinMode(port, INPUT);
+		_prev_gpio_map[port] = digitalRead(port);
+	}
+	for(auto& port:gpio_sw){
+		pinMode(port, INPUT);
+		_prev_gpio_map[port] = digitalRead(port);
+	}
 
 
 	//perform tasks
