@@ -47,8 +47,8 @@ void app_timbo::timbo_record(){
 	cossb::message _msg(this, base::msg_type::DATA);
 	vector<unsigned char> data(frame, frame+sizeof(frame));
 	_msg.pack(data);
+	cossb_log->log(log::loglevel::INFO, "> Publish 'RECORD' command");
 	cossb_broker->publish("timbo_write", _msg);
-	cossb_log->log(log::loglevel::INFO, "(APP_TIMBO) publish : 'RECORD' command");
 }
 
 void app_timbo::timbo_play(){
@@ -56,8 +56,8 @@ void app_timbo::timbo_play(){
 	cossb::message _msg(this, base::msg_type::DATA);
 	vector<unsigned char> data(frame, frame+sizeof(frame));
 	_msg.pack(data);
+	cossb_log->log(log::loglevel::INFO, "> Publish 'PLAY' command");
 	cossb_broker->publish("timbo_write", _msg);
-	cossb_log->log(log::loglevel::INFO, "(APP_TIMBO) publish : 'PLAY' command");
 }
 
 
@@ -66,8 +66,8 @@ void app_timbo::timbo_stop(){
 	cossb::message _msg(this, base::msg_type::DATA);
 	vector<unsigned char> data(frame, frame+sizeof(frame));
 	_msg.pack(data);
+	cossb_log->log(log::loglevel::INFO, "> Publish 'STOP' command");
 	cossb_broker->publish("timbo_write", _msg);
-	cossb_log->log(log::loglevel::INFO, "(APP_TIMBO) publish : 'STOP' command");
 }
 
 void app_timbo::timbo_ping(){
@@ -75,8 +75,8 @@ void app_timbo::timbo_ping(){
 	cossb::message _msg(this, base::msg_type::DATA);
 	vector<unsigned char> data(frame, frame+sizeof(frame));
 	_msg.pack(data);
+	cossb_log->log(log::loglevel::INFO, "> Publish 'PING' command");
 	cossb_broker->publish("timbo_write", _msg);
-	cossb_log->log(log::loglevel::INFO, "(APP_TIMBO) publish : 'PING' command");
 }
 
 void app_timbo::timbo_trajectory_play(int page, int module){
@@ -145,8 +145,8 @@ void app_timbo::timbo_trajectory_dump(int page, int module) {
 	std::tuple<int, int, vector<unsigned char>> data = std::make_tuple(page, module, packet);
 	cossb::message _msg(this, base::msg_type::REQUEST);
 	_msg.pack(data);
+	cossb_log->log(log::loglevel::INFO, "> Publish 'TRAJECTORY DUMP' command");
 	cossb_broker->publish("timbo_write", _msg);
-	cossb_log->log(log::loglevel::INFO, "(APP_TIMBO) publish : 'TRAJECTORY DUMP' command");
 }
 
 void app_timbo::ebook_sound_play()
