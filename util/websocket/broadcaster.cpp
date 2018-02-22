@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
 		cerr << "Invalid Port number " << argv[1] << endl;
 
 	WsServer server(port, 4);
-	//server.config.address = address;
+
 	cout << server.config.address << " - Waiting for connection on port " << port << endl;
 
 	auto& guidebook_epmap = server.endpoint["^/guidebook?$"];

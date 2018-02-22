@@ -14,7 +14,6 @@
 </info>
 
 <property>
-	<interval>1000</interval>
 	<if>wlan0</if>
 </property>
 

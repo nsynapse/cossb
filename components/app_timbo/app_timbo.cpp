@@ -28,7 +28,8 @@ bool app_timbo::setup()
 	net::macAddress _mac = net::getMacAddress(_if.c_str());
 	memcpy(_group_id, _mac.address, sizeof(_group_id));
 
-	cossb_log->log(log::loglevel::INFO, fmt::format("Group ID : {}", _mac.address[0]));
+	cossb_log->log(log::loglevel::INFO, fmt::format("Group ID(MAC Address) : {}:{}:{}:{}:{}",
+			_mac.address[0],_mac.address[1],_mac.address[2],_mac.address[3],_mac.address[4]));
 
 	return true;
 }
