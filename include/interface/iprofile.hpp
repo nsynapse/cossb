@@ -55,7 +55,9 @@ public:
 		}
 		return mt.c_str();
 	}
+	methodtype type(){ return method; }
 	_service_method& operator= (_service_method const& m) { this->method = m.method; return *this; }
+	//bool operator == (const _service_method& lsm, const _service_method& rsm){ return (lsm.method==rsm.method)?true:false; }
 private:
 	methodtype method = methodtype::UNDEFINED;
 } service_method;

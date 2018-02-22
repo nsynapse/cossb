@@ -31,7 +31,7 @@ namespace broker {
 typedef multimap<string, string> topic_map;
 
 //service name, service desc
-typedef map<string, service::_service_desc> service_map;
+typedef map<string, service::service_desc> service_map;
 
 
 class component_broker : public arch::singleton<component_broker> {
