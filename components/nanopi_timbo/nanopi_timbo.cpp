@@ -118,6 +118,19 @@ bool nanopi_timbo::stop()
 	destroy_task(_gpio_task);
 	destroy_task(_wl_uart_read_task);
 	destroy_task(_w_uart_read_task);
+
+	if(_wl_uart){
+		_wl_uart->close();
+		delete _wl_uart;
+		_wl_uart = nullptr;
+	}
+
+	if(_w_uart){
+		_w_uart->close();
+		delete _w_uart;
+		_w_uart = nullptr;
+	}
+
 	return true;
 }
 
