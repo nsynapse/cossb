@@ -32,9 +32,10 @@ public:
 	message(interface::icomponent* component, base::msg_type type);
 	virtual ~message();
 
-	message& operator = (const message& p){
-		this->msg_frame.from =  p.get_from();
-		this->msg_frame.type = p.get_type();
+	message& operator = (const message& other){
+		if(this!=&other){
+			this->msg_frame = other.msg_frame;
+		}
 		return *this;
 	}
 
