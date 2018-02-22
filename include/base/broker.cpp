@@ -16,6 +16,7 @@ unsigned int component_broker::publish(const char* service_name, cossb::message&
 			if(_drv){
 				if(!_drv->mine(msg.get_from())) {
 					cossb_log->log(log::loglevel::INFO, fmt::format("Subscribe {} : {} --> {}", msg.msg_frame.topic, msg.get_from(), _drv->get_component()->get_name()));
+					cossb_log->log(log::loglevel::INFO, fmt::format("Message Size : {}", sizeof(*msg.get_data())));
 					_drv->subscribe(&msg);
 					times++;
 				}
