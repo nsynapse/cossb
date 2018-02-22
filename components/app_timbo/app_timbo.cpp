@@ -8,6 +8,7 @@
 #include <base/broker.hpp>
 #include <base/task.hpp>
 #include <net/util.hpp>
+#include <iostream>
 
 using namespace std;
 
@@ -53,6 +54,7 @@ void app_timbo::subscribe(cossb::message* const msg)
 	{
 		//commands from Web GUI
 		try {
+			cout << *msg->get_data() << endl;
 			string data = boost::any_cast<string>(*msg->get_data());
 			nlohmann::json _json_data = nlohmann::json::parse(data);
 
