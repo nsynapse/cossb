@@ -15,7 +15,7 @@ unsigned int component_broker::publish(const char* service_name, cossb::message&
 			driver::component_driver* _drv = cossb_component_manager->get_driver(itr->second.c_str());
 			if(_drv){
 				if(!_drv->mine(msg.get_from())) {
-					cossb_log->log(log::loglevel::INFO, fmt::format("Subscribe Message {} from {} to {}", msg.msg_frame.topic, msg.get_from(), _drv->get_component()->get_name()));
+					cossb_log->log(log::loglevel::INFO, fmt::format("Subscribe {} : {} --> {}", msg.msg_frame.topic, msg.get_from(), _drv->get_component()->get_name()));
 					_drv->subscribe(&msg);
 					times++;
 				}

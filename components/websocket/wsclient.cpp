@@ -21,7 +21,7 @@ void on_receive(const std::string & message)
 		cossb::message msg("wsclient", base::msg_type::REQUEST);
 		msg.pack(wsdata);
 		cossb_broker->publish(service.c_str(), msg);
-		cossb_log->log(log::loglevel::INFO, fmt::format("Publish WS message : {}", wsdata));
+		cossb_log->log(log::loglevel::INFO, fmt::format("> Publish websocket message : {}", wsdata));
 	}
 
 }

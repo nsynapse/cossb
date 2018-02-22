@@ -77,7 +77,11 @@ void app_timbo::subscribe(cossb::message* const msg)
 				else if(!command.compare("stop")){this->timbo_stop();}	//stop command
 				else if(!command.compare("ping")){this->timbo_ping();}	//ping command
 			}
-		}catch(const boost::bad_any_cast&){}
+			else
+				cossb_log->log(log::loglevel::INFO, "No Command");
+		}catch(const boost::bad_any_cast&){
+			cossb_log->log(log::loglevel::INFO, "[app_timbo] Invalid casting");
+		}
 	}
 		break;
 
