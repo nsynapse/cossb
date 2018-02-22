@@ -52,10 +52,7 @@ public:
 private:
 
 	void subscribe(cossb::message* msg){
-		boost::mutex::scoped_lock __lock(_mutex);
 		_mailbox.push(*msg);
-		__lock.unlock();
-
 		_subscribe_cv.notify_one();
 	}
 

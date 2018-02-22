@@ -64,6 +64,7 @@ bool wsclient::stop()
 	if(_client){
 		_client->close();
 		delete _client;
+		_client = nullptr;
 	}
 	return true;
 }
