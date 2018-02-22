@@ -85,13 +85,12 @@ bool nanopi_timbo::setup()
 	}
 	cossb_log->log(log::loglevel::INFO, fmt::format("Open {}({})",_w_port, w_baudrate));
 
-	//setting up wiringNP to use GPIO
+	//setting up wiringNP to use GPIO with default value
 	wiringPiSetup ();
 
-
 	for(auto& port:gpio_led){
-		pinMode(gpio_led[i], OUTPUT);
-		digitalWrite(gpio_led[i], HIGH);
+		pinMode(port, OUTPUT);
+		digitalWrite(port, HIGH);
 	}
 
 	for(auto& port:gpio_btn){
