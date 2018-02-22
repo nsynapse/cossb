@@ -1,5 +1,6 @@
 #include "broker.hpp"
 #include <base/message_any.hpp>
+#include <interface/iprofile.hpp>
 
 namespace cossb {
 namespace broker {
@@ -14,7 +15,7 @@ unsigned int component_broker::publish(const char* service_name, cossb::message&
 		for(topic_map::iterator itr = range.first; itr!=range.second; ++itr) {
 			driver::component_driver* _drv = cossb_component_manager->get_driver(itr->second.c_str());
 			if(_drv){
-				if(!_drv->mine(msg.get_from())) {
+				if(!_drv->mine(msg.get_from()) && _service_map[service_name].method==service::methodtype::SUBSCRIBE) {
 					cossb_log->log(log::loglevel::INFO, fmt::format("Subscribe {} : {} --> {}", msg.msg_frame.topic, msg.get_from(), _drv->get_component()->get_name()));
 					_drv->subscribe(&msg);
 					times++;
