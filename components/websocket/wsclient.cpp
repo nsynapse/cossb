@@ -20,8 +20,8 @@ void on_receive(const std::string & message)
 		string service = _json_data["service"];
 		cossb::message msg("wsclient", base::msg_type::REQUEST);
 		msg.pack(wsdata);
-		cossb_broker->publish(service.c_str(), msg);
 		cossb_log->log(log::loglevel::INFO, fmt::format("> Publish websocket message : {}", wsdata));
+		cossb_broker->publish(service.c_str(), msg);
 	}
 
 }
