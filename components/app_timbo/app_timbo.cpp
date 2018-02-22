@@ -80,7 +80,7 @@ void app_timbo::subscribe(cossb::message* const msg)
 			else
 				cossb_log->log(log::loglevel::INFO, "No Command");
 		}catch(const boost::bad_any_cast&){
-			cossb_log->log(log::loglevel::INFO, "[app_timbo] Invalid casting for REQUEST");
+			cossb_log->log(log::loglevel::ERROR, "[app_timbo] Invalid casting for REQUEST");
 		}
 	}
 		break;
@@ -99,7 +99,7 @@ void app_timbo::subscribe(cossb::message* const msg)
 			}
 		}
 		catch(const boost::bad_any_cast&){
-			cossb_log->log(log::loglevel::INFO, "[app_timbo] Invalid casting for DATA");
+			cossb_log->log(log::loglevel::ERROR, "[app_timbo] Invalid casting for DATA");
 		}
 
 	} break;

@@ -91,7 +91,7 @@ void timboprotocol::subscribe(cossb::message* const msg)
 					cossb::message msg(this, cossb::base::msg_type::DATA);
 					msg.pack(packet);
 					cossb_broker->publish("timbo_protocol_write", msg);
-					cossb_log->log(log::loglevel::INFO, fmt::format("Published {}bytes data", packet.size()));
+					cossb_log->log(log::loglevel::INFO, fmt::format("Published {} bytes data", packet.size()));
 				}
 			}
 		}
