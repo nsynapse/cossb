@@ -54,7 +54,7 @@ bool nanopi_timbo::setup()
 	_w_port = get_profile()->get(profile::section::property, "w_port").asString("/dev/ttyS0");
 	unsigned int w_baudrate = get_profile()->get(profile::section::property, "w_baudrate").asInt(115200);
 
-	_i2c_address = (unsigned char)(get_profile()->get(profile::section::property, "i2c_address").asUInt(0)*16);
+	_i2c_address = (unsigned char)get_profile()->get(profile::section::property, "i2c_address").asUInt(0);
 	cossb_log->log(log::loglevel::INFO, fmt::format("I2C Address : {}",(int)_i2c_address));
 
 	//2. create serial instances
