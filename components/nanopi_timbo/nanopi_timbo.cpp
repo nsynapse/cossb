@@ -2,6 +2,7 @@
 #include "nanopi_timbo.hpp"
 #include <cossb.hpp>
 #include <wiringPi.h>
+#include <wiringPiI2C.h>
 #include <algorithm>
 #include <base/log.hpp>
 #include <base/broker.hpp>
@@ -41,10 +42,7 @@ nanopi_timbo::nanopi_timbo()
 }
 
 nanopi_timbo::~nanopi_timbo() {
-	if(_wl_uart)
-		delete _wl_uart;
-	if(_w_uart)
-		delete _w_uart;
+
 }
 
 bool nanopi_timbo::setup()
@@ -55,6 +53,9 @@ bool nanopi_timbo::setup()
 
 	_w_port = get_profile()->get(profile::section::property, "w_port").asString("/dev/ttyS0");
 	unsigned int w_baudrate = get_profile()->get(profile::section::property, "w_baudrate").asInt(115200);
+
+	_i2c_address = (unsigned char)(get_profile()->get(profile::section::property, "i2c_address").asUInt(0)*16);
+	cossb_log->log(log::loglevel::INFO, fmt::format("I2C Address : {}",(int)_i2c_address));
 
 	//2. create serial instances
 	if(!_wl_uart)
@@ -88,11 +89,12 @@ bool nanopi_timbo::setup()
 	//setting up wiringNP to use GPIO with default value
 	wiringPiSetup ();
 
-	for(auto& port:gpio_led){
-		pinMode(port, OUTPUT);
-		digitalWrite(port, HIGH);
-	}
+	//I2C configuration
+	_i2c_handle = wiringPiI2CSetup(_i2c_address);
+	wiringPiI2CWrite(_i2c_handle, _selected_id); //initial (all LED off)
 
+
+	//gpio input initialization
 	for(auto& port:gpio_btn){
 		pinMode(port, INPUT);
 		_prev_gpio_map[port] = digitalRead(port);
@@ -102,11 +104,11 @@ bool nanopi_timbo::setup()
 		_prev_gpio_map[port] = digitalRead(port);
 	}
 
-
 	//perform tasks
 	_wl_uart_read_task = create_task(nanopi_timbo::wireless_uart_read);
 	_w_uart_read_task = create_task(nanopi_timbo::wired_uart_read);
-	_gpio_task = create_task(nanopi_timbo::gpio_read);
+	_led_task = create_task(nanopi_timbo::gpio_read);
+	_ir_task = create_task(nanopi_timbo::ir_read);
 
 	return true;
 }
@@ -118,7 +120,8 @@ bool nanopi_timbo::run()
 
 bool nanopi_timbo::stop()
 {
-	destroy_task(_gpio_task);
+	destroy_task(_led_task);
+	destroy_task(_ir_task);
 	destroy_task(_wl_uart_read_task);
 	destroy_task(_w_uart_read_task);
 
@@ -155,24 +158,23 @@ void nanopi_timbo::subscribe(cossb::message* const msg)
 				_dumping = true;
 				_dump_buffer.clear();
 				_dump_file.open(fmt::format("./contents/page{}_{}.trj", page, module), std::ofstream::in|std::ofstream::app);
-				_wl_uart->write(packet.data(), packet.size()); //send command packet
+				_w_uart->write(packet.data(), packet.size()); //send command packet
 
 				cossb_log->log(log::loglevel::INFO, fmt::format("Trajectory Dump page : {}, module : {}", page, module));
 				cossb_log->log(log::loglevel::INFO, "Now Dumping...");
 
 			} catch(const boost::bad_any_cast&){ }
 		}break;
+
 		case cossb::base::msg_type::DATA: {
 			//uart data
 			try
 			{
 				vector<unsigned char> data = boost::any_cast<vector<unsigned char>>(*msg->get_data());
 				_wl_uart->write((const char*)data.data(), data.size());
-				cossb_log->log(log::loglevel::INFO, fmt::format("Write {} byte(s) to the serial", data.size()));
+				cossb_log->log(log::loglevel::INFO, fmt::format("Write {} byte(s) to the", data.size()));
 			}
-			catch(const boost::bad_any_cast&){
-				//cossb_log->log(log::loglevel::ERROR, "Invalid type casting");
-			}
+			catch(const boost::bad_any_cast&){ }
 
 			//subscribe gpio write
 			try {
@@ -217,6 +219,36 @@ void nanopi_timbo::wireless_uart_read(){
 				if(readsize>0) {
 					cossb_log->log(log::loglevel::INFO, fmt::format("Received {} Byte(s) from {}",readsize, _wl_port));
 
+					//publish the received data
+					cossb::message _msg(this, base::msg_type::DATA);
+					vector<unsigned char> data(buffer, buffer+readsize);
+					_msg.pack(data);
+					cossb_broker->publish("nanopi_uart_read", _msg);
+				}
+
+				delete []buffer;
+				if(boost::this_thread::interruption_requested())
+					break;
+				boost::this_thread::sleep(boost::posix_time::milliseconds(10));
+			}
+		}
+		catch(thread_interrupted&) {
+			break;
+		}
+	}
+}
+
+void nanopi_timbo::wired_uart_read(){
+	while(1) {
+		try {
+			if(_w_uart->is_opened()) {
+				const unsigned int len = 2048;
+				unsigned char* buffer = new unsigned char[len];
+				int readsize = _w_uart->read(buffer, sizeof(unsigned char)*len);
+
+				if(readsize>0) {
+					cossb_log->log(log::loglevel::INFO, fmt::format("Received {} Byte(s) from {}",readsize, _w_port));
+
 					if(_dumping){
 						//push back into the buffer
 						for(int i=0;i<readsize;i++)
@@ -227,10 +259,10 @@ void nanopi_timbo::wireless_uart_read(){
 							if(_dump_buffer[0]==0x55 && _dump_buffer[1]==0x36){
 								unsigned short len = (_dump_buffer[2] << 8 | _dump_buffer[3]);
 								cossb_log->log(log::loglevel::INFO, fmt::format("Receiving trajectory.. {}%", _dump_buffer.size()/(len+1)*100));
-								if(_dump_buffer.size()==(len+1)*5){
+								if(_dump_buffer.size()==(unsigned int)(len+1)*5){
 									for(int i=0;i<5;i++) _dump_buffer.pop_front(); //remove header packet
 									if(_dump_file.is_open()){	//save into file
-										for(int i=0;i<_dump_buffer.size();i++){
+										for(int i=0;i<(int)_dump_buffer.size();i++){
 											_dump_file << _dump_buffer.front();
 											_dump_buffer.pop_front();
 										}
@@ -241,52 +273,42 @@ void nanopi_timbo::wireless_uart_read(){
 								}
 							}
 						}
-
-					}
-					else{
-						//publish the received data
-						cossb::message _msg(this, base::msg_type::DATA);
-						vector<unsigned char> data(buffer, buffer+readsize);
-						_msg.pack(data);
-						cossb_broker->publish("nanopi_uart_read", _msg);
 					}
 				}
 
 				delete []buffer;
+				if(boost::this_thread::interruption_requested())
+					break;
 				boost::this_thread::sleep(boost::posix_time::milliseconds(10));
 			}
 		}
 		catch(thread_interrupted&) {
 			break;
 		}
-
-		if(boost::this_thread::interruption_requested())
-			break;
 	}
 }
 
-void nanopi_timbo::wired_uart_read(){
-	while(1) {
-		try {
-			if(_w_uart->is_opened()) {
-				const unsigned int len = 1024;
-				unsigned char* buffer = new unsigned char[len];
-				int readsize = _w_uart->read(buffer, sizeof(unsigned char)*len);
+void nanopi_timbo::ir_read()
+{
+	int prev_ir_data = 0;
+	while(1){
+		int ir_data = wiringPiI2CRead(_i2c_handle);
 
-				if(readsize>0) {
-					cossb_log->log(log::loglevel::INFO, fmt::format("Received {} Byte(s) from {}",readsize, _w_port));
-				}
-
-				delete []buffer;
-				boost::this_thread::sleep(boost::posix_time::milliseconds(10));
+		if(prev_ir_data!=ir_data){
+			switch(ir_data){
+			case 1: {} break; //record
+			case 2: {} break; //play
+			case 3: {} break; //stop
+			case 4: {} break; //trajectory dump
+			case 5: {} break; //trajectory play
 			}
-		}
-		catch(thread_interrupted&) {
-			break;
+			cossb_log->log(log::loglevel::INFO, fmt::format("Remocon #{}", ir_data));
 		}
 
-		if(boost::this_thread::interruption_requested())
-			break;
+		prev_ir_data = ir_data;
+
+		if(boost::this_thread::interruption_requested()) break;
+		boost::this_thread::sleep(boost::posix_time::milliseconds(100)); //read period = 500ms
 	}
 }
 
@@ -307,41 +329,39 @@ void nanopi_timbo::gpio_read()
 		//2. control (id selection : falling edge [high to low])
 		if(_prev_gpio_map[BTN_ID_SEL] && !gpio_map[BTN_ID_SEL])
 			cossb_log->log(log::loglevel::INFO, "Pushed ID Selection Button");
-		//both low (keep pushed)
+		//ID is changing..
 		else if(!_prev_gpio_map[BTN_ID_SEL] && !gpio_map[BTN_ID_SEL]){
-			for(auto& led:gpio_led)
-				digitalWrite(led, HIGH);	//turn off all
-			if(_selected_id>=sizeof(gpio_led)/sizeof(unsigned int))
+			if(_selected_id>=4)
 				_selected_id = 0;
-			digitalWrite(gpio_led[_selected_id], LOW); //turn on one
-			_selected_id++;
-
+			wiringPiI2CWrite(_i2c_handle, ++_selected_id);
 		}
-		//rising edge [low to high]
+		//stop changing.
 		else if(!_prev_gpio_map[BTN_ID_SEL] && gpio_map[BTN_ID_SEL]){
-			_selected_id--;
-			if(_selected_id>=sizeof(gpio_led)/sizeof(unsigned int))
-				_selected_id = 0;
-			cossb_log->log(log::loglevel::INFO, fmt::format("ID Selection : {} [{},{}]", _selected_id, _prev_gpio_map[BTN_ID_SEL], gpio_map[BTN_ID_SEL]));
+			cossb_log->log(log::loglevel::INFO, fmt::format("Selected ID : {}", _selected_id));
 		}
 
 		//4. id setting (rising edge)
 		if(!_prev_gpio_map[BTN_ID_SET] && gpio_map[BTN_ID_SET]){
-			cossb_log->log(log::loglevel::INFO, fmt::format("ID Setting : {}", _selected_id));
 			//publish message
 			cossb::message msg(this, cossb::base::msg_type::REQUEST);
 			msg.pack(gpio_map);
+			cossb_log->log(log::loglevel::INFO, fmt::format("ID Setting : {}", _selected_id));
 			cossb_broker->publish("nanopi_gpio_id_set", msg);
 		}
 
-		//5. trajectory play (rising edge)
+		//5. read guidebook page
+		if(gpio_map[SW1]) _guidebook_page = 1;
+		else if(gpio_map[SW2]) _guidebook_page = 2;
+		else if(gpio_map[SW3]) _guidebook_page = 3;
+		else if(gpio_map[SW4]) _guidebook_page = 4;
+
+		//6. trajectory play (rising edge)
 		if(!_prev_gpio_map[BTN_TRJ_PLAY] && gpio_map[BTN_TRJ_PLAY]){
 			cossb_log->log(log::loglevel::INFO, "Trajectory Play");
 			cossb::message msg(this, cossb::base::msg_type::REQUEST);
 			nlohmann::json _json_msg;
 			_json_msg["command"] = "trajectory_play";
-			_json_msg["page"] = 1;
-			_json_msg["module"] = 1;
+			_json_msg["page"] = _guidebook_page;
 			msg.pack(_json_msg.dump());
 			cossb_broker->publish("nanopi_websocket_read", msg);
 		}

@@ -46,7 +46,6 @@
     		data['service'] = "websocket_read";
     		data['command'] = "trajectory_dump";
         data['page'] = 1;
-        data['module'] = 1;
     		sock.send(JSON.stringify(data));
         });
 
@@ -55,7 +54,6 @@
     		data['service'] = "websocket_read";
     		data['command'] = "trajectory_play";
         data['page'] = 1;
-        data['module'] = 1;
     		sock.send(JSON.stringify(data));
         });
 

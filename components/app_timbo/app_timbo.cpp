@@ -63,14 +63,12 @@ void app_timbo::subscribe(cossb::message* const msg)
 				//play trajectory
 				if(!command.compare("trajectory_play")){
 					int page = _json_data["page"].get<int>();
-					int module = _json_data["module"].get<int>();
-					this->timbo_trajectory_play(page, module);
+					this->timbo_trajectory_play(page, 1);
 				}
 				//dump trajectory
 				else if(!command.compare("trajectory_dump")){
 					int page = _json_data["page"].get<int>();
-					int module = _json_data["module"].get<int>();
-					this->timbo_trajectory_dump(page, module);
+					this->timbo_trajectory_dump(page, 1);
 				}
 				else if(!command.compare("record")){this->timbo_record();} //record command
 				else if(!command.compare("play")){this->timbo_play();}	//play command

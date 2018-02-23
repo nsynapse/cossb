@@ -18,6 +18,7 @@
 	<wl_baudrate>115200</wl_baudrate>
 	<w_port>/dev/ttyS2</w_port>
 	<w_baudrate>115200</w_baudrate>
+	<i2c_address>28</i2c_address> <!-- hexadecimal value -->
 </property>
 
 <service name="nanopi_gpio_id_set" method="publish" topic="service/id/setting"></service>

@@ -53,12 +53,16 @@ private:
 	//UART read function for wired
 	void wired_uart_read();
 
-	//GPIO control function for read
+	//GPIO read function for I2C
 	void gpio_read();
+
+	//IR read function
+	void ir_read();
 
 private:
 	//gpio control task
-	cossb::base::task _gpio_task;
+	cossb::base::task _led_task;
+	cossb::base::task _ir_task;
 
 	//async serial read callback function
 	cossb::base::task _wl_uart_read_task;
@@ -77,11 +81,16 @@ private:
 	//previous gpio map
 	map<int, int> _prev_gpio_map;
 	int _selected_id = 0;
+	int _guidebook_page = 1;
 
 
 	bool _dumping = false;
 	ofstream _dump_file;
 	deque<unsigned char> _dump_buffer;
+
+	//i2c address
+	unsigned char _i2c_address = 0x00;
+	int _i2c_handle = -1;
 };
 
 COMPONENT_EXPORT
