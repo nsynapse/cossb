@@ -83,7 +83,7 @@ void app_timbo::timbo_ping(){
 void app_timbo::timbo_trajectory_play(int page){
 
 	//find trajectory files
-	file::collector* trj_files = new file::collector("./contents/", "*.trj");
+	file::collector* trj_files = new file::collector("./contents/", ".trj");
 	for(auto& file : trj_files->getList()){
 		cossb_log->log(log::loglevel::INFO, fmt::format("Trajectory file : {}", file.absolute));
 	}
