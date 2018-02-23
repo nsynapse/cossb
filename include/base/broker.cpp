@@ -11,23 +11,23 @@ unsigned int component_broker::publish(const char* service_name, cossb::message&
 
 	if(_service_map.find(service_name)!=_service_map.end()) {
 		auto range = _topic_map.equal_range(_service_map[service_name].topic);
-		msg.msg_frame.topic = _service_map[service_name].topic;
 		for(topic_map::iterator itr = range.first; itr!=range.second; ++itr) {
-			//if(_service_map[itr->second.c_str()].method.type() == service::methodtype::SUBSCRIBE){
-				driver::component_driver* _drv = cossb_component_manager->get_driver(itr->second.c_str());
-				if(_drv){
+			driver::component_driver* _drv = cossb_component_manager->get_driver(itr->second.c_str());
+			if(_drv){
+				if(_drv->get_component()->get_profile()->has(service::methodtype::SUBSCRIBE, _service_map[service_name].topic.c_str())){
 					if(!_drv->mine(msg.get_from())) {
 						cossb_log->log(log::loglevel::INFO, fmt::format("Subscribe {} : {} --> {}", msg.msg_frame.topic, msg.get_from(), _drv->get_component()->get_name()));
+						msg.msg_frame.topic = _service_map[service_name].topic;
 						_drv->subscribe(&msg);
 						times++;
 					}
 				}
-				else {
-					cossb_log->log(log::loglevel::ERROR, fmt::format("{} service has no component driver. it will be removed.", service_name));
-					_service_map.erase(service_name);
-					//throw broker::exception(cossb::broker::excode::DRIVER_NOT_FOUND);
-				}
-			//}
+			}
+			else {
+				cossb_log->log(log::loglevel::ERROR, fmt::format("{} service has no component driver. it will be removed.", service_name));
+				_service_map.erase(service_name);
+				//throw broker::exception(cossb::broker::excode::DRIVER_NOT_FOUND);
+			}
 		}
 	}
 	else

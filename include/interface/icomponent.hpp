@@ -12,7 +12,6 @@
 #include <string>
 #include <interface/iprofile.hpp>
 #include <interface/ilog.hpp>
-//#include <interface/imessage.hpp>
 #include <base/message_any.hpp>
 #include <cassert>
 
@@ -87,6 +86,16 @@ public:
 	iprofile* get_profile() const {
 		return _profile;
 	}
+
+	/*
+	 * @brief
+	 */
+	/*bool has(service::methodtype type, const char* topic = nullptr){
+		for(auto& srv:_profile->h){
+
+		}
+		return false;
+	}*/
 
 	/**
 	 * @brief	getting status

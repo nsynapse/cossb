@@ -195,6 +195,18 @@ public:
 	 */
 	virtual bool save() = 0;
 
+	/*
+	 * @brief	find own service
+	 */
+	bool has(service::methodtype type, const char* topic){
+		for(auto& srv:_services){
+			if(srv.method.type()==type && !srv.topic.compare(topic))
+				return true;
+		}
+		return false;
+	}
+
+
 
 private:
 	/**
