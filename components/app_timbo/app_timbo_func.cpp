@@ -8,6 +8,7 @@
 #include <fstream>
 #include <vector>
 #include <base/task.hpp>
+#include <file/collector.hpp>
 
 using namespace std;
 
@@ -79,12 +80,19 @@ void app_timbo::timbo_ping(){
 	cossb_broker->publish("timbo_write", _msg);
 }
 
-void app_timbo::timbo_trajectory_play(int page, int module){
+void app_timbo::timbo_trajectory_play(int page){
+
+	//find trajectory files
+	file::collector* trj_files = new file::collector("./contents/", "*.trj");
+	for(auto& file : trj_files->getList()){
+		cossb_log->log(log::loglevel::INFO, fmt::format("Trajectory file : {}", file.absolute));
+	}
+	delete trj_files;
 
 	//1. read trajectory file
 	ifstream file;
 	vector<unsigned char> trajectory;
-	file.open(fmt::format("./contents/page{}_{}.trj", page, module), ios::in|ios::binary);
+	file.open(fmt::format("./contents/page{}_{}.trj", page, 1), ios::in|ios::binary);
 	//read trajectory file
 	if(file.is_open()){
 		file.seekg(0, ios::end);	//set the pointer to the end of file
@@ -94,7 +102,7 @@ void app_timbo::timbo_trajectory_play(int page, int module){
 		file.read((char*)data, size);
 		trajectory.insert(trajectory.end(), &data[0], &data[size]);
 		delete []data;
-		cossb_log->log(log::loglevel::INFO, fmt::format("Loaded Trajectory file : page{}_{}.trj ({}bytes) ",page, module, trajectory.size()));
+		cossb_log->log(log::loglevel::INFO, fmt::format("Loaded Trajectory file : page{}_{}.trj ({}bytes) ",page, 1, trajectory.size()));
 	}
 	file.close();
 	cossb_log->log(log::loglevel::INFO, "Trajectory Playing...");
@@ -139,10 +147,10 @@ void app_timbo::timbo_trajectory_play(int page, int module){
 
 }
 
-void app_timbo::timbo_trajectory_dump(int page, int module) {
+void app_timbo::timbo_trajectory_dump(int page) {
 	unsigned char frame[] = {HEAD, 0x03, TRAJECTORY_DUMP, 0x00, END};
 	vector<unsigned char> packet(frame, frame+sizeof(frame)/sizeof(frame[0]));
-	std::tuple<int, int, vector<unsigned char>> data = std::make_tuple(page, module, packet);
+	std::tuple<int, vector<unsigned char>> data = std::make_tuple(page, packet);
 	cossb::message _msg(this, base::msg_type::REQUEST);
 	_msg.pack(data);
 	cossb_log->log(log::loglevel::INFO, "> Publish 'TRAJECTORY DUMP' command");

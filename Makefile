@@ -249,7 +249,8 @@ $(OUTDIR)libuart.o: $(COMPONENT_FILES)uart/libserial.cpp
 	
 app_timbo.comp: $(OUTDIR)app_timbo.o \
 				$(OUTDIR)message_any.o \
-				$(OUTDIR)app_timbo_func.o
+				$(OUTDIR)app_timbo_func.o \
+				$(OUTDIR)collector.o
 	$(CXX) $(LDFLAGS) $(LD_LIBRARY_PATH) -shared -o $(OUTDIR)$@ $^ $(LDLIBS)
 $(OUTDIR)app_timbo.o: $(COMPONENT_FILES)app_timbo/app_timbo.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
@@ -327,6 +328,8 @@ $(OUTDIR)format.o: $(INCLUDE_FILES)util/format.cc
 $(OUTDIR)tinyxml2.o: $(INCLUDE_FILES)ext/tinyxml2.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 
+$(OUTDIR)collector.o: $(INCLUDE_FILES)file/collector.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $^ -o $@
 
 
 

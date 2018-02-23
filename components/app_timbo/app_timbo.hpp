@@ -51,8 +51,8 @@ private:
 	void timbo_ping();
 
 	//trajectory control
-	void timbo_trajectory_dump(int page, int module);
-	void timbo_trajectory_play(int page, int module);
+	void timbo_trajectory_dump(int page);
+	void timbo_trajectory_play(int page);
 
 	//ebook control
 	void ebook_sound_play();		//each page contains one sound file, play via websocket

@@ -146,21 +146,20 @@ void nanopi_timbo::subscribe(cossb::message* const msg)
 		case cossb::base::msg_type::REQUEST: {
 
 			try {
-				typedef std::tuple<int, int, vector<unsigned char>> req;
+				typedef std::tuple<int, vector<unsigned char>> req;
 				req data = boost::any_cast<req>(*msg->get_data());
 
 				if(_dump_file.is_open())
 					_dump_file.close();
 
-				int page, module;
 				vector<unsigned char> packet;
-				std::tie(page, module, packet) = data;
+				std::tie(_guidebook_page, packet) = data;
 				_dumping = true;
 				_dump_buffer.clear();
-				_dump_file.open(fmt::format("./contents/page{}_{}.trj", page, module), std::ofstream::in|std::ofstream::app);
+				_dump_file.open(fmt::format("./contents/page{}_{}.trj", _guidebook_page, _selected_id), std::ofstream::in|std::ofstream::app);
 				_w_uart->write(packet.data(), packet.size()); //send command packet
 
-				cossb_log->log(log::loglevel::INFO, fmt::format("Trajectory Dump page : {}, module : {}", page, module));
+				cossb_log->log(log::loglevel::INFO, fmt::format("Trajectory Dump Page : {}, ID : {}", _guidebook_page, _selected_id));
 				cossb_log->log(log::loglevel::INFO, "Now Dumping...");
 
 			} catch(const boost::bad_any_cast&){ }
@@ -175,32 +174,6 @@ void nanopi_timbo::subscribe(cossb::message* const msg)
 				cossb_log->log(log::loglevel::INFO, fmt::format("Write {} byte(s) to the", data.size()));
 			}
 			catch(const boost::bad_any_cast&){ }
-
-			//subscribe gpio write
-			try {
-				/*map<int, unsigned char> data = boost::any_cast<map<int, unsigned char>>(*msg->get_data()); //{key, value} pair
-
-				//1. extract keys
-				vector<int> keys;
-				for(auto& port: data)
-					keys.push_back(port.first);
-
-				//2. compare port set, then write data if it is outport
-				for(auto& key:keys){
-					cossb_log->log(log::loglevel::INFO, fmt::format("GPIO write key : {}", key));
-					if(_gpio_port_map.find(key)!=_gpio_port_map.end()){
-						if(_gpio_port_map[key]){ //output port
-							if(data[key]==0x00)
-								digitalWrite(key, LOW);
-							else
-								digitalWrite(key, HIGH);
-						}
-					}
-				}*/
-			}
-			catch(const boost::bad_any_cast&){
-				cossb_log->log(log::loglevel::ERROR, "Invalid type casting, should be map<int, unsigned char> type.");
-			}
 		} break;
 		case cossb::base::msg_type::RESPONSE: break;
 		case cossb::base::msg_type::EVENT:  break;
