@@ -13,7 +13,7 @@ unsigned int component_broker::publish(const char* service_name, cossb::message&
 		auto range = _topic_map.equal_range(_service_map[service_name].topic);
 		msg.msg_frame.topic = _service_map[service_name].topic;
 		for(topic_map::iterator itr = range.first; itr!=range.second; ++itr) {
-			if(_service_map[itr->second.c_str()].method.type() == service::methodtype::SUBSCRIBE){
+			//if(_service_map[itr->second.c_str()].method.type() == service::methodtype::SUBSCRIBE){
 				driver::component_driver* _drv = cossb_component_manager->get_driver(itr->second.c_str());
 				if(_drv){
 					if(!_drv->mine(msg.get_from())) {
@@ -27,7 +27,7 @@ unsigned int component_broker::publish(const char* service_name, cossb::message&
 					_service_map.erase(service_name);
 					//throw broker::exception(cossb::broker::excode::DRIVER_NOT_FOUND);
 				}
-			}
+			//}
 		}
 	}
 	else
