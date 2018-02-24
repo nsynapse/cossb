@@ -7,12 +7,12 @@ $(document).ready(function(){
 	sock.onopen = function(){
 		console.log("open");
 		console.log("open connection");
-
 	}
 	sock.onclose = function(e){
 		console.log("closed connection");
 	}
 	sock.onmessage = function(e){
+		console.log(e.data);
 		var jsondata = jQuery.parseJSON(e.data);
 		
 		console.log(jsondata);
