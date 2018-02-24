@@ -12,7 +12,7 @@ $(document).ready(function(){
 		console.log("closed connection");
 	}
 	sock.onmessage = function(e){
-		console.log(e.data);
+		console.log("onmessage");
 		var jsondata = jQuery.parseJSON(e.data);
 		
 		console.log(jsondata);
