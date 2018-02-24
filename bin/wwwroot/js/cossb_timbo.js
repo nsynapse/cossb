@@ -15,6 +15,8 @@ $(document).ready(function(){
 	sock.onmessage = function(e){
 		var jsondata = jQuery.parseJSON(e.data);
 		
+		console.log(jsondata);
+		
 		//sound play
 		if(jsondata.command=="sound_play"){
 			document.getElementById('sound').play();
