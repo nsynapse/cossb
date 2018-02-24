@@ -1,6 +1,6 @@
 
 $(document).ready(function(){
-	var host = 192.168.43.242;
+	var host = "192.168.0.95";
 	var socket_uri = "ws://"+host+":9002/guidebook";
 	var sock = new WebSocket(socket_uri)
 
@@ -20,7 +20,7 @@ $(document).ready(function(){
 			document.getElementById('sound').play();
 			console.log("sound play");
 		}
-		else if(jsondata.command=="move"){
+		else if(jsondata.command=="movepage"){
 		document.location.replace("http://"+host+"/page"+jsondata.page+".html")
 		}
 	}
@@ -36,7 +36,7 @@ $(document).ready(function(){
 		var data = {}
 		data['service'] = "websocket_read";
 		data['command'] = "trajectory_dump";
-    data['page'] = 1;
+    	data['page'] = $('#page').val();
 		sock.send(JSON.stringify(data));
     });
 
@@ -44,7 +44,7 @@ $(document).ready(function(){
 		var data = {}
 		data['service'] = "websocket_read";
 		data['command'] = "trajectory_play";
-    data['page'] = 1;
+    	data['page'] = $('#page').val();
 		sock.send(JSON.stringify(data));
     });
 

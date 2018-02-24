@@ -323,10 +323,10 @@ void nanopi_timbo::gpio_read()
 		}
 
 		//5. read guidebook page
-		if(gpio_map[SW1]) _guidebook_page = 1;
-		else if(gpio_map[SW2]) _guidebook_page = 2;
-		else if(gpio_map[SW3]) _guidebook_page = 3;
-		else if(gpio_map[SW4]) _guidebook_page = 4;
+		if(gpio_map[SW1]) move_page(1);
+		else if(gpio_map[SW2]) move_page(2);
+		else if(gpio_map[SW3]) move_page(3);
+		else if(gpio_map[SW4]) move_page(4);
 
 		//6. trajectory play (rising edge)
 		if(!_prev_gpio_map[BTN_TRJ_PLAY] && gpio_map[BTN_TRJ_PLAY]){
@@ -346,5 +346,20 @@ void nanopi_timbo::gpio_read()
 		boost::this_thread::sleep(boost::posix_time::milliseconds(500)); //read period = 500ms
 
 	}
+}
+
+void nanopi_timbo::move_page(int page){
+
+	if(_guidebook_page!=page){
+		cossb::message msg(this, cossb::base::msg_type::REQUEST);
+		nlohmann::json _json_msg;
+		_json_msg["command"] = " movepage";
+		_json_msg["page"] = page;
+		msg.pack(_json_msg.dump());
+		cossb_log->log(log::loglevel::INFO, fmt::format("Change Ebook Page : {}", page));
+		cossb_broker->publish("websocket_write_msg",msg);
+	}
+	_guidebook_page = page;
+
 }
 

@@ -159,17 +159,10 @@ void app_timbo::timbo_trajectory_dump(int page) {
 
 void app_timbo::ebook_sound_play()
 {
-	//1. create message instance
 	cossb::message msg(this, cossb::base::msg_type::REQUEST);
-
-	//2. generate json message
 	nlohmann::json _json_msg;
 	_json_msg["command"] = "sound_play";
-
-	//3. pack the json message
 	msg.pack(_json_msg.dump());
-
-	//4. send to broker
 	cossb_broker->publish("websocket_write_msg",msg);
 	cossb_log->log(log::loglevel::INFO, "Sound Play on Ebook");
 }

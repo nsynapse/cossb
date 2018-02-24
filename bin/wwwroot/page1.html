@@ -14,81 +14,6 @@
   <script src="js/cossb_timbo.js"></script>
   <!-- Custom styles for this template -->
   <link href="./css/style.css" rel="stylesheet">
-  <script type="text/javascript">
-    $(document).ready(function(){
-
-    	var socket_uri = "ws://192.168.43.242:9002/guidebook";
-    	var sock = new WebSocket(socket_uri)
-
-    	sock.onopen = function(){
-    		console.log("open");
-    		console.log("open connection");
-
-    	}
-    	sock.onclose = function(e){
-    		console.log("closed connection");
-    	}
-    	sock.onmessage = function(e){
-    		var jsondata = jQuery.parseJSON(e.data);
-    		if(jsondata.command=="sound_play"){
-    			document.getElementById('sound1').play();
-    			console.log("sound play");
-    		}
-    	}
-
-    	$("#id_btn_setting").click(function(){
-    		data['service'] = "websocket_read";
-    		data['command'] = "idsetting";
-    		sock.send(JSON.stringify(data));
-        });
-
-
-    	$("#id_btn_dump_trajectory").click(function(){
-    		var data = {}
-    		data['service'] = "websocket_read";
-    		data['command'] = "trajectory_dump";
-        data['page'] = 1;
-    		sock.send(JSON.stringify(data));
-        });
-
-      $("#id_btn_play_trajectory").click(function(){
-    		var data = {}
-    		data['service'] = "websocket_read";
-    		data['command'] = "trajectory_play";
-        data['page'] = 1;
-    		sock.send(JSON.stringify(data));
-        });
-
-      $("#id_btn_record").click(function(){
-    		var data = {}
-    		data['service'] = "websocket_read";
-    		data['command'] = "record";
-    		sock.send(JSON.stringify(data));
-        });
-
-      $("#id_btn_play").click(function(){
-    		var data = {}
-    		data['service'] = "websocket_read";
-    		data['command'] = "play";
-    		sock.send(JSON.stringify(data));
-        });
-
-      $("#id_btn_stop").click(function(){
-    		var data = {}
-    		data['service'] = "websocket_read";
-    		data['command'] = "stop";
-    		sock.send(JSON.stringify(data));
-        });
-
-      $("#id_btn_ping").click(function(){
-    		var data = {}
-    		data['service'] = "websocket_read";
-    		data['command'] = "ping";
-    		sock.send(JSON.stringify(data));
-        });
-
-    });
-  </script>
   <style type="text/css">
 
     #ebook_image{
@@ -127,6 +52,8 @@
   <audio id="sound" src="./sound/bark.mp3" type="audio/mpeg" preload="auto" autobuffer style="display:none;">
       Your browser does not support the audio element.
   </audio>
+  <h2>page1</h2>
+  <input id="page" type="hidden" value="1">
   <div id="ebook_image">
   </div>
   <nav class="navbar navbar-expand fixed-bottom">
@@ -135,16 +62,13 @@
       <div id="nav-collapse" class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
           <li>
-            <a id="id_btn_setting" href="#" class="btn azm-social azm-size-64 azm-circle azm-long-shadow azm-linux"><i class="fa fa-cog"></i></a>
+            <a id="id_btn_setting" href="#" class="btn azm-social azm-size-64 azm-circle azm-long-shadow azm-linux"data-toggle="tooltip" title="ID Setting"><i class="fa fa-cog"></i></a>
           </li>
           <li>
-            <a id="id_btn_dump_trajectory" href="#" class="btn azm-social azm-size-64 azm-circle azm-long-shadow azm-linux"><i class="fa fa-download"></i></a>
+            <a id="id_btn_dump_trajectory" href="#" class="btn azm-social azm-size-64 azm-circle azm-long-shadow azm-linux"><i class="fa fa-download" data-toggle="tooltip" title="Trajectory Dump"></i></a>
           </li>
           <li>
-            <a href="#" class="btn azm-social azm-size-64 azm-circle azm-long-shadow azm-linux"><i class="fa fa-check"></i></a>
-          </li>
-          <li>
-            <a id="id_btn_play" href="#" class="btn azm-social azm-size-64 azm-circle azm-long-shadow azm-linux"><i class="fa fa-play"></i></a>
+            <a id="id_btn_play" href="#" class="btn azm-social azm-size-64 azm-circle azm-long-shadow azm-linux" data-toggle="tooltip" title="Play"><i class="fa fa-play"></i></a>
           </li>
         </ul>
       </div>

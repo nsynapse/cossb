@@ -59,6 +59,9 @@ private:
 	//IR read function
 	void ir_read();
 
+	//page move
+	void move_page(int page);
+
 private:
 	//gpio control task
 	cossb::base::task _led_task;
