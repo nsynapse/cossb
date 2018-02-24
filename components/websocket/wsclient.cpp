@@ -76,7 +76,10 @@ void wsclient::subscribe(cossb::message* const msg)
 			try {
 				string pack = boost::any_cast<string>(*msg->get_data());
 				_client->send(pack); //pack string must be json format
-			} catch(boost::bad_any_cast&){ }
+				cossb_log->log(log::loglevel::INFO, fmt::format("Send to Websocket : {}", pack));
+			} catch(boost::bad_any_cast&){
+				cossb_log->log(log::loglevel::ERROR, "Invalid Casting for JSON");
+			}
 		} break;
 		case cossb::base::msg_type::DATA: break;
 		case cossb::base::msg_type::RESPONSE: break;
