@@ -5,7 +5,7 @@ OS := $(shell uname)
 ifeq ($(OS),Darwin) #Mac OS
 	LDFLAGS = -dynamiclib
 	INCLUDE += -I/usr/local/Cellar/boost/1.66.0/include
-	LD_LIBRARY_PATH += -L/usr/local/Cellar/boost/1.66.0/lib/
+	LD_LIBRARY_PATH += -L/usr/local/Cellar/boost/1.66.0/lib/ -L/usr/local/opt/openssl/lib/
 	LDLIBS = -lboost_system-mt -lboost_thread-mt -lboost_filesystem-mt
 endif
 
@@ -18,7 +18,7 @@ CXX = g++
 CXXFLAGS = -O3 -fPIC -Wall -std=c++11 -D__cplusplus=201103L -D__boostthread__
 
 EDISON_LDLIBS = -lmraa
-INCLUDE += -I./include -I/usr/include -I/usr/local/include
+INCLUDE += -I./include -I/usr/include -I/usr/local/include -I/usr/local/opt/openssl/include/
 RM	= rm -rf
 
 OUTDIR		= ./bin/
