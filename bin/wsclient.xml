@@ -14,7 +14,7 @@
 </info>
 
 <property>
-	<endpoint>ws://127.0.0.1:9002/guidebook</endpoint>
+	<endpoint>ws://11.12.14.110:9002/guidebook</endpoint>
 </property>
 
 <service name="websocket_read" method="publish" topic="service/websocket/read"></service>
