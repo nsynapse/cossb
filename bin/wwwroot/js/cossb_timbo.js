@@ -38,7 +38,7 @@ $(document).ready(function(){
 		var data = {}
 		data['service'] = "websocket_read";
 		data['command'] = "trajectory_dump";
-		data['page'] = $('#page').val();
+		data['page'] = parseInt($('#page').val(), 10);
 		sock.send(JSON.stringify(data));
     });
 
@@ -46,7 +46,7 @@ $(document).ready(function(){
 		var data = {}
 		data['service'] = "websocket_read";
 		data['command'] = "trajectory_play";
-		data['page'] = $('#page').val();
+		data['page'] = parseInt($('#page').val(), 10);
 		sock.send(JSON.stringify(data));
     });
 
