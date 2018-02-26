@@ -351,6 +351,7 @@ void nanopi_timbo::gpio_read()
 void nanopi_timbo::move_page(int page){
 
 	if(_guidebook_page!=page){
+		//move page for ebook
 		cossb::message msg(this, cossb::base::msg_type::REQUEST);
 		nlohmann::json _json_msg;
 		_json_msg["command"] = " movepage";

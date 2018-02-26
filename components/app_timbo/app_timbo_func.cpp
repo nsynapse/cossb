@@ -82,69 +82,80 @@ void app_timbo::timbo_ping(){
 
 void app_timbo::timbo_trajectory_play(int page){
 
-	//find trajectory files
+	map<int, vector<unsigned char>> trj_map; //[id, trajectory]
 	file::collector* trj_files = new file::collector("./contents/", ".trj");
+
+	//1. load trajectory data
 	for(auto& file : trj_files->getList()){
-		cossb_log->log(log::loglevel::INFO, fmt::format("Found Trajectory file : {}", file.absolute));
+		size_t pos = file.filename.find(fmt::format("page{}_", page));
+		if(pos!=string::npos){
+			cossb_log->log(log::loglevel::INFO, fmt::format("Found Trajectory file : {}", file.filename));
+			string str_id = file.filename.substr(pos+6);
+			int id = ::stoi(str_id.c_str());
+
+			ifstream f;
+			f.open(file.absolute, ios::in|ios::binary);
+			if(f.is_open()){
+				f.seekg(0, ios::end);	//set the pointer to the end of file
+				int size = f.tellg();
+				f.seekg(0, ios::beg);
+				unsigned char* data = new unsigned char[size];
+				f.read((char*)data, size);
+				vector<unsigned char> trjtmp;
+				trjtmp.insert(trjtmp.end(), &data[0], &data[size]);
+				trj_map[id] = trjtmp;	//insert to map
+				delete []data;
+				cossb_log->log(log::loglevel::INFO, fmt::format("Loaded Trajectory file : {} ({}bytes) ",file.filename, trjtmp.size()));
+			}
+			f.close();
+		}
 	}
 	delete trj_files;
 
-	//1. read trajectory file
-	ifstream file;
-	vector<unsigned char> trajectory;
-	file.open(fmt::format("./contents/page{}_{}.trj", page, 1), ios::in|ios::binary);
-	//read trajectory file
-	if(file.is_open()){
-		file.seekg(0, ios::end);	//set the pointer to the end of file
-		int size = file.tellg();
-		file.seekg(0, ios::beg);
-		unsigned char* data = new unsigned char[size];
-		file.read((char*)data, size);
-		trajectory.insert(trajectory.end(), &data[0], &data[size]);
-		delete []data;
-		cossb_log->log(log::loglevel::INFO, fmt::format("Loaded Trajectory file : page{}_{}.trj ({}bytes) ",page, 1, trajectory.size()));
+	cossb_log->log(log::loglevel::INFO, "Trajectories downloading..");
+
+	//2. multiple trajectory download..
+	for(auto& trj:trj_map){
+		unsigned char start[] = {HEAD, 0x06, (unsigned char)trj.first, 0x0c, 0x0, 0x55, 0x7f, 0x01, END}; //start
+		vector<unsigned char> sdata(start, start+sizeof(start)/sizeof(start[0]));
+		cossb::message smsg(this, base::msg_type::DATA);
+		smsg.pack(sdata);
+		cossb_broker->publish("timbo_write", smsg);
+		boost::this_thread::sleep(boost::posix_time::milliseconds(100/trj_map.size()));
 	}
-	file.close();
-	cossb_log->log(log::loglevel::INFO, "Trajectory Playing...");
 
-
-	unsigned char start[] = {HEAD, 0x06, 0x0f, 0x0c, 0x0, 0x55, 0x7f, 0x01, END}; //record start
-	vector<unsigned char> sdata(start, start+sizeof(start)/sizeof(start[0]));
-	cossb::message smsg(this, base::msg_type::DATA);
-	smsg.pack(sdata);
-	cossb_broker->publish("timbo_write", smsg);
-	boost::this_thread::sleep(boost::posix_time::milliseconds(100));
-
-
-	//2. send start
-	unsigned char header[] = {HEAD, 0x03, 0x0f, 0x2e, 0x00, END}; //record start
-	vector<unsigned char> data1(header, header+sizeof(header)/sizeof(header[0]));
-	cossb::message hmsg(this, base::msg_type::DATA);
-	hmsg.pack(data1);
-	cossb_broker->publish("timbo_write", hmsg);
-	boost::this_thread::sleep(boost::posix_time::milliseconds(100));
-
-	//3. send trajectory
+	//data downloading...
 	const int offset = 20;
-	for(int i=0;i<(int)trajectory.size();i+=offset) {
-		unsigned char trj[] = {HEAD, 0x05, 0x0f, TRAJ, trajectory[i+2], trajectory[i+3], 0x00, END};
-		cossb::message vmsg(this, base::msg_type::DATA);
-		vector<unsigned char> data2(trj, trj+sizeof(trj));
-		vmsg.pack(data2);
-		cossb_broker->publish("timbo_write", vmsg);
-		cossb_log->log(log::loglevel::INFO, fmt::format("Send Trajectory : {}, {}", trajectory[i+2], trajectory[i+3]));
-		boost::this_thread::sleep(boost::posix_time::milliseconds(100));
+	int pos = 0;
+	while(1){
+		int done = 0;
+		for(auto& trj:trj_map){
+			if(pos<(int)trj.second.size()){
+				unsigned char trj_pack[] = {HEAD, 0x05, (unsigned char)trj.first, TRAJ, trj.second[pos+2], trj.second[pos+3], 0x00, END};
+				cossb::message vmsg(this, base::msg_type::DATA);
+				vector<unsigned char> data2(trj_pack, trj_pack+sizeof(trj_pack));
+				vmsg.pack(data2);
+				cossb_log->log(log::loglevel::INFO, fmt::format("[Device ID : {}] Send Trajectory : {}, {}", trj.first, trj.second[pos+2], trj.second[pos+3]));
+				cossb_broker->publish("timbo_write", vmsg);
+				boost::this_thread::sleep(boost::posix_time::milliseconds(100/trj_map.size()));
+			}
+			else
+				done++;
+
+			pos+=offset;
+		}
+		if(done>=(int)trj_map.size()) break;
 	}
 
-	//4. end
-	cossb::message tmsg(this, base::msg_type::DATA);
-	unsigned char tail[] = {HEAD, 0x03, 0x0f, 0x04, 0x00, END};
-	vector<unsigned char> data3(tail, tail+sizeof(tail));
-	tmsg.pack(data3);
-	cossb_broker->publish("timbo_write", tmsg);
-	cossb_log->log(log::loglevel::INFO, "Trajectory Playing...Done.");
-
-
+	//end
+	for(auto& trj:trj_map){
+		cossb::message tmsg(this, base::msg_type::DATA);
+		unsigned char tail[] = {HEAD, 0x03, 0x0f, 0x04, 0x00, END};
+		vector<unsigned char> data3(tail, tail+sizeof(tail));
+		tmsg.pack(data3);
+		cossb_log->log(log::loglevel::INFO, fmt::format("[Device ID : {}] Trajectory Playing...Done.", trj.first));
+		cossb_broker->publish("timbo_write", tmsg);
+	}
 }
 
 void app_timbo::timbo_trajectory_dump(int page) {
