@@ -4,36 +4,37 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
-  </head>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
-  <script src="js/jquery.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/cossb_timbo.js"></script>
+  <!-- Bootstrap CSS -->
+  <link href="./css/bootstrap.css" rel="stylesheet">
+  <link href="./css/font-awesome.min.css" rel="stylesheet">
+</head>
+  
 <body>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/cossb_timbo.js"></script>
+	
 	<input id="page" type="hidden" value="1">
-  <div class="py-5">
-    <div class="container">
+<div class="btn-group btn-group-lg" role="group" aria-label="...">
       <div class="row">
         <div class="col-md-12">
-          
-            <a class="btn btn-outline-primary" href="#" id="id_btn_setting">ID Setting</a>
-            <a href="#" class="btn btn-outline-primary" id="id_btn_dump_trajectory">Trajectory Dump</a>
-            <a class="btn btn-outline-primary" id="id_btn_play_trajectory" href="#">Play Trajectory(dumped)</a>
+            <a class="btn btn-primary" href="#" id="id_btn_setting">ID Setting</a>
+            <a href="#" class="btn btn-primary" id="id_btn_dump_trajectory">Trajectory Dump</a>
+            <a class="btn btn-primary" id="id_btn_play_trajectory" href="#">Play Trajectory(dumped)</a>
           </div>
         </div>
       </div>
       <div class="row">
         <div class="col-md-12">
           <div class="btn-group">
-            <a class="btn btn-outline-danger" id="id_btn_record" href="#">Record</a>
-            <a class="btn btn-outline-danger" id="id_btn_play" href="#">Play</a>
-            <a href="#" class="btn btn-outline-danger" id="id_btn_stop">Stop</a>
-            <a href="#" class="btn btn-outline-danger" id="id_btn_ping">Ping</a>
+            <a class="btn btn-danger" id="id_btn_record" href="#">Record</a>
+            <a class="btn btn-danger" id="id_btn_play" href="#">Play</a>
+            <a href="#" class="btn btn-danger" id="id_btn_stop">Stop</a>
+            <a href="#" class="btn btn-danger" id="id_btn_ping">Ping</a>
           </div>
         </div>
+      
       </div>
-    </div>
 </body>
 
 </html>

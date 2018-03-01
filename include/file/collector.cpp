@@ -75,7 +75,7 @@ namespace cossb {
 							path.ext = ext_itr->path().extension().string();
 							path.relative = ext_itr->path().string();
 							path.filename = ext_itr->path().filename().stem().string();
-							path.absolute = boost::filesystem::absolute(ext_itr->path().filename()).string();
+							path.absolute = boost::filesystem::absolute(ext_itr->path()).string();
 							_file_container.push_back(path);
 						}
 					}
