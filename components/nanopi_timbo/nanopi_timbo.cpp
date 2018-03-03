@@ -261,6 +261,16 @@ void nanopi_timbo::wired_uart_read(){
 	}
 }
 
+void nanopi_timbo::ir_command(const char* command, int page)
+{
+	cossb::message msg(this, cossb::base::msg_type::REQUEST);
+	nlohmann::json _json_msg;
+	_json_msg["command"] = command;
+	_json_msg["page"] = page;
+	msg.pack(_json_msg.dump());
+	cossb_broker->publish("nanopi_websocket_read", msg);
+}
+
 void nanopi_timbo::ir_read()
 {
 	int prev_ir_data = 0;
@@ -269,13 +279,29 @@ void nanopi_timbo::ir_read()
 
 		if(prev_ir_data!=ir_data){
 			switch(ir_data){
-			case 1: {} break; //record
-			case 2: {} break; //play
-			case 3: {} break; //stop
-			case 4: {} break; //trajectory dump
-			case 5: {} break; //trajectory play
+			case 1: { //record
+				cossb_log->log(log::loglevel::INFO, "Record");
+				ir_command("record", _guidebook_page);
+
+			} break;
+			case 2: { //play
+				cossb_log->log(log::loglevel::INFO, "Play");
+				ir_command("play", _guidebook_page);
+
+			} break;
+			case 3: {//stop
+				cossb_log->log(log::loglevel::INFO, "Stop");
+				ir_command("stop", _guidebook_page);
+			} break;
+			case 4: { //trajectory dump
+				cossb_log->log(log::loglevel::INFO, "Trajectory Dump");
+				ir_command("trajectory_dump", _guidebook_page);
+			} break;
+			case 5: { //trajectory play
+				cossb_log->log(log::loglevel::INFO, "Trajectory Play");
+				ir_command("trajectory_play", _guidebook_page);
+			} break;
 			}
-			cossb_log->log(log::loglevel::INFO, fmt::format("Remocon #{}", ir_data));
 		}
 
 		prev_ir_data = ir_data;
@@ -357,7 +383,7 @@ void nanopi_timbo::move_page(int page){
 		_json_msg["command"] = " movepage";
 		_json_msg["page"] = page;
 		msg.pack(_json_msg.dump());
-		cossb_log->log(log::loglevel::INFO, fmt::format("Change Ebook Page : {}", page));
+		cossb_log->log(log::loglevel::INFO, fmt::format("Change eBook Page : {}", page));
 		cossb_broker->publish("websocket_write_msg",msg);
 	}
 	_guidebook_page = page;

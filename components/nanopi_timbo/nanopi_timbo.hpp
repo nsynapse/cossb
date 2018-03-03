@@ -62,6 +62,8 @@ private:
 	//page move
 	void move_page(int page);
 
+	void ir_command(const char* command, int page);
+
 private:
 	//gpio control task
 	cossb::base::task _led_task;

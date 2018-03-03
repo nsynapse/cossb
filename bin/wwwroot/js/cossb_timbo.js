@@ -1,6 +1,6 @@
 
 $(document).ready(function(){
-	var host = "192.168.0.5";
+	var host = "127.0.0.1";
 	var socket_uri = "ws://"+host+":9002/guidebook";
 	var sock = new WebSocket(socket_uri)
 
