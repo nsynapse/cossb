@@ -156,7 +156,7 @@ void nanopi_timbo::subscribe(cossb::message* const msg)
 				std::tie(_guidebook_page, packet) = data;
 				_dumping = true;
 				_dump_buffer.clear();
-				_dump_file.open(fmt::format("./contents/page{}_{}.trj", _guidebook_page, _selected_id), std::ofstream::in|std::ofstream::app);
+				_dump_file.open(fmt::format("./contents/page{}_{}.trj", _guidebook_page, _selected_id), std::ofstream::in);
 				_w_uart->write(packet.data(), packet.size()); //send command packet
 
 				cossb_log->log(log::loglevel::INFO, fmt::format("Trajectory Dump Page : {}, ID : {}", _guidebook_page, _selected_id));
