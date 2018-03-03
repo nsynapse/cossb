@@ -23,6 +23,7 @@ using namespace std;
 #define TRAJECTORY_DUMP	0x37
 #define TRAJECTORY_PLAY	0x2e
 
+
 void app_timbo::key_id_setting(int value){
 	unsigned char frame[] = {HEAD, 0x07, SET, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, END};
 	memcpy(frame+3, _group_id, sizeof(_group_id));
@@ -117,6 +118,11 @@ void app_timbo::timbo_trajectory_play(int page){
 	//2. multiple trajectory download..
 	for(auto& trj:trj_map){
 		unsigned char start[] = {HEAD, 0x06, (unsigned char)trj.first, 0x0c, 0x0, 0x55, 0x7f, 0x01, END}; //start
+		string logdata;
+		for(auto& c:start)
+			logdata += fmt::format("{}\t",(int)c);
+		cossb_log->log(log::loglevel::INFO, fmt::format("[{}]{}",trj.first, logdata));
+		cossb_log->log(log::loglevel::INFO, "Now Trajectories downloading..");
 		vector<unsigned char> sdata(start, start+sizeof(start)/sizeof(start[0]));
 		cossb::message smsg(this, base::msg_type::DATA);
 		smsg.pack(sdata);
@@ -135,6 +141,10 @@ void app_timbo::timbo_trajectory_play(int page){
 		for(auto& trj:trj_map){
 			if(pos<(int)trj.second.size()){
 				unsigned char trj_pack[] = {HEAD, 0x05, (unsigned char)trj.first, TRAJ, trj.second[pos+2], trj.second[pos+3], 0x00, END};
+				string logdata;
+				for(auto& c:trj_pack)
+					logdata += fmt::format("{}\t",(int)c);
+				cossb_log->log(log::loglevel::INFO, fmt::format("[{}]{}",trj.first, logdata));
 				cossb::message vmsg(this, base::msg_type::DATA);
 				vector<unsigned char> data2(trj_pack, trj_pack+sizeof(trj_pack));
 				vmsg.pack(data2);
