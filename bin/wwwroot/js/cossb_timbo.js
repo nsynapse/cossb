@@ -16,14 +16,13 @@ $(document).ready(function(){
 		var jsondata = jQuery.parseJSON(e.data);
 		
 		console.log(jsondata.command);
-		document.location.replace("http://"+host+"/page"+jsondata.page+".html")
 		
 		//sound play
 		if(jsondata.command=="sound_play"){
 			document.getElementById('sound').play();
 			console.log("sound play");
 		}
-		else if(jsondata.command=="movepage"){
+		if(!jsondata.command.localeCompare("movepage")){
 		console.log("Move Page");
 		document.location.replace("http://"+host+"/page"+jsondata.page+".html")
 		}
