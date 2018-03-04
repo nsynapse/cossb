@@ -17,13 +17,14 @@ $(document).ready(function(){
 		
 		console.log(jsondata.command);
 		console.log(typeof jsondata.command);
+		var movepage = "movepage";
 		
 		//sound play
 		if(jsondata.command=="sound_play"){
 			document.getElementById('sound').play();
 			console.log("sound play");
 		}
-		if(jsondata.command.equals("movepage")){
+		if(jsondata.command==movepage){
 			console.log("Move Page");
 			document.location.replace("http://"+host+"/page"+jsondata.page+".html")
 		}
