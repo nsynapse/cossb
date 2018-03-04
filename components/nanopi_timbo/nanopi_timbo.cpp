@@ -354,6 +354,8 @@ void nanopi_timbo::gpio_read()
 		else if(!gpio_map[SW3]) move_page(3);
 		else if(!gpio_map[SW4]) move_page(4);
 
+		cossb_log->log(log::loglevel::INFO, fmt::format("Limit Switch : {},{},{},{}", gpio_map[SW1],gpio_map[SW2],gpio_map[SW3],gpio_map[SW4]));
+
 		//6. trajectory play (rising edge)
 		if(!_prev_gpio_map[BTN_TRJ_PLAY] && gpio_map[BTN_TRJ_PLAY]){
 			cossb_log->log(log::loglevel::INFO, "Trajectory Play");
