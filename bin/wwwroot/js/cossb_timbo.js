@@ -16,6 +16,7 @@ $(document).ready(function(){
 		var jsondata = jQuery.parseJSON(e.data);
 		
 		console.log(jsondata.command);
+		document.location.replace("http://"+host+"/page"+jsondata.page+".html")
 		
 		//sound play
 		if(jsondata.command=="sound_play"){
