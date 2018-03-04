@@ -15,7 +15,7 @@ $(document).ready(function(){
 		console.log("onmessage");
 		var jsondata = jQuery.parseJSON(e.data);
 		
-		console.log(jsondata);
+		console.log(jsondata.command);
 		
 		//sound play
 		if(jsondata.command=="sound_play"){
