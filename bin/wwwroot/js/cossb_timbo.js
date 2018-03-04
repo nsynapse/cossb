@@ -12,17 +12,18 @@ $(document).ready(function(){
 		console.log("closed connection");
 	}
 	sock.onmessage = function(e){
-		console.log("onmessage");
 		var jsondata = jQuery.parseJSON(e.data);
+		console.log(jsondata);
 		
 		console.log(jsondata.command);
+		console.log(typeof jsondata.command);
 		
 		//sound play
 		if(jsondata.command=="sound_play"){
 			document.getElementById('sound').play();
 			console.log("sound play");
 		}
-		if(!jsondata.command.localeCompare("movepage")){
+		if(jsondata.command=='movepage'){
 		console.log("Move Page");
 		document.location.replace("http://"+host+"/page"+jsondata.page+".html")
 		}
