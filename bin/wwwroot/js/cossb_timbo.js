@@ -23,6 +23,7 @@ $(document).ready(function(){
 			console.log("sound play");
 		}
 		else if(jsondata.command=="movepage"){
+		console.log("Move Page");
 		document.location.replace("http://"+host+"/page"+jsondata.page+".html")
 		}
 	}
