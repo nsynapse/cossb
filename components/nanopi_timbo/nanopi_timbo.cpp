@@ -349,10 +349,10 @@ void nanopi_timbo::gpio_read()
 		}
 
 		//5. read guidebook page
-		if(gpio_map[SW1]) move_page(1);
-		else if(gpio_map[SW2]) move_page(2);
-		else if(gpio_map[SW3]) move_page(3);
-		else if(gpio_map[SW4]) move_page(4);
+		if(!gpio_map[SW1]) move_page(1);
+		else if(!gpio_map[SW2]) move_page(2);
+		else if(!gpio_map[SW3]) move_page(3);
+		else if(!gpio_map[SW4]) move_page(4);
 
 		//6. trajectory play (rising edge)
 		if(!_prev_gpio_map[BTN_TRJ_PLAY] && gpio_map[BTN_TRJ_PLAY]){
