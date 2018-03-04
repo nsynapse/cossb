@@ -380,7 +380,7 @@ void nanopi_timbo::move_page(int page){
 		//move page for ebook
 		cossb::message msg(this, cossb::base::msg_type::REQUEST);
 		nlohmann::json _json_msg;
-		_json_msg["command"] = " movepage";
+		_json_msg["command"] = "movepage";
 		_json_msg["page"] = page;
 		msg.pack(_json_msg.dump());
 		cossb_log->log(log::loglevel::INFO, fmt::format("Change eBook Page : {}", page));
