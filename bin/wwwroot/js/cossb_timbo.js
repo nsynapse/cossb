@@ -23,9 +23,9 @@ $(document).ready(function(){
 			document.getElementById('sound').play();
 			console.log("sound play");
 		}
-		if(jsondata.command=='movepage'){
-		console.log("Move Page");
-		document.location.replace("http://"+host+"/page"+jsondata.page+".html")
+		if(jsondata.command.equals("movepage")){
+			console.log("Move Page");
+			document.location.replace("http://"+host+"/page"+jsondata.page+".html")
 		}
 	}
 
