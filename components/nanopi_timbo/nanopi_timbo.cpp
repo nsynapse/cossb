@@ -91,7 +91,7 @@ bool nanopi_timbo::setup()
 
 	//I2C configuration
 	_i2c_handle = wiringPiI2CSetup(_i2c_address);
-	wiringPiI2CWrite(_i2c_handle, _selected_id); //initial (all LED off)
+	wiringPiI2CWrite(_i2c_handle, (int)_selected_id); //initial (default=1)
 
 
 	//gpio input initialization
@@ -156,10 +156,10 @@ void nanopi_timbo::subscribe(cossb::message* const msg)
 				std::tie(_guidebook_page, packet) = data;
 				_dumping = true;
 				_dump_buffer.clear();
-				_dump_file.open(fmt::format("./contents/page{}_{}.trj", _guidebook_page, _selected_id), std::ofstream::in);
+				_dump_file.open(fmt::format("./contents/page{}_{}.trj", _guidebook_page, (int)_selected_id), std::ios::out|std::ios::trunc);
 				_w_uart->write(packet.data(), packet.size()); //send command packet
 
-				cossb_log->log(log::loglevel::INFO, fmt::format("Trajectory Dump Page : {}, ID : {}", _guidebook_page, _selected_id));
+				cossb_log->log(log::loglevel::INFO, fmt::format("Trajectory Dump Page : {}, ID : {}", _guidebook_page, (int)_selected_id));
 				cossb_log->log(log::loglevel::INFO, "Now Dumping...");
 
 			} catch(const boost::bad_any_cast&){ }
@@ -330,13 +330,13 @@ void nanopi_timbo::gpio_read()
 			cossb_log->log(log::loglevel::INFO, "Pushed ID Selection Button");
 		//ID is changing..
 		else if(!_prev_gpio_map[BTN_ID_SEL] && !gpio_map[BTN_ID_SEL]){
-			if(_selected_id>=4)
-				_selected_id = 0;
-			wiringPiI2CWrite(_i2c_handle, ++_selected_id);
+			if(_selected_id>=0x08)
+				_selected_id = 0x00;
+			wiringPiI2CWrite(_i2c_handle, (int)(_selected_id<<1));
 		}
 		//stop changing.
 		else if(!_prev_gpio_map[BTN_ID_SEL] && gpio_map[BTN_ID_SEL]){
-			cossb_log->log(log::loglevel::INFO, fmt::format("Selected ID : {}", _selected_id));
+			cossb_log->log(log::loglevel::INFO, fmt::format("Selected ID : {}", (int)_selected_id));
 		}
 
 		//4. id setting (rising edge)
@@ -344,7 +344,7 @@ void nanopi_timbo::gpio_read()
 			//publish message
 			cossb::message msg(this, cossb::base::msg_type::REQUEST);
 			msg.pack(gpio_map);
-			cossb_log->log(log::loglevel::INFO, fmt::format("ID Setting : {}", _selected_id));
+			cossb_log->log(log::loglevel::INFO, fmt::format("ID Setting : {}", (int)_selected_id));
 			cossb_broker->publish("nanopi_gpio_id_set", msg);
 		}
 
