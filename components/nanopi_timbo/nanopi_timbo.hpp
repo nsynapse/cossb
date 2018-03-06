@@ -85,7 +85,7 @@ private:
 
 	//previous gpio map
 	map<int, int> _prev_gpio_map;
-	unsigned char _selected_id = 0x00;
+	int _selected_id = 0;
 	int _guidebook_page = 1;
 
 
