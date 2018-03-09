@@ -352,9 +352,9 @@ websocket: wsbroadcaster wsclient.comp example_websocket_client.comp
 install : 
 	cp $(OUTDIR)*.xml $(INSTALL_DIR)
 	cp $(OUTDIR)*.comp $(INSTALL_DIR)
-	cp wsbroadcaster $(INSTALL_DIR)
-	cp lwan $(INSTALL_DIR)
-	cp lwan.conf $(INSTALL_DIR)
+	cp $(OUTDIR)wsbroadcaster $(INSTALL_DIR)
+	cp $(OUTDIR)lwan $(INSTALL_DIR)
+	cp $(OUTDIR)lwan.conf $(INSTALL_DIR)
 # Clean
 clean: 
 	$(RM) $(OUTDIR)*.o $(OUTDIR)cossb $(OUTDIR)cossb_test $(OUTDIR)*.so $(OUTDIR)*.comp
