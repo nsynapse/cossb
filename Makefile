@@ -31,6 +31,7 @@ TEST_FILES = ./test/
 SOURCE_FILES = ./src/
 UTIL_FILES = ./util/
 BASE_FILES = ./base/
+INSTALL_DIR = /usr/local/bin/
 
 #cossb version
 CXXFLAGS += -D__MAJOR__=0 -D__MINOR__=0 -D__REV__=2
@@ -348,6 +349,12 @@ cat: cossb wsbroadcaster edison_uart.comp example_cat_monitoring.comp cat_protoc
 cat2: cossb wsbroadcaster example_cat_monitoring.comp cat_protocol.comp wsclient.comp sqlitedb.comp compcontroller.comp
 websocket: wsbroadcaster wsclient.comp example_websocket_client.comp
 
+install : 
+	cp -f $(OUTDIR)*.xml $(INSTALL_DIR)*
+	cp -f $(OUTDIR)*.comp $(INSTALL_DIR)*
+	cp -f wsbroadcaster $(INSTALL_DIR)*
+	cp -f lwan $(INSTALL_DIR)*
+	cp -f lwan.conf $(INSTALL_DIR)*
 # Clean
 clean: 
 	$(RM) $(OUTDIR)*.o $(OUTDIR)cossb $(OUTDIR)cossb_test $(OUTDIR)*.so $(OUTDIR)*.comp
