@@ -352,6 +352,7 @@ websocket: wsbroadcaster wsclient.comp example_websocket_client.comp
 install : 
 	cp $(OUTDIR)manifest_timbo.xml $(INSTALL_DIR)
 	cp $(OUTDIR)*.comp $(INSTALL_DIR)
+	cp $(OUTDIR)cossb $(INSTALL_DIR)
 	cp $(OUTDIR)wsbroadcaster $(INSTALL_DIR)
 	cp $(OUTDIR)lwan $(INSTALL_DIR)
 	cp $(OUTDIR)lwan.conf $(INSTALL_DIR)
