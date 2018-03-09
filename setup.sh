@@ -1,19 +1,20 @@
 #!/bin/bash
-echo "Build Cossb for Timbo..."
+
+echo "Installing default packages..."
+sudo apt-get update
+sudo apt-get install build-essential git uuid-dev libboost-all-dev libssl-dev cmake
+
+echo "Cloning HTTP Server..."
+git clone https://github.com/lpereira/lwan
+cd lwan
+sudo mkdir build
+cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+make
+
+
+echo "Cloning COSSB"
+git clone https://github.com/nsynapse/cossb.git
+cd cossb
 make timbo
-
-echo "Copying files..."
-cp -rp ./bin/cossb /usr/local/bin/
-cp -rp ./bin/wsclient.comp /usr/local/bin/
-cp -rp ./bin/wsclient.xml /usr/local/bin/
-cp -rp ./bin/app_timbo.comp /usr/local/bin/
-cp -rp ./bin/app_timbo.xml /usr/local/bin/
-cp -rp ./bin/timboprotocol.comp /usr/local/bin/
-cp -rp ./bin/timboprotocol.xml /usr/local/bin/
-cp -rp ./bin/nanopi_timbo.comp /usr/local/bin/
-cp -rp ./bin/nanopi_timbo.xml /usr/local/bin/
-cp -rp ./bin/manifest_timbo.xml /usr/local/bin/
-
-cp -rp ./bin/wsbroadcaster /usr/local/bin/
-cp -rp ./bin/lwan /usr/local/bin/
-cp -rp ./bin/lwan.conf /usr/local/bin/
+sudo make install
