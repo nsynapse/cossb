@@ -140,6 +140,7 @@ void app_timbo::timbo_trajectory_play(int page){
 	}
 	cossb_log->log(log::loglevel::INFO, "Now Trajectories downloading..");
 
+	//default is false
 	map<int, bool> trj_done;
 	for(auto& trj:trj_map)
 		trj_done[trj.first] = false;
@@ -152,6 +153,7 @@ void app_timbo::timbo_trajectory_play(int page){
 		int alldone = 0;
 		cossb_log->log(log::loglevel::INFO, fmt::format("pos : {}", pos));
 		for(auto& trj:trj_map){
+			alldone = 0;
 			if(pos<(int)trj.second.size()){
 				unsigned char trj_pack[] = {HEAD, 0x05, (unsigned char)trj.first, TRAJ, trj.second[pos+2], trj.second[pos+3], 0x00, END};
 				string logdata;
