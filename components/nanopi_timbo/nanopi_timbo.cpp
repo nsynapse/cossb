@@ -353,6 +353,7 @@ void nanopi_timbo::gpio_read()
 		else if(!gpio_map[SW2]) move_page(2);
 		else if(!gpio_map[SW3]) move_page(3);
 		else if(!gpio_map[SW4]) move_page(4);
+		else move_page(5);
 
 		//6. trajectory play (rising edge)
 		if(!_prev_gpio_map[BTN_TRJ_PLAY] && gpio_map[BTN_TRJ_PLAY]){
