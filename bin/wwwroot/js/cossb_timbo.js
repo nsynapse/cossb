@@ -1,6 +1,7 @@
 
 $(document).ready(function(){
-	var host = "192.168.0.17";
+	var host = "192.168.0.17"; //!!! edit
+	var guidebook_id = 1;	  //!!! edit
 	var socket_uri = "ws://"+host+":9002/guidebook";
 	var sock = new WebSocket(socket_uri)
 	
@@ -26,7 +27,7 @@ $(document).ready(function(){
 		}
 		if(jsondata.command=="movepage"){
 			console.log("Move Page");
-			document.location.replace("http://"+host+"/page"+jsondata.page+".html")
+			document.location.replace("http://"+host+"/"+guidebook_id+"/page"+jsondata.page+".html")
 		}
 	}
 
