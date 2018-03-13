@@ -1,7 +1,8 @@
 
 $(document).ready(function(){
-	var host = "192.168.0.17"; //!!! edit
+	var host = "172.30.1.42"; //!!! edit
 	var guidebook_id = 1;	  //!!! edit
+	
 	var socket_uri = "ws://"+host+":9002/guidebook";
 	var sock = new WebSocket(socket_uri)
 	
@@ -82,5 +83,18 @@ $(document).ready(function(){
 		data['service'] = "websocket_read";
 		data['command'] = "ping";
 		sock.send(JSON.stringify(data));
+    });
+    
+  $("#id_btn_prev").click(function(){
+  		var cur = parseInt($('#page').val(), 10)-1;
+  		console.log("Page move :"+cur);
+  		if(cur<1) cur = 1;
+		document.location.replace("http://"+host+"/"+guidebook_id+"/page"+cur+".html")
+    });
+    
+  $("#id_btn_next").click(function(){
+		var cur = parseInt($('#page').val(), 10)+1;
+  		if(cur>10) cur = 10;
+		document.location.replace("http://"+host+"/"+guidebook_id+"/page"+cur+".html")
     });
 });
