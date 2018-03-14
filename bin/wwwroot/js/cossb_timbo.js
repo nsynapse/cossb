@@ -44,6 +44,7 @@ $(document).ready(function(){
 		var data = {}
 		data['service'] = "websocket_read";
 		data['command'] = "trajectory_dump";
+		data['guidebook'] = guidebook_id;
 		data['page'] = parseInt($('#page').val(), 10);
 		sock.send(JSON.stringify(data));
     });
@@ -52,6 +53,7 @@ $(document).ready(function(){
 		var data = {}
 		data['service'] = "websocket_read";
 		data['command'] = "trajectory_play";
+		data['guidebook'] = guidebook_id;
 		data['page'] = parseInt($('#page').val(), 10);
 		sock.send(JSON.stringify(data));
     });
@@ -94,7 +96,7 @@ $(document).ready(function(){
     
   $("#id_btn_next").click(function(){
 		var cur = parseInt($('#page').val(), 10)+1;
-  		if(cur>10) cur = 10;
+  		if(cur>20) cur = 20;
 		document.location.replace("http://"+host+"/"+guidebook_id+"/page"+cur+".html")
     });
 });

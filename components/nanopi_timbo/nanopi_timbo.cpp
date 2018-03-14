@@ -146,17 +146,17 @@ void nanopi_timbo::subscribe(cossb::message* const msg)
 		case cossb::base::msg_type::REQUEST: {
 
 			try {
-				typedef std::tuple<int, vector<unsigned char>> req;
+				typedef std::tuple<int, int, vector<unsigned char>> req;
 				req data = boost::any_cast<req>(*msg->get_data());
 
 				if(_dump_file.is_open())
 					_dump_file.close();
 
 				vector<unsigned char> packet;
-				std::tie(_guidebook_page, packet) = data;
+				std::tie(_guidebook_page, _guidebook_id, packet) = data;
 				_dumping = true;
 				_dump_buffer.clear();
-				_dump_file.open(fmt::format("./contents/page{}_{}.trj", _guidebook_page, _selected_id), std::ios::out|std::ios::trunc);
+				_dump_file.open(fmt::format("./contents/{}/page{}_{}.trj", _guidebook_id, _guidebook_page, _selected_id), std::ios::out|std::ios::trunc);
 				_w_uart->write(packet.data(), packet.size()); //send command packet
 
 				cossb_log->log(log::loglevel::INFO, fmt::format("Trajectory Dump Page : {}, ID : {}", _guidebook_page, _selected_id));
@@ -362,6 +362,7 @@ void nanopi_timbo::gpio_read()
 			nlohmann::json _json_msg;
 			_json_msg["command"] = "trajectory_play";
 			_json_msg["page"] = _guidebook_page;
+			_json_msg["guidebook"] = _guidebook_id;
 			msg.pack(_json_msg.dump());
 			cossb_broker->publish("nanopi_websocket_read", msg);
 		}
@@ -383,6 +384,7 @@ void nanopi_timbo::move_page(int page){
 		nlohmann::json _json_msg;
 		_json_msg["command"] = "movepage";
 		_json_msg["page"] = page;
+		_json_msg["guidebook"] = _guidebook_id;
 		msg.pack(_json_msg.dump());
 		cossb_log->log(log::loglevel::INFO, fmt::format("Change eBook Page : {}", page));
 		cossb_broker->publish("websocket_write_msg",msg);

@@ -14,7 +14,7 @@
 </info>
 
 <property>
-	<if>wlan0</if>
+	<if>wifi0</if>
 </property>
 
 <service name="app_timbo_command" method="publish" topic="app/timbo/command"></service>
