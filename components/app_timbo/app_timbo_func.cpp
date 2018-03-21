@@ -128,8 +128,10 @@ void app_timbo::timbo_trajectory_play(int page, int guidebook_id){
 	}
 	delete trj_files;
 
-	//2. multiple trajectory download..
+	//trajectory download
 	for(auto& trj:trj_map){
+
+		//start
 		unsigned char start[] = {HEAD, 0x06, (unsigned char)trj.first, 0x0c, 0x0, 0x55, 0x7f, 0x01, END}; //start
 		string logdata;
 		for(auto& c:start)
@@ -141,10 +143,7 @@ void app_timbo::timbo_trajectory_play(int page, int guidebook_id){
 		cossb_broker->publish("timbo_write", smsg);
 		//boost::this_thread::sleep(boost::posix_time::milliseconds(100/trj_map.size()));
 		boost::this_thread::sleep(boost::posix_time::milliseconds(100));
-	}
-	
-	//send start
-	for(auto& trj:trj_map){
+
 		unsigned char header[] = {HEAD, 0x03, (unsigned char)trj.first, 0x2e, 0x00, END};
 		vector<unsigned char> hdata(header, header+sizeof(header)/sizeof(header[0]));
 		cossb::message hmsg(this, base::msg_type::DATA);
@@ -152,17 +151,14 @@ void app_timbo::timbo_trajectory_play(int page, int guidebook_id){
 		cossb_broker->publish("timbo_write", hmsg);
 		//boost::this_thread::sleep(boost::posix_time::milliseconds(100/trj_map.size()));
 		boost::this_thread::sleep(boost::posix_time::milliseconds(100));
-	}
-	cossb_log->log(log::loglevel::INFO, "Now Trajectories downloading..");
 
-	//data downloading...
-	const int offset = 20;
-	int pos = 0;
+		cossb_log->log(log::loglevel::INFO, "Now Trajectories downloading..");
 
-	bool done = false;
-	while(1){
-		//cossb_log->log(log::loglevel::INFO, fmt::format("pos : {}", pos));
-		for(auto& trj:trj_map){
+		const int offset = 20;
+		int pos = 0;
+		bool done = false;
+
+		while(1){
 			if(pos<(int)trj.second.size()){
 				unsigned char trj_pack[] = {HEAD, 0x05, (unsigned char)trj.first, TRAJ, trj.second[pos+2], trj.second[pos+3], 0x00, END};
 				string logdata;
@@ -182,15 +178,13 @@ void app_timbo::timbo_trajectory_play(int page, int guidebook_id){
 				break;
 			}
 
+			if(done)
+				break;
+
+			pos+=offset;
 		}
-		if(done)
-			break;
 
-		pos+=offset;
-
-	}
-
-	for(auto& trj:trj_map){
+		//end
 		cossb::message tmsg(this, base::msg_type::DATA);
 		unsigned char tail[] = {HEAD, 0x03, (unsigned char)trj.first, 0x04, 0x00, END};
 		vector<unsigned char> data3(tail, tail+sizeof(tail));
@@ -198,9 +192,10 @@ void app_timbo::timbo_trajectory_play(int page, int guidebook_id){
 		cossb_broker->publish("timbo_write", tmsg);
 		//boost::this_thread::sleep(boost::posix_time::milliseconds(100/trj_map.size()));
 		boost::this_thread::sleep(boost::posix_time::milliseconds(100));
-	}
 
-	cossb_log->log(log::loglevel::INFO, "Trajectory Downloading...Done.");
+		cossb_log->log(log::loglevel::INFO, "Trajectory Downloading...Done.");
+
+	}
 }
 
 void app_timbo::timbo_trajectory_dump(int page, int guidebook_id) {
