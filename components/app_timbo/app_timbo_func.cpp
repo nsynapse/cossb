@@ -159,8 +159,9 @@ void app_timbo::timbo_trajectory_play(int page, int guidebook_id){
 	const int offset = 20;
 	int pos = 0;
 
+	bool done = false;
 	while(1){
-		cossb_log->log(log::loglevel::INFO, fmt::format("pos : {}", pos));
+		//cossb_log->log(log::loglevel::INFO, fmt::format("pos : {}", pos));
 		for(auto& trj:trj_map){
 			if(pos<(int)trj.second.size()){
 				unsigned char trj_pack[] = {HEAD, 0x05, (unsigned char)trj.first, TRAJ, trj.second[pos+2], trj.second[pos+3], 0x00, END};
@@ -171,17 +172,23 @@ void app_timbo::timbo_trajectory_play(int page, int guidebook_id){
 				cossb::message vmsg(this, base::msg_type::DATA);
 				vector<unsigned char> data2(trj_pack, trj_pack+sizeof(trj_pack));
 				vmsg.pack(data2);
-				cossb_log->log(log::loglevel::INFO, fmt::format("[Device ID : {}] Send Trajectory : {}, {}", trj.first, trj.second[pos+2], trj.second[pos+3]));
+				cossb_log->log(log::loglevel::INFO, fmt::format("({}) [Device ID : {}] Send Trajectory : {}, {}", pos, trj.first, trj.second[pos+2], trj.second[pos+3]));
 				cossb_broker->publish("timbo_write", vmsg);
 				//boost::this_thread::sleep(boost::posix_time::milliseconds(100/trj_map.size()));
 				boost::this_thread::sleep(boost::posix_time::milliseconds(100));
 			}
-			else
+			else{
+				done = true;
 				break;
-
 			}
-			pos+=offset;
+
 		}
+		if(done)
+			break;
+
+		pos+=offset;
+
+	}
 
 	for(auto& trj:trj_map){
 		cossb::message tmsg(this, base::msg_type::DATA);
