@@ -192,10 +192,9 @@ void app_timbo::timbo_trajectory_play(int page, int guidebook_id){
 		cossb_broker->publish("timbo_write", tmsg);
 		//boost::this_thread::sleep(boost::posix_time::milliseconds(100/trj_map.size()));
 		boost::this_thread::sleep(boost::posix_time::milliseconds(100));
-
-		cossb_log->log(log::loglevel::INFO, "Trajectory Downloading...Done.");
-
 	}
+
+	cossb_log->log(log::loglevel::INFO, "Trajectory Downloading...Done.");
 }
 
 void app_timbo::timbo_trajectory_dump(int page, int guidebook_id) {
