@@ -2,6 +2,7 @@
 $(document).ready(function(){
 	var host = "172.30.1.42"; //!!! edit
 	var guidebook_id = 1;	  //!!! edit
+	var playing = false;
 	
 	var socket_uri = "ws://"+host+":9002/guidebook";
 	var sock = new WebSocket(socket_uri)
@@ -66,10 +67,23 @@ $(document).ready(function(){
     });
 
   $("#id_btn_play").click(function(){
-		var data = {}
-		data['service'] = "websocket_read";
-		data['command'] = "play";
-		sock.send(JSON.stringify(data));
+	  if(playing==false){
+		  	var data = {}
+			data['service'] = "websocket_read";
+			data['command'] = "play";
+			sock.send(JSON.stringify(data));
+			$("#id_icon_play").attr('class', 'fa fa-spinner fa-spin fa-fw');
+			playing = true;
+	  }
+	  else{
+		  	var data = {}
+			data['service'] = "websocket_read";
+			data['command'] = "stop";
+			sock.send(JSON.stringify(data));
+		  $("#id_icon_play").attr('class', 'fa fa-play');
+		  playing=false;
+	  }
+		
 		//document.getElementById('sound').play();
     });
 
