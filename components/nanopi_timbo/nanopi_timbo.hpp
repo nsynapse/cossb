@@ -88,6 +88,7 @@ private:
 	int _selected_id = 0;
 	int _guidebook_page = 1;
 	int _guidebook_id = 1;
+	bool _playing = false;
 
 
 	bool _dumping = false;

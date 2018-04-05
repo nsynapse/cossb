@@ -366,12 +366,23 @@ void nanopi_timbo::gpio_read()
 
 		//6. play (rising edge)
 		if(!_prev_gpio_map[BTN_TRJ_PLAY] && gpio_map[BTN_TRJ_PLAY]){
-			cossb_log->log(log::loglevel::INFO, "Play");
-			cossb::message msg(this, cossb::base::msg_type::REQUEST);
-			nlohmann::json _json_msg;
-			_json_msg["command"] = "play";
-			msg.pack(_json_msg.dump());
-			cossb_broker->publish("nanopi_websocket_read", msg);
+			if(!_playing){
+				cossb_log->log(log::loglevel::INFO, "Play");
+				cossb::message msg(this, cossb::base::msg_type::REQUEST);
+				nlohmann::json _json_msg;
+				_json_msg["command"] = "play";
+				msg.pack(_json_msg.dump());
+				cossb_broker->publish("nanopi_websocket_read", msg);
+			}
+			else{
+				cossb_log->log(log::loglevel::INFO, "Stop");
+				cossb::message msg(this, cossb::base::msg_type::REQUEST);
+				nlohmann::json _json_msg;
+				_json_msg["command"] = "stop";
+				msg.pack(_json_msg.dump());
+				cossb_broker->publish("nanopi_websocket_read", msg);
+			}
+			_playing = !_playing;
 		}
 
 		_prev_gpio_map = gpio_map;

@@ -31,6 +31,14 @@ $(document).ready(function(){
 			console.log("Move Page");
 			document.location.replace("http://"+host+"/"+guidebook_id+"/page"+jsondata.page+".html")
 		}
+		if(jsondata.command=="play"){
+			$("#id_icon_play").attr('class', 'fa fa-spinner fa-spin fa-fw');
+			playing = true;
+		}
+		else if(jsondata.command=="stop"){
+			$("#id_icon_play").attr('class', 'fa fa-play');
+			playing=false;
+		}
 	}
 
 	$("#id_btn_setting").click(function(){
