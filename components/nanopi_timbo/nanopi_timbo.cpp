@@ -19,7 +19,7 @@ using namespace std;
 #define LED4		1
 
 #define BTN_ID_SEL		13	//ID Selection
-#define BTN_ID_SET		14	//ID Setting
+#define BTN_ID_TRJ_DOWNLOAD		14	//Trajectory Download
 #define BTN_TRJ_PLAY	10	//Trajectory play
 
 #define SW1		3	//Guidebook page1
@@ -28,7 +28,7 @@ using namespace std;
 #define SW4		12	//Guidebook page4
 
 const unsigned int gpio_led[] = {LED1, LED2, LED3, LED4 };
-const unsigned int gpio_btn[] = {BTN_ID_SEL, BTN_ID_SET, BTN_TRJ_PLAY };
+const unsigned int gpio_btn[] = {BTN_ID_SEL, BTN_ID_TRJ_DOWNLOAD, BTN_TRJ_PLAY };
 const unsigned int gpio_sw[] = {SW1, SW2, SW3, SW4};
 
 using namespace std;
@@ -339,13 +339,22 @@ void nanopi_timbo::gpio_read()
 			cossb_log->log(log::loglevel::INFO, fmt::format("Selected ID : {}", _selected_id));
 		}
 
-		//4. id setting (rising edge)
-		if(!_prev_gpio_map[BTN_ID_SET] && gpio_map[BTN_ID_SET]){
+		//4. trajectory download (rising edge)
+		if(!_prev_gpio_map[BTN_ID_TRJ_DOWNLOAD] && gpio_map[BTN_ID_TRJ_DOWNLOAD]){
 			//publish message
-			cossb::message msg(this, cossb::base::msg_type::REQUEST);
+			/*cossb::message msg(this, cossb::base::msg_type::REQUEST);
 			msg.pack(gpio_map);
 			cossb_log->log(log::loglevel::INFO, fmt::format("ID Setting : {}", _selected_id));
-			cossb_broker->publish("nanopi_gpio_id_set", msg);
+			cossb_broker->publish("nanopi_gpio_id_set", msg);*/
+
+			cossb_log->log(log::loglevel::INFO, "Trajectory Downloading..");
+			cossb::message msg(this, cossb::base::msg_type::REQUEST);
+			nlohmann::json _json_msg;
+			_json_msg["command"] = "trajectory_play";
+			_json_msg["page"] = _guidebook_page;
+			_json_msg["guidebook"] = _guidebook_id;
+			msg.pack(_json_msg.dump());
+			cossb_broker->publish("nanopi_websocket_read", msg);
 		}
 
 		//5. read guidebook page
@@ -355,14 +364,12 @@ void nanopi_timbo::gpio_read()
 		else if(!gpio_map[SW1] && gpio_map[SW2] && gpio_map[SW3] && gpio_map[SW4]) move_page(4);
 		else move_page(5);
 
-		//6. trajectory play (rising edge)
+		//6. play (rising edge)
 		if(!_prev_gpio_map[BTN_TRJ_PLAY] && gpio_map[BTN_TRJ_PLAY]){
-			cossb_log->log(log::loglevel::INFO, "Trajectory Play");
+			cossb_log->log(log::loglevel::INFO, "Play");
 			cossb::message msg(this, cossb::base::msg_type::REQUEST);
 			nlohmann::json _json_msg;
-			_json_msg["command"] = "trajectory_play";
-			_json_msg["page"] = _guidebook_page;
-			_json_msg["guidebook"] = _guidebook_id;
+			_json_msg["command"] = "play";
 			msg.pack(_json_msg.dump());
 			cossb_broker->publish("nanopi_websocket_read", msg);
 		}
