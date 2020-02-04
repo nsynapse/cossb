@@ -1822,21 +1822,21 @@ class ArgFormatterBase : public ArgVisitor<Impl, void> {
     typedef typename BasicWriter<Char>::CharPtr CharPtr;
     Char fill = internal::CharTraits<Char>::cast(spec_.fill());
     CharPtr out = CharPtr();
-    const unsigned int CHAR_WIDTH = 1;
-    if (spec_.width_ > CHAR_WIDTH) {
+    const unsigned int CHAR_LENGTH = 1;
+    if (spec_.width_ > CHAR_LENGTH) {
       out = writer_.grow_buffer(spec_.width_);
       if (spec_.align_ == ALIGN_RIGHT) {
-        std::uninitialized_fill_n(out, spec_.width_ - CHAR_WIDTH, fill);
-        out += spec_.width_ - CHAR_WIDTH;
+        std::uninitialized_fill_n(out, spec_.width_ - CHAR_LENGTH, fill);
+        out += spec_.width_ - CHAR_LENGTH;
       } else if (spec_.align_ == ALIGN_CENTER) {
         out = writer_.fill_padding(out, spec_.width_,
-                                   internal::check(CHAR_WIDTH), fill);
+                                   internal::check(CHAR_LENGTH), fill);
       } else {
-        std::uninitialized_fill_n(out + CHAR_WIDTH,
-                                  spec_.width_ - CHAR_WIDTH, fill);
+        std::uninitialized_fill_n(out + CHAR_LENGTH,
+                                  spec_.width_ - CHAR_LENGTH, fill);
       }
     } else {
-      out = writer_.grow_buffer(CHAR_WIDTH);
+      out = writer_.grow_buffer(CHAR_LENGTH);
     }
     *out = internal::CharTraits<Char>::cast(value);
   }
