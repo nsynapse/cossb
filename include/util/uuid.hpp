@@ -8,7 +8,7 @@
 #ifndef INCLUDE_UTIL_UUID_HPP_
 #define INCLUDE_UTIL_UUID_HPP_
 
-#include <uuid/uuid.h>
+#include <uuid.h>
 #include <string>
 
 using namespace std;

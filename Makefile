@@ -14,11 +14,12 @@ ifeq ($(OS),Linux) #Linux
 	LDLIBS = -lboost_system -lboost_thread -lboost_filesystem -ldl -luuid 
 endif
 
-CXX = g++
+#CXX = g++
+CXX = arm-bcm2708-linux-gnueabi-g++
 CXXFLAGS = -O3 -fPIC -Wall -std=c++11 -D__cplusplus=201103L -D__boostthread__
 
 EDISON_LDLIBS = -lmraa
-INCLUDE += -I./include -I/usr/include -I/usr/local/include -I/usr/local/opt/openssl/include/
+INCLUDE += -I./include -I/usr/include -I/usr/local/include -I/usr/local/opt/openssl/include/ -I/usr/include/x86_64-linux-gnu/ -I/usr/include/linux/
 RM	= rm -rf
 
 OUTDIR		= ./bin/
